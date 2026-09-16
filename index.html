@@ -148,6 +148,10 @@ section{position:relative}
   border-radius:50%;cursor:pointer;display:grid;place-items:center;transition:.3s}
 .theme-btn:hover{border-color:var(--gold);color:var(--gold)}
 .theme-btn svg{width:17px;height:17px}
+.lang-toggle{display:inline-flex;align-items:stretch;border:1px solid var(--line-strong);border-radius:100px;overflow:hidden;background:transparent;cursor:pointer;padding:0;font-family:var(--sans);flex-shrink:0}
+.lang-toggle span{padding:.42em .66em;font-size:.6rem;font-weight:600;letter-spacing:.12em;color:var(--text-dim);transition:.25s;line-height:1;display:flex;align-items:center}
+.lang-toggle span[data-active]{background:linear-gradient(180deg,var(--gold-2),var(--gold-3));color:#1a1405}
+.lang-toggle:hover{border-color:var(--gold)}
 @media(max-width:1080px){
   .nav-links{position:fixed;inset:calc(env(safe-area-inset-top,0px) + 60px) 0 auto 0;flex-direction:column;gap:0;
     background:var(--bg-2);border-bottom:1px solid var(--line);padding:.5rem var(--gate) 1.5rem;
@@ -630,20 +634,21 @@ img,svg,video{max-width:100%;height:auto}
       <span class="brandtext"><b>TYMF</b><span>Tulum 2026</span></span>
     </a>
     <div class="nav-links" id="navLinks">
-      <a href="#festival">Festival</a>
-      <a href="#schedule">Schedule</a>
-      <a href="#teachers">Teachers + Healers</a>
-      <a href="#music">Music</a>
-      <a href="#partners">Partners</a>
-      <a href="#affiliates">Affiliates</a>
-      <a href="#vendors">Vendors</a>
-      <a href="#about">About</a>
+      <a href="#festival" data-i18n="nav.festival">Festival</a>
+      <a href="#schedule" data-i18n="nav.schedule">Schedule</a>
+      <a href="#teachers" data-i18n="nav.teachers">Teachers + Healers</a>
+      <a href="#music" data-i18n="nav.music">Music</a>
+      <a href="#partners" data-i18n="nav.partners">Partners</a>
+      <a href="#affiliates" data-i18n="nav.affiliates">Affiliates</a>
+      <a href="#vendors" data-i18n="nav.vendors">Vendors</a>
+      <a href="#about" data-i18n="nav.about">About</a>
     </div>
     <div class="nav-cta">
+      <button class="lang-toggle" id="langToggle" type="button" aria-label="Cambiar idioma / Switch language"><span data-lang-opt="es">ES</span><span data-lang-opt="en">EN</span></button>
       <button class="theme-btn" id="themeBtn" aria-label="Toggle light/dark theme" title="Toggle theme">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" id="themeIcon"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
       </button>
-      <a href="#tickets" class="btn btn-gold btn-sm btn-hero-nav">Buy Tickets</a>
+      <a href="#tickets" class="btn btn-gold btn-sm btn-hero-nav" data-i18n="nav.buy">Buy Tickets</a>
       <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
       </button>
@@ -660,8 +665,8 @@ img,svg,video{max-width:100%;height:auto}
     <img class="hero-wordmark reveal" src="wordmark.png" alt="Mexico — Tulum Yoga Music Fest + Conference Week" width="1400" height="512" />
     <img class="hero-dateline reveal" src="dateline.png" alt="September 21–27, 2026 — A week of yoga, wellness, music &amp; community" width="1200" height="376" />
     <div class="hero-cta reveal">
-      <a href="#tickets" class="btn btn-gold">Buy Festival Tickets</a>
-      <a href="#schedule" class="btn btn-ghost">View Schedule</a>
+      <a href="#tickets" class="btn btn-gold" data-i18n="cta.buy">Buy Festival Tickets</a>
+      <a href="#schedule" class="btn btn-ghost" data-i18n="cta.viewSchedule">View Schedule</a>
     </div>
   </div>
 </header>
@@ -669,7 +674,7 @@ img,svg,video{max-width:100%;height:auto}
 <!-- ===== Sponsor / partner strip (below hero) ===== -->
 <section class="hero-sponsors" aria-label="Sponsors and community partners">
   <div class="wrap">
-    <p class="hs-eyebrow">Presented in community with</p>
+    <p class="hs-eyebrow" data-i18n="sponsors.eyebrow">Presented in community with</p>
     <div class="hs-logos reveal" id="heroSponsors"></div>
   </div>
 </section>
@@ -677,14 +682,14 @@ img,svg,video{max-width:100%;height:auto}
 <!-- countdown -->
 <div class="countbar">
   <div class="countbar-in reveal">
-    <div class="count-label">The gathering begins in</div>
+    <div class="count-label" data-i18n="count.label">The gathering begins in</div>
     <div class="count-clock" id="clock">
-      <div class="u"><div class="n" data-d>—</div><div class="l">Days</div></div>
-      <div class="u"><div class="n" data-h>—</div><div class="l">Hours</div></div>
-      <div class="u"><div class="n" data-m>—</div><div class="l">Minutes</div></div>
-      <div class="u"><div class="n" data-s>—</div><div class="l">Seconds</div></div>
+      <div class="u"><div class="n" data-d>—</div><div class="l" data-i18n="count.days">Days</div></div>
+      <div class="u"><div class="n" data-h>—</div><div class="l" data-i18n="count.hours">Hours</div></div>
+      <div class="u"><div class="n" data-m>—</div><div class="l" data-i18n="count.minutes">Minutes</div></div>
+      <div class="u"><div class="n" data-s>—</div><div class="l" data-i18n="count.seconds">Seconds</div></div>
     </div>
-    <a href="#tickets" class="btn btn-gold btn-sm">Get Tickets</a>
+    <a href="#tickets" class="btn btn-gold btn-sm" data-i18n="cta.getTickets">Get Tickets</a>
   </div>
 </div>
 
@@ -696,22 +701,22 @@ img,svg,video{max-width:100%;height:auto}
         <img src="festival.jpg" alt="Yoga at Oasis Tulum, Tulum Yoga Music Fest" loading="lazy" width="1400" height="866" />
       </div>
       <div class="reveal">
-        <div class="eyebrow">The Main Festival</div>
+        <div class="eyebrow" data-i18n="fest.eyebrow">The Main Festival</div>
         <div class="fest-when">
-          <span class="big">Saturday · September 26</span>
-          <span class="sub">11 AM – 11 PM · Oasis Tulum · La Veleta</span>
+          <span class="big" data-i18n="fest.when">Saturday · September 26</span>
+          <span class="sub" data-i18n="fest.sub">11 AM – 11 PM · Oasis Tulum · La Veleta</span>
         </div>
-        <p class="lede">The whole week comes together for one full day and night of yoga, conscious music, healing arts, performances, wellness, food, vendors and community.</p>
+        <p class="lede" data-i18n="fest.lede">The whole week comes together for one full day and night of yoga, conscious music, healing arts, performances, wellness, food, vendors and community.</p>
         <div class="pill-row">
-          <span class="pill">Yoga + Movement</span>
-          <span class="pill">Live Music + DJs</span>
-          <span class="pill">Healing + Wellness</span>
-          <span class="pill">Workshops + Talks</span>
-          <span class="pill">Vendors + Food</span>
+          <span class="pill" data-i18n="pill.yoga">Yoga + Movement</span>
+          <span class="pill" data-i18n="pill.music">Live Music + DJs</span>
+          <span class="pill" data-i18n="pill.heal">Healing + Wellness</span>
+          <span class="pill" data-i18n="pill.work">Workshops + Talks</span>
+          <span class="pill" data-i18n="pill.food">Vendors + Food</span>
         </div>
         <div class="hero-cta">
-          <a href="#tickets" class="btn btn-gold">Buy Tickets</a>
-          <a href="#schedule" class="btn btn-ghost">See Festival Schedule</a>
+          <a href="#tickets" class="btn btn-gold" data-i18n="cta.buyTickets">Buy Tickets</a>
+          <a href="#schedule" class="btn btn-ghost" data-i18n="cta.seeSchedule">See Festival Schedule</a>
         </div>
       </div>
     </div>
@@ -722,22 +727,22 @@ img,svg,video{max-width:100%;height:auto}
 <section class="tickets section-pad" id="tickets">
   <div class="wrap">
     <div class="center reveal" style="max-width:640px;margin:0 auto">
-      <div class="eyebrow" style="justify-content:center">Festival Ticket</div>
-      <h2 class="sechead" style="margin:1rem 0 .8rem">Get Your <span class="goldtext">Ticket</span></h2>
-      <p class="lede" style="margin:0 auto">One ticket. One full day and night of yoga, music and community at Oasis Tulum.</p>
+      <div class="eyebrow" style="justify-content:center" data-i18n="tix.eyebrow">Festival Ticket</div>
+      <h2 class="sechead" style="margin:1rem 0 .8rem" data-i18n-html="tix.heading">Get Your <span class="goldtext">Ticket</span></h2>
+      <p class="lede" style="margin:0 auto" data-i18n="tix.lede">One ticket. One full day and night of yoga, music and community at Oasis Tulum.</p>
     </div>
 
     <div class="ticket-layout">
       <div class="ticket-list" id="ticketList" role="list"></div>
 
       <aside class="summary reveal" aria-label="Order summary">
-        <h3>Your Order</h3>
+        <h3 data-i18n="tix.order">Your Order</h3>
         <div class="sum-lines" id="sumLines">
-          <p class="sum-empty">No tickets selected yet — add a ticket to begin.</p>
+          <p class="sum-empty" data-i18n="tix.empty">No tickets selected yet — add a ticket to begin.</p>
         </div>
-        <div class="sum-total"><span>Total</span><span class="g" id="grandTotal">$0 MXN</span></div>
-        <button class="btn btn-gold" id="checkoutBtn" disabled>Checkout</button>
-        <p class="fine">Prices in Mexican pesos (MXN). Instant e-ticket by email.<br/>$300 at the door on the day of the festival.</p>
+        <div class="sum-total"><span data-i18n="tix.total">Total</span><span class="g" id="grandTotal">$0 MXN</span></div>
+        <button class="btn btn-gold" id="checkoutBtn" data-i18n="tix.checkout" disabled>Checkout</button>
+        <p class="fine" data-i18n-html="tix.fine">Prices in Mexican pesos (MXN). Instant e-ticket by email.<br/>$300 at the door on the day of the festival.</p>
       </aside>
     </div>
   </div>
@@ -747,27 +752,27 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="week">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">September 21–27</div>
-      <h2 class="sechead" style="margin-top:1rem">The Week, In Three Movements</h2>
+      <div class="eyebrow" data-i18n="week.eyebrow">September 21–27</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="week.heading">The Week, In Three Movements</h2>
     </div>
     <div class="week-grid">
       <div class="week-card reveal">
         <div class="num">01</div>
-        <div class="dates">Sept 21–25</div>
-        <h3>Conference Week</h3>
-        <p>Classes, workshops, kirtans, sound baths and gatherings hosted throughout Tulum by participating teachers, healers and venues.</p>
+        <div class="dates" data-i18n="week.c1dates">Sept 21–25</div>
+        <h3 data-i18n="week.c1title">Conference Week</h3>
+        <p data-i18n="week.c1p">Classes, workshops, kirtans, sound baths and gatherings hosted throughout Tulum by participating teachers, healers and venues.</p>
       </div>
       <div class="week-card hl reveal">
         <div class="num">02</div>
-        <div class="dates">Sept 26</div>
-        <h3>Main Festival</h3>
-        <p>One full day and night at Oasis Tulum — yoga, live music, DJs, healing arts, workshops, a conscious market and community.</p>
+        <div class="dates" data-i18n="week.c2dates">Sept 26</div>
+        <h3 data-i18n="week.c2title">Main Festival</h3>
+        <p data-i18n="week.c2p">One full day and night at Oasis Tulum — yoga, live music, DJs, healing arts, workshops, a conscious market and community.</p>
       </div>
       <div class="week-card reveal">
         <div class="num">03</div>
-        <div class="dates">Sept 27</div>
-        <h3>Integration Day</h3>
-        <p>A gentle closing at Oasis Tulum — restorative practice, ceremony and community reflection to carry the week forward.</p>
+        <div class="dates" data-i18n="week.c3dates">Sept 27</div>
+        <h3 data-i18n="week.c3title">Integration Day</h3>
+        <p data-i18n="week.c3p">A gentle closing at Oasis Tulum — restorative practice, ceremony and community reflection to carry the week forward.</p>
       </div>
     </div>
   </div>
@@ -777,21 +782,21 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="schedule" style="background:var(--bg-2);border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Full Schedule</div>
-      <h2 class="sechead" style="margin-top:1rem">One Week · <span class="goldtext">All of Tulum</span></h2>
-      <p class="lede" style="margin-top:1rem">Seven days of practice across the community. Select a day to explore its offerings — each with teacher, time, venue and how to book.</p>
+      <div class="eyebrow" data-i18n="sched.eyebrow">Full Schedule</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n-html="sched.heading">One Week · <span class="goldtext">All of Tulum</span></h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="sched.lede">Seven days of practice across the community. Select a day to explore its offerings — each with teacher, time, venue and how to book.</p>
     </div>
 
     <div class="day-tabs" id="dayTabs" role="tablist"></div>
     <div class="sched-legend">
-      <span><i class="dot" style="background:var(--cat-yoga)"></i> Yoga + Movement</span>
-      <span><i class="dot" style="background:var(--cat-music)"></i> Music + Kirtan</span>
-      <span><i class="dot" style="background:var(--cat-heal)"></i> Healing + Wellness</span>
-      <span><i class="dot" style="background:var(--cat-work)"></i> Workshop + Talk</span>
-      <span><i class="dot" style="background:var(--cat-comm)"></i> Community + Ceremony</span>
+      <span><i class="dot" style="background:var(--cat-yoga)"></i> <span data-i18n="sched.legYoga">Yoga + Movement</span></span>
+      <span><i class="dot" style="background:var(--cat-music)"></i> <span data-i18n="sched.legMusic">Music + Kirtan</span></span>
+      <span><i class="dot" style="background:var(--cat-heal)"></i> <span data-i18n="sched.legHeal">Healing + Wellness</span></span>
+      <span><i class="dot" style="background:var(--cat-work)"></i> <span data-i18n="sched.legWork">Workshop + Talk</span></span>
+      <span><i class="dot" style="background:var(--cat-comm)"></i> <span data-i18n="sched.legComm">Community + Ceremony</span></span>
     </div>
     <div class="events" id="events"></div>
-    <p class="sched-note">Conference Week events are hosted independently by participating teachers and venues. Booking, payment and event details are managed directly by each host. The Main Festival on Sept 26 is ticketed above.</p>
+    <p class="sched-note" data-i18n="sched.note">Conference Week events are hosted independently by participating teachers and venues. Booking, payment and event details are managed directly by each host. The Main Festival on Sept 26 is ticketed above.</p>
   </div>
 </section>
 
@@ -799,9 +804,9 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="teachers">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Teachers + Healers</div>
-      <h2 class="sechead" style="margin-top:1rem">Meet the Facilitators</h2>
-      <p class="lede" style="margin-top:1rem">The teachers, guides and healers holding space across the week.</p>
+      <div class="eyebrow" data-i18n="teach.eyebrow">Teachers + Healers</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="teach.heading">Meet the Facilitators</h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="teach.lede">The teachers, guides and healers holding space across the week.</p>
     </div>
     <div class="people" id="people"></div>
   </div>
@@ -811,9 +816,9 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="music" style="background:var(--bg-2);border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Musicians + Artists</div>
-      <h2 class="sechead" style="margin-top:1rem">The <span class="goldtext">Sound</span> of the Week</h2>
-      <p class="lede" style="margin-top:1rem">Conscious music, live sets, kirtan and ceremony — from headline performances to intimate gatherings.</p>
+      <div class="eyebrow" data-i18n="music.eyebrow">Musicians + Artists</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n-html="music.heading">The <span class="goldtext">Sound</span> of the Week</h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="music.lede">Conscious music, live sets, kirtan and ceremony — from headline performances to intimate gatherings.</p>
     </div>
     <div class="artist-feats" id="artistFeats"></div>
     <div class="artist-grid" id="artistGrid"></div>
@@ -824,9 +829,9 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="partners">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Our Community Partners</div>
-      <h2 class="sechead" style="margin-top:1rem">Venues, Studios &amp; Spaces</h2>
-      <p class="lede" style="margin-top:1rem">The hotels, studios, spas and organizations opening their doors across Tulum.</p>
+      <div class="eyebrow" data-i18n="part.eyebrow">Our Community Partners</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="part.heading">Venues, Studios &amp; Spaces</h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="part.lede">The hotels, studios, spas and organizations opening their doors across Tulum.</p>
     </div>
     <div class="partners" id="partners"></div>
   </div>
@@ -836,9 +841,9 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="affiliates" style="background:var(--bg-2);border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Festival Week Affiliates</div>
-      <h2 class="sechead" style="margin-top:1rem">Friends of the Festival</h2>
-      <p class="lede" style="margin-top:1rem">Local businesses offering something special to festival-goers all week long.</p>
+      <div class="eyebrow" data-i18n="aff.eyebrow">Festival Week Affiliates</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="aff.heading">Friends of the Festival</h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="aff.lede">Local businesses offering something special to festival-goers all week long.</p>
     </div>
     <div class="logo-grid" id="affiliates"></div>
   </div>
@@ -848,15 +853,15 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="vendors">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Conscious Market</div>
-      <h2 class="sechead" style="margin-top:1rem">The Vendors</h2>
-      <p class="lede" style="margin-top:1rem">Food, art, clothing, wellness and conscious products from local makers and brands.</p>
+      <div class="eyebrow" data-i18n="ven.eyebrow">Conscious Market</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="ven.heading">The Vendors</h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="ven.lede">Food, art, clothing, wellness and conscious products from local makers and brands.</p>
     </div>
     <div class="vendors" id="vendors"></div>
     <div class="recruit reveal">
-      <h3>Want to join as a vendor?</h3>
-      <p>Applications for the Conscious Market are open while space remains.</p>
-      <a href="https://wa.me/17867487247" class="btn btn-gold" target="_blank" rel="noopener">Message Narayani</a>
+      <h3 data-i18n="ven.recruitH">Want to join as a vendor?</h3>
+      <p data-i18n="ven.recruitP">Applications for the Conscious Market are open while space remains.</p>
+      <a href="https://wa.me/17867487247" class="btn btn-gold" target="_blank" rel="noopener" data-i18n="ven.recruitBtn">Message Narayani</a>
     </div>
   </div>
 </section>
@@ -866,21 +871,21 @@ img,svg,video{max-width:100%;height:auto}
   <div class="wrap">
     <div class="split">
       <div class="reveal">
-        <div class="eyebrow">About TYMF</div>
-        <h2 class="sechead" style="margin:1rem 0 1.4rem">More Than a Festival</h2>
-        <p class="dim" style="margin-bottom:1.1rem">Tulum Yoga Music Fest + Conference Week is a grassroots celebration of the people who make Tulum's conscious community what it is.</p>
-        <p class="dim" style="margin-bottom:1.1rem">For one week, teachers, musicians, healers, artists, studios, hotels, local businesses and community members come together across Tulum — creating more ways to practice, discover, connect and support one another.</p>
-        <p class="dim">Our intention is simple: bring the community together, make wellness more accessible, and create greater visibility for the people and spaces doing this work year-round.</p>
+        <div class="eyebrow" data-i18n="about.eyebrow">About TYMF</div>
+        <h2 class="sechead" style="margin:1rem 0 1.4rem" data-i18n="about.heading">More Than a Festival</h2>
+        <p class="dim" style="margin-bottom:1.1rem" data-i18n="about.p1">Tulum Yoga Music Fest + Conference Week is a grassroots celebration of the people who make Tulum's conscious community what it is.</p>
+        <p class="dim" style="margin-bottom:1.1rem" data-i18n="about.p2">For one week, teachers, musicians, healers, artists, studios, hotels, local businesses and community members come together across Tulum — creating more ways to practice, discover, connect and support one another.</p>
+        <p class="dim" data-i18n="about.p3">Our intention is simple: bring the community together, make wellness more accessible, and create greater visibility for the people and spaces doing this work year-round.</p>
         <div class="stat-row">
-          <div class="stat"><div class="n">7</div><div class="l">Days</div></div>
-          <div class="stat"><div class="n">40+</div><div class="l">Teachers &amp; Artists</div></div>
-          <div class="stat"><div class="n">12+</div><div class="l">Venues</div></div>
+          <div class="stat"><div class="n">7</div><div class="l" data-i18n="about.stat1">Days</div></div>
+          <div class="stat"><div class="n">40+</div><div class="l" data-i18n="about.stat2">Teachers &amp; Artists</div></div>
+          <div class="stat"><div class="n">12+</div><div class="l" data-i18n="about.stat3">Venues</div></div>
         </div>
       </div>
       <div class="about-card reveal">
-        <p class="lead">"This is happening. Here is what you can experience. Here is who is part of it. Come join us."</p>
-        <p class="dim">The festival grew from a simple idea — that Tulum's teachers, artists and spaces are stronger when they gather. One week a year, the whole community shares one calendar, one intention, and one celebration.</p>
-        <p class="dim">Whether you come for a single class, one unforgettable festival day, or the full seven-day journey, you become part of it.</p>
+        <p class="lead" data-i18n="about.cardLead">"This is happening. Here is what you can experience. Here is who is part of it. Come join us."</p>
+        <p class="dim" data-i18n="about.cardP1">The festival grew from a simple idea — that Tulum's teachers, artists and spaces are stronger when they gather. One week a year, the whole community shares one calendar, one intention, and one celebration.</p>
+        <p class="dim" data-i18n="about.cardP2">Whether you come for a single class, one unforgettable festival day, or the full seven-day journey, you become part of it.</p>
       </div>
     </div>
   </div>
@@ -889,9 +894,9 @@ img,svg,video{max-width:100%;height:auto}
 <!-- ============ AWARENESS BREAK ============ -->
 <section class="awareness section-pad">
   <div class="wrap reveal">
-    <div class="big">September Is Yoga Awareness Month</div>
-    <div class="sub">A month to practice. A week to come together.</div>
-    <div class="d">September 21–27 · Tulum</div>
+    <div class="big" data-i18n="aware.big">September Is Yoga Awareness Month</div>
+    <div class="sub" data-i18n="aware.sub">A month to practice. A week to come together.</div>
+    <div class="d" data-i18n="aware.date">September 21–27 · Tulum</div>
   </div>
 </section>
 
@@ -899,8 +904,8 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="gallery">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Community</div>
-      <h2 class="sechead" style="margin-top:1rem">This Is Tulum</h2>
+      <div class="eyebrow" data-i18n="gal.eyebrow">Community</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="gal.heading">This Is Tulum</h2>
     </div>
     <div class="gallery reveal">
       <div class="gcell big"><span>Yoga</span></div>
@@ -913,7 +918,7 @@ img,svg,video{max-width:100%;height:auto}
       <div class="gcell"><span>Venues</span></div>
       <div class="gcell wide"><span>Community</span></div>
     </div>
-    <p class="sched-note" style="margin-top:1.4rem">Imagery reflects Tulum's yoga &amp; music community and past gatherings; it does not depict TYMF 2026.</p>
+    <p class="sched-note" style="margin-top:1.4rem" data-i18n="gal.note">Imagery reflects Tulum's yoga &amp; music community and past gatherings; it does not depict TYMF 2026.</p>
   </div>
 </section>
 
@@ -921,21 +926,21 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="organizers" style="background:var(--bg-2);border-block:1px solid var(--line)">
   <div class="wrap">
     <div class="reveal">
-      <div class="eyebrow">Created in Community</div>
-      <h2 class="sechead" style="margin:1rem 0 2rem">Who's Behind It</h2>
+      <div class="eyebrow" data-i18n="org.eyebrow">Created in Community</div>
+      <h2 class="sechead" style="margin:1rem 0 2rem" data-i18n="org.heading">Who's Behind It</h2>
     </div>
     <div class="org-card reveal">
       <div class="ph"><span class="mono">N</span></div>
       <div>
         <h3>Narayani</h3>
-        <div class="role">Founder &amp; Community Weaver</div>
-        <p>A teacher and organizer rooted in Tulum's yoga, bhakti and wellness community, Narayani has spent years bringing people together through practice, music and ceremony. TYMF grew from that work — a way to give the community one week to celebrate, connect and be seen. She leads the core organizing team alongside teachers, artists and venue partners across Tulum.</p>
+        <div class="role" data-i18n="org.role">Founder &amp; Community Weaver</div>
+        <p data-i18n="org.bio">A teacher and organizer rooted in Tulum's yoga, bhakti and wellness community, Narayani has spent years bringing people together through practice, music and ceremony. TYMF grew from that work — a way to give the community one week to celebrate, connect and be seen. She leads the core organizing team alongside teachers, artists and venue partners across Tulum.</p>
       </div>
     </div>
     <div class="quotes">
-      <div class="quote reveal"><p>A week that reminded us why we came to Tulum in the first place — connected, held, and truly in community.</p><div class="who">— Participating Teacher</div></div>
-      <div class="quote reveal"><p>The energy across every venue was something special. It brought our whole community onto one calendar.</p><div class="who">— Partner Venue</div></div>
-      <div class="quote reveal"><p>From sunrise practice to late-night kirtan, it felt like the whole town was breathing together.</p><div class="who">— Festival Attendee</div></div>
+      <div class="quote reveal"><p data-i18n="org.q1">A week that reminded us why we came to Tulum in the first place — connected, held, and truly in community.</p><div class="who" data-i18n="org.q1w">— Participating Teacher</div></div>
+      <div class="quote reveal"><p data-i18n="org.q2">The energy across every venue was something special. It brought our whole community onto one calendar.</p><div class="who" data-i18n="org.q2w">— Partner Venue</div></div>
+      <div class="quote reveal"><p data-i18n="org.q3">From sunrise practice to late-night kirtan, it felt like the whole town was breathing together.</p><div class="who" data-i18n="org.q3w">— Festival Attendee</div></div>
     </div>
   </div>
 </section>
@@ -944,9 +949,9 @@ img,svg,video{max-width:100%;height:auto}
 <section class="section-pad" id="sponsors">
   <div class="wrap center">
     <div class="reveal">
-      <div class="eyebrow" style="justify-content:center">Made Possible With the Support Of</div>
-      <h2 class="sechead" style="margin-top:1rem">Thank You</h2>
-      <p class="lede" style="margin:1rem auto 0">To our sponsors and community partners who make this week possible.</p>
+      <div class="eyebrow" style="justify-content:center" data-i18n="spon.eyebrow">Made Possible With the Support Of</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="spon.heading">Thank You</h2>
+      <p class="lede" style="margin:1rem auto 0" data-i18n="spon.lede">To our sponsors and community partners who make this week possible.</p>
     </div>
     <div class="sponsor-grid reveal" id="sponsors"></div>
   </div>
@@ -955,12 +960,12 @@ img,svg,video{max-width:100%;height:auto}
 <!-- ============ FINAL CTA ============ -->
 <section class="final section-pad">
   <div class="wrap reveal">
-    <h2 class="display">Tulum · <span class="goldtext">September 21–27</span></h2>
-    <div class="come">Come practice. Come listen. Come connect.</div>
-    <div class="d">Oasis Tulum, Mexico</div>
+    <h2 class="display" data-i18n-html="final.heading">Tulum · <span class="goldtext">September 21–27</span></h2>
+    <div class="come" data-i18n="final.come">Come practice. Come listen. Come connect.</div>
+    <div class="d" data-i18n="final.place">Oasis Tulum, Mexico</div>
     <div class="hero-cta">
-      <a href="#tickets" class="btn btn-gold">Buy Festival Tickets</a>
-      <a href="#week" class="btn btn-ghost">View the Week</a>
+      <a href="#tickets" class="btn btn-gold" data-i18n="cta.buy">Buy Festival Tickets</a>
+      <a href="#week" class="btn btn-ghost" data-i18n="cta.viewWeek">View the Week</a>
     </div>
   </div>
 </section>
@@ -981,27 +986,27 @@ img,svg,video{max-width:100%;height:auto}
           </span>
           <span class="brandtext"><b>TYMF</b><span>Tulum 2026</span></span>
         </a>
-        <p>Tulum Yoga Music Fest + Conference Week · September 21–27, 2026 · Tulum, Mexico. A week of yoga, wellness, music &amp; community.</p>
+        <p data-i18n="foot.tagline">Tulum Yoga Music Fest + Conference Week · September 21–27, 2026 · Tulum, Mexico. A week of yoga, wellness, music &amp; community.</p>
       </div>
       <div class="foot-col">
-        <h5>Explore</h5>
-        <a href="#festival">Main Festival</a>
-        <a href="#schedule">Full Schedule</a>
-        <a href="#teachers">Teachers + Healers</a>
-        <a href="#music">Musicians + Artists</a>
-        <a href="#tickets">Buy Tickets</a>
+        <h5 data-i18n="foot.explore">Explore</h5>
+        <a href="#festival" data-i18n="foot.mainFestival">Main Festival</a>
+        <a href="#schedule" data-i18n="foot.fullSchedule">Full Schedule</a>
+        <a href="#teachers" data-i18n="nav.teachers">Teachers + Healers</a>
+        <a href="#music" data-i18n="music.eyebrow">Musicians + Artists</a>
+        <a href="#tickets" data-i18n="nav.buy">Buy Tickets</a>
       </div>
       <div class="foot-col">
-        <h5>Connect</h5>
+        <h5 data-i18n="foot.connect">Connect</h5>
         <a href="https://instagram.com/yogamusicfest.mx" target="_blank" rel="noopener">Instagram · @yogamusicfest.mx</a>
         <a href="https://wa.me/17867487247" target="_blank" rel="noopener">WhatsApp · +1 786 748 7247</a>
-        <a href="https://wa.me/17867487247" target="_blank" rel="noopener">Join the WhatsApp Community</a>
+        <a href="https://wa.me/17867487247" target="_blank" rel="noopener" data-i18n="foot.community">Join the WhatsApp Community</a>
         <a href="mailto:hello@yogamusicfest.mx">hello@yogamusicfest.mx</a>
-        <p>Contact: Narayani</p>
+        <p data-i18n="foot.contact">Contact: Narayani</p>
       </div>
     </div>
     <div class="foot-bottom">
-      <p>© 2026 Tulum Yoga Music Fest + Conference Week. Made in community.</p>
+      <p data-i18n="foot.copyright">© 2026 Tulum Yoga Music Fest + Conference Week. Made in community.</p>
       <div class="foot-sponsors">
         <span>Oasis Tulum</span><span>Holistika</span><span>Azulik</span><span>SEDETUR</span><span>Vesica</span>
       </div>
@@ -1028,6 +1033,20 @@ img,svg,video{max-width:100%;height:auto}
 var $=function(s,r){return (r||document).querySelector(s);};
 var fmt=function(n){return '$'+n.toLocaleString('en-US')+' MXN';};
 var fmt0=function(n){return '$'+n.toLocaleString('en-US');};
+
+/* ---------- i18n ---------- */
+var I18N={"en": {"nav.festival": "Festival", "nav.schedule": "Schedule", "nav.teachers": "Teachers + Healers", "nav.music": "Music", "nav.partners": "Partners", "nav.affiliates": "Affiliates", "nav.vendors": "Vendors", "nav.about": "About", "nav.buy": "Buy Tickets", "cta.buy": "Buy Festival Tickets", "cta.viewSchedule": "View Schedule", "cta.getTickets": "Get Tickets", "cta.buyTickets": "Buy Tickets", "cta.seeSchedule": "See Festival Schedule", "cta.viewWeek": "View the Week", "sponsors.eyebrow": "Presented in community with", "count.label": "The gathering begins in", "count.days": "Days", "count.hours": "Hours", "count.minutes": "Minutes", "count.seconds": "Seconds", "fest.eyebrow": "The Main Festival", "fest.when": "Saturday \u00b7 September 26", "fest.sub": "11 AM \u2013 11 PM \u00b7 Oasis Tulum \u00b7 La Veleta", "fest.lede": "The whole week comes together for one full day and night of yoga, conscious music, healing arts, performances, wellness, food, vendors and community.", "pill.yoga": "Yoga + Movement", "pill.music": "Live Music + DJs", "pill.heal": "Healing + Wellness", "pill.work": "Workshops + Talks", "pill.food": "Vendors + Food", "tix.eyebrow": "Festival Ticket", "tix.heading": "Get Your <span class=\"goldtext\">Ticket</span>", "tix.lede": "One ticket. One full day and night of yoga, music and community at Oasis Tulum.", "tix.name": "Festival Ticket", "tix.dates": "Saturday \u00b7 Sept 26 \u00b7 11am\u201311pm \u00b7 Oasis Tulum", "tix.desc": "Full-day access to the Main Festival \u2014 yoga, live music, healing arts, conscious market, food & community.", "tix.door": "$300 at the door (day of)", "tix.order": "Your Order", "tix.empty": "No tickets selected yet \u2014 add a ticket to begin.", "tix.total": "Total", "tix.checkout": "Checkout", "tix.fine": "Prices in Mexican pesos (MXN). Instant e-ticket by email.<br/>$300 at the door on the day of the festival.", "tix.perTicket": "per ticket", "tix.added": "Festival Ticket added", "week.eyebrow": "September 21\u201327", "week.heading": "The Week, In Three Movements", "week.c1title": "Conference Week", "week.c1dates": "Sept 21\u201325", "week.c1p": "Classes, workshops, kirtans, sound baths and gatherings hosted throughout Tulum by participating teachers, healers and venues.", "week.c2title": "Main Festival", "week.c2dates": "Sept 26", "week.c2p": "One full day and night at Oasis Tulum \u2014 yoga, live music, DJs, healing arts, workshops, a conscious market and community.", "week.c3title": "Integration Day", "week.c3dates": "Sept 27", "week.c3p": "A gentle closing at Oasis Tulum \u2014 restorative practice, ceremony and community reflection to carry the week forward.", "sched.eyebrow": "Full Schedule", "sched.heading": "One Week \u00b7 <span class=\"goldtext\">All of Tulum</span>", "sched.lede": "Seven days of practice across the community. Select a day to explore its offerings \u2014 each with teacher, time, venue and how to book.", "sched.legYoga": "Yoga + Movement", "sched.legMusic": "Music + Kirtan", "sched.legHeal": "Healing + Wellness", "sched.legWork": "Workshop + Talk", "sched.legComm": "Community + Ceremony", "sched.note": "Conference Week events are hosted independently by participating teachers and venues. Booking, payment and event details are managed directly by each host. The Main Festival on Sept 26 is ticketed above.", "day.conference": "Conference", "day.festival": "Festival", "day.integration": "Integration", "price.free": "Free", "price.don": "Donation", "price.paid": "Paid", "book.direct": "Book Directly", "book.buy": "Buy Tickets", "teach.eyebrow": "Teachers + Healers", "teach.heading": "Meet the Facilitators", "teach.lede": "The teachers, guides and healers holding space across the week.", "music.eyebrow": "Musicians + Artists", "music.heading": "The <span class=\"goldtext\">Sound</span> of the Week", "music.lede": "Conscious music, live sets, kirtan and ceremony \u2014 from headline performances to intimate gatherings.", "part.eyebrow": "Our Community Partners", "part.heading": "Venues, Studios & Spaces", "part.lede": "The hotels, studios, spas and organizations opening their doors across Tulum.", "aff.eyebrow": "Festival Week Affiliates", "aff.heading": "Friends of the Festival", "aff.lede": "Local businesses offering something special to festival-goers all week long.", "ven.eyebrow": "Conscious Market", "ven.heading": "The Vendors", "ven.lede": "Food, art, clothing, wellness and conscious products from local makers and brands.", "ven.recruitH": "Want to join as a vendor?", "ven.recruitP": "Applications for the Conscious Market are open while space remains.", "ven.recruitBtn": "Message Narayani", "about.eyebrow": "About TYMF", "about.heading": "More Than a Festival", "about.p1": "Tulum Yoga Music Fest + Conference Week is a grassroots celebration of the people who make Tulum's conscious community what it is.", "about.p2": "For one week, teachers, musicians, healers, artists, studios, hotels, local businesses and community members come together across Tulum \u2014 creating more ways to practice, discover, connect and support one another.", "about.p3": "Our intention is simple: bring the community together, make wellness more accessible, and create greater visibility for the people and spaces doing this work year-round.", "about.stat1": "Days", "about.stat2": "Teachers & Artists", "about.stat3": "Venues", "about.cardLead": "\u201cThis is happening. Here is what you can experience. Here is who is part of it. Come join us.\u201d", "about.cardP1": "The festival grew from a simple idea \u2014 that Tulum's teachers, artists and spaces are stronger when they gather. One week a year, the whole community shares one calendar, one intention, and one celebration.", "about.cardP2": "Whether you come for a single class, one unforgettable festival day, or the full seven-day journey, you become part of it.", "aware.big": "September Is Yoga Awareness Month", "aware.sub": "A month to practice. A week to come together.", "aware.date": "September 21\u201327 \u00b7 Tulum", "gal.eyebrow": "Community", "gal.heading": "This Is Tulum", "gal.note": "Imagery reflects Tulum's yoga & music community and past gatherings; it does not depict TYMF 2026.", "org.eyebrow": "Created in Community", "org.heading": "Who's Behind It", "org.role": "Founder & Community Weaver", "org.bio": "A teacher and organizer rooted in Tulum's yoga, bhakti and wellness community, Narayani has spent years bringing people together through practice, music and ceremony. TYMF grew from that work \u2014 a way to give the community one week to celebrate, connect and be seen. She leads the core organizing team alongside teachers, artists and venue partners across Tulum.", "org.q1": "A week that reminded us why we came to Tulum in the first place \u2014 connected, held, and truly in community.", "org.q1w": "\u2014 Participating Teacher", "org.q2": "The energy across every venue was something special. It brought our whole community onto one calendar.", "org.q2w": "\u2014 Partner Venue", "org.q3": "From sunrise practice to late-night kirtan, it felt like the whole town was breathing together.", "org.q3w": "\u2014 Festival Attendee", "spon.eyebrow": "Made Possible With the Support Of", "spon.heading": "Thank You", "spon.lede": "To our sponsors and community partners who make this week possible.", "final.heading": "Tulum \u00b7 <span class=\"goldtext\">September 21\u201327</span>", "final.come": "Come practice. Come listen. Come connect.", "final.place": "Oasis Tulum, Mexico", "foot.tagline": "Tulum Yoga Music Fest + Conference Week \u00b7 September 21\u201327, 2026 \u00b7 Tulum, Mexico. A week of yoga, wellness, music & community.", "foot.explore": "Explore", "foot.connect": "Connect", "foot.contact": "Contact: Narayani", "foot.copyright": "\u00a9 2026 Tulum Yoga Music Fest + Conference Week. Made in community.", "foot.mainFestival": "Main Festival", "foot.fullSchedule": "Full Schedule", "foot.buyTickets": "Buy Tickets", "foot.community": "Join the WhatsApp Community", "modal.checkout": "Secure Checkout", "modal.confirmed": "Confirmed", "f.name": "Full Name", "f.email": "Email (your tickets are sent here)", "f.phone": "WhatsApp / Phone", "f.card": "Card Number", "f.exp": "Expiry", "f.cvc": "CVC", "modal.pay": "Pay", "modal.payNote": "Demo checkout \u2014 no real payment is processed. Connect Stripe or your ticketing provider to go live.", "succ.title": "You're in.", "succ.body": "Your spot at Tulum Yoga Music Fest is reserved. A confirmation and e-tickets are on the way to", "succ.see": "See you September 21\u201327 in Tulum. \ud83e\udeb7"}, "es": {"nav.festival": "Festival", "nav.schedule": "Agenda", "nav.teachers": "Maestros y Sanadores", "nav.music": "M\u00fasica", "nav.partners": "Aliados", "nav.affiliates": "Afiliados", "nav.vendors": "Vendedores", "nav.about": "Acerca", "nav.buy": "Comprar Boletos", "cta.buy": "Comprar Boletos", "cta.viewSchedule": "Ver Agenda", "cta.getTickets": "Comprar Boletos", "cta.buyTickets": "Comprar Boletos", "cta.seeSchedule": "Ver Agenda del Festival", "cta.viewWeek": "Ver la Semana", "sponsors.eyebrow": "Presentado en comunidad con", "count.label": "El encuentro comienza en", "count.days": "D\u00edas", "count.hours": "Horas", "count.minutes": "Minutos", "count.seconds": "Segundos", "fest.eyebrow": "El Festival Principal", "fest.when": "S\u00e1bado \u00b7 26 de Septiembre", "fest.sub": "11 AM \u2013 11 PM \u00b7 Oasis Tulum \u00b7 La Veleta", "fest.lede": "La semana entera se une para un d\u00eda y una noche completos de yoga, m\u00fasica consciente, artes de sanaci\u00f3n, presentaciones, bienestar, comida, vendedores y comunidad.", "pill.yoga": "Yoga + Movimiento", "pill.music": "M\u00fasica en Vivo + DJs", "pill.heal": "Sanaci\u00f3n + Bienestar", "pill.work": "Talleres + Charlas", "pill.food": "Vendedores + Comida", "tix.eyebrow": "Boleto del Festival", "tix.heading": "Consigue tu <span class=\"goldtext\">Boleto</span>", "tix.lede": "Un boleto. Un d\u00eda y una noche completos de yoga, m\u00fasica y comunidad en Oasis Tulum.", "tix.name": "Boleto del Festival", "tix.dates": "S\u00e1bado \u00b7 26 Sep \u00b7 11am\u201311pm \u00b7 Oasis Tulum", "tix.desc": "Acceso de d\u00eda completo al Festival Principal \u2014 yoga, m\u00fasica en vivo, artes de sanaci\u00f3n, mercado consciente, comida y comunidad.", "tix.door": "$300 en la entrada (d\u00eda del evento)", "tix.order": "Tu Orden", "tix.empty": "A\u00fan no hay boletos seleccionados \u2014 agrega uno para comenzar.", "tix.total": "Total", "tix.checkout": "Pagar", "tix.fine": "Precios en pesos mexicanos (MXN). Boleto electr\u00f3nico al instante por correo.<br/>$300 en la entrada el d\u00eda del festival.", "tix.perTicket": "por boleto", "tix.added": "Boleto agregado", "week.eyebrow": "21\u201327 de Septiembre", "week.heading": "La Semana, En Tres Movimientos", "week.c1title": "Semana de Conferencias", "week.c1dates": "21\u201325 Sep", "week.c1p": "Clases, talleres, kirtans, ba\u00f1os de sonido y encuentros por todo Tulum, ofrecidos por maestros, sanadores y recintos participantes.", "week.c2title": "Festival Principal", "week.c2dates": "26 Sep", "week.c2p": "Un d\u00eda y una noche completos en Oasis Tulum \u2014 yoga, m\u00fasica en vivo, DJs, artes de sanaci\u00f3n, talleres, mercado consciente y comunidad.", "week.c3title": "D\u00eda de Integraci\u00f3n", "week.c3dates": "27 Sep", "week.c3p": "Un cierre suave en Oasis Tulum \u2014 pr\u00e1ctica restaurativa, ceremonia y reflexi\u00f3n en comunidad para llevar la semana contigo.", "sched.eyebrow": "Agenda Completa", "sched.heading": "Una Semana \u00b7 <span class=\"goldtext\">Todo Tulum</span>", "sched.lede": "Siete d\u00edas de pr\u00e1ctica en toda la comunidad. Elige un d\u00eda para explorar sus ofrendas \u2014 cada una con maestro, hora, recinto y c\u00f3mo reservar.", "sched.legYoga": "Yoga + Movimiento", "sched.legMusic": "M\u00fasica + Kirtan", "sched.legHeal": "Sanaci\u00f3n + Bienestar", "sched.legWork": "Taller + Charla", "sched.legComm": "Comunidad + Ceremonia", "sched.note": "Los eventos de la Semana de Conferencias son organizados de forma independiente por los maestros y recintos participantes. La reserva, el pago y los detalles los gestiona directamente cada anfitri\u00f3n. El Festival Principal del 26 de septiembre tiene boleto arriba.", "day.conference": "Conferencia", "day.festival": "Festival", "day.integration": "Integraci\u00f3n", "price.free": "Gratis", "price.don": "Donaci\u00f3n", "price.paid": "Pago", "book.direct": "Reservar", "book.buy": "Comprar", "teach.eyebrow": "Maestros y Sanadores", "teach.heading": "Conoce a los Facilitadores", "teach.lede": "Los maestros, gu\u00edas y sanadores que sostienen el espacio durante la semana.", "music.eyebrow": "M\u00fasicos y Artistas", "music.heading": "El <span class=\"goldtext\">Sonido</span> de la Semana", "music.lede": "M\u00fasica consciente, sets en vivo, kirtan y ceremonia \u2014 desde presentaciones estelares hasta encuentros \u00edntimos.", "part.eyebrow": "Nuestros Aliados de Comunidad", "part.heading": "Recintos, Estudios y Espacios", "part.lede": "Los hoteles, estudios, spas y organizaciones que abren sus puertas por todo Tulum.", "aff.eyebrow": "Afiliados de la Semana", "aff.heading": "Amigos del Festival", "aff.lede": "Negocios locales que ofrecen algo especial a los asistentes durante toda la semana.", "ven.eyebrow": "Mercado Consciente", "ven.heading": "Los Vendedores", "ven.lede": "Comida, arte, ropa, bienestar y productos conscientes de creadores y marcas locales.", "ven.recruitH": "\u00bfQuieres ser vendedor?", "ven.recruitP": "Las solicitudes para el Mercado Consciente est\u00e1n abiertas mientras haya espacio.", "ven.recruitBtn": "Escribe a Narayani", "about.eyebrow": "Acerca de TYMF", "about.heading": "M\u00e1s Que un Festival", "about.p1": "Tulum Yoga Music Fest + Semana de Conferencias es una celebraci\u00f3n comunitaria de las personas que hacen de la comunidad consciente de Tulum lo que es.", "about.p2": "Durante una semana, maestros, m\u00fasicos, sanadores, artistas, estudios, hoteles, negocios locales y miembros de la comunidad se re\u00fanen por todo Tulum \u2014 creando m\u00e1s formas de practicar, descubrir, conectar y apoyarse mutuamente.", "about.p3": "Nuestra intenci\u00f3n es simple: unir a la comunidad, hacer el bienestar m\u00e1s accesible y dar mayor visibilidad a las personas y espacios que hacen este trabajo todo el a\u00f1o.", "about.stat1": "D\u00edas", "about.stat2": "Maestros y Artistas", "about.stat3": "Recintos", "about.cardLead": "\u201cEsto est\u00e1 sucediendo. Esto es lo que puedes vivir. Ellos son parte de esto. Ven y \u00fanete.\u201d", "about.cardP1": "El festival naci\u00f3 de una idea simple \u2014 que los maestros, artistas y espacios de Tulum son m\u00e1s fuertes cuando se re\u00fanen. Una semana al a\u00f1o, toda la comunidad comparte un calendario, una intenci\u00f3n y una celebraci\u00f3n.", "about.cardP2": "Ya sea que vengas por una sola clase, un d\u00eda de festival inolvidable, o el viaje completo de siete d\u00edas, te vuelves parte de esto.", "aware.big": "Septiembre es el Mes de la Conciencia del Yoga", "aware.sub": "Un mes para practicar. Una semana para reunirnos.", "aware.date": "21\u201327 de Septiembre \u00b7 Tulum", "gal.eyebrow": "Comunidad", "gal.heading": "Esto es Tulum", "gal.note": "Las im\u00e1genes reflejan la comunidad de yoga y m\u00fasica de Tulum y encuentros pasados; no representan TYMF 2026.", "org.eyebrow": "Creado en Comunidad", "org.heading": "Qui\u00e9nes lo Hacen", "org.role": "Fundadora y Tejedora de Comunidad", "org.bio": "Maestra y organizadora arraigada en la comunidad de yoga, bhakti y bienestar de Tulum, Narayani ha pasado a\u00f1os uniendo a las personas a trav\u00e9s de la pr\u00e1ctica, la m\u00fasica y la ceremonia. TYMF naci\u00f3 de ese trabajo \u2014 una forma de dar a la comunidad una semana para celebrar, conectar y ser vista. Lidera el equipo organizador junto a maestros, artistas y recintos aliados de todo Tulum.", "org.q1": "Una semana que nos record\u00f3 por qu\u00e9 llegamos a Tulum \u2014 conectados, sostenidos y verdaderamente en comunidad.", "org.q1w": "\u2014 Maestra Participante", "org.q2": "La energ\u00eda en cada recinto fue algo especial. Reuni\u00f3 a toda nuestra comunidad en un mismo calendario.", "org.q2w": "\u2014 Recinto Aliado", "org.q3": "Desde la pr\u00e1ctica al amanecer hasta el kirtan nocturno, se sinti\u00f3 como si todo el pueblo respirara junto.", "org.q3w": "\u2014 Asistente al Festival", "spon.eyebrow": "Hecho Posible Con el Apoyo De", "spon.heading": "Gracias", "spon.lede": "A nuestros patrocinadores y aliados de comunidad que hacen posible esta semana.", "final.heading": "Tulum \u00b7 <span class=\"goldtext\">21\u201327 de Septiembre</span>", "final.come": "Ven a practicar. Ven a escuchar. Ven a conectar.", "final.place": "Oasis Tulum, M\u00e9xico", "foot.tagline": "Tulum Yoga Music Fest + Semana de Conferencias \u00b7 21\u201327 de Septiembre, 2026 \u00b7 Tulum, M\u00e9xico. Una semana de yoga, bienestar, m\u00fasica y comunidad.", "foot.explore": "Explorar", "foot.connect": "Conecta", "foot.contact": "Contacto: Narayani", "foot.copyright": "\u00a9 2026 Tulum Yoga Music Fest + Semana de Conferencias. Hecho en comunidad.", "foot.mainFestival": "Festival Principal", "foot.fullSchedule": "Agenda Completa", "foot.buyTickets": "Comprar Boletos", "foot.community": "\u00danete a la Comunidad de WhatsApp", "modal.checkout": "Pago Seguro", "modal.confirmed": "Confirmado", "f.name": "Nombre Completo", "f.email": "Correo (aqu\u00ed se env\u00edan tus boletos)", "f.phone": "WhatsApp / Tel\u00e9fono", "f.card": "N\u00famero de Tarjeta", "f.exp": "Vencimiento", "f.cvc": "CVC", "modal.pay": "Pagar", "modal.payNote": "Pago de demostraci\u00f3n \u2014 no se procesa ning\u00fan pago real. Conecta Stripe o tu proveedor de boletos para activarlo.", "succ.title": "\u00a1Est\u00e1s dentro!", "succ.body": "Tu lugar en Tulum Yoga Music Fest est\u00e1 reservado. Una confirmaci\u00f3n y tus boletos van en camino a", "succ.see": "Nos vemos del 21 al 27 de septiembre en Tulum. \ud83e\udeb7"}};
+var LANG='es';
+function t(k){var d=I18N[LANG]||{};return (k in d)?d[k]:((k in I18N.en)?I18N.en[k]:k);}
+function applyI18n(){
+  document.documentElement.setAttribute('lang',LANG);
+  document.querySelectorAll('[data-i18n]').forEach(function(el){el.textContent=t(el.getAttribute('data-i18n'));});
+  document.querySelectorAll('[data-i18n-html]').forEach(function(el){el.innerHTML=t(el.getAttribute('data-i18n-html'));});
+  document.querySelectorAll('[data-lang-opt]').forEach(function(s){if(s.getAttribute('data-lang-opt')===LANG){s.setAttribute('data-active','1');}else{s.removeAttribute('data-active');}});
+  if(window.__rerender)window.__rerender();
+}
+function setLang(l){LANG=l;try{localStorage.setItem('tymf_lang',l);}catch(e){}applyI18n();}
+
 
 /* ---------- data ---------- */
 var TICKETS=[
@@ -1149,26 +1168,27 @@ function initials(name){return name.split(/\s+/).map(function(w){return w[0];}).
 
 function renderTickets(){
   var list=$('#ticketList');
+  var NM=t('tix.name'),DT=t('tix.dates'),DS=t('tix.desc'),DOOR=t('tix.door');
   list.innerHTML=TICKETS.map(function(t){
     return '<div class="tk'+(t.feat?' feat':'')+'" role="listitem">'+
       (t.badge?'<span class="tk-badge">'+t.badge+'</span>':'')+
-      '<div class="tk-info"><h4>'+t.name+'</h4><div class="dates">'+t.dates+'</div>'+
-      '<p class="desc">'+t.desc+'</p></div>'+
-      '<div class="tk-right"><div class="tk-price">'+fmt(t.price)+'<small>$300 at the door (day of)</small></div>'+
+      '<div class="tk-info"><h4>'+NM+'</h4><div class="dates">'+DT+'</div>'+
+      '<p class="desc">'+DS+'</p></div>'+
+      '<div class="tk-right"><div class="tk-price">'+fmt(t.price)+'<small>'+DOOR+'</small></div>'+
       '<div class="stepper" data-id="'+t.id+'">'+
       '<button type="button" data-act="dec" aria-label="Remove one '+t.name+'">−</button>'+
       '<span class="q" data-q>'+cart[t.id]+'</span>'+
       '<button type="button" data-act="inc" aria-label="Add one '+t.name+'">+</button>'+
       '</div></div></div>';
   }).join('');
-  list.addEventListener('click',function(e){
+  if(!list.__b){list.__b=1;list.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]');if(!b)return;
     var id=b.closest('.stepper').getAttribute('data-id');
     cart[id]=Math.max(0,Math.min(20,cart[id]+(b.getAttribute('data-act')==='inc'?1:-1)));
     b.closest('.stepper').querySelector('[data-q]').textContent=cart[id];
-    if(b.getAttribute('data-act')==='inc') toast(TICKETS.filter(function(t){return t.id===id;})[0].name+' added');
+    if(b.getAttribute('data-act')==='inc') toast(t('tix.added'));
     renderSummary();
-  });
+  });}
 }
 
 function totals(){
@@ -1179,13 +1199,13 @@ function totals(){
 }
 
 function renderSummary(){
-  var lines=$('#sumLines'),tt=totals();
+  var lines=$('#sumLines'),tt=totals(),NM=t('tix.name');
   var rows=TICKETS.filter(function(t){return cart[t.id]>0;});
   if(!rows.length){
-    lines.innerHTML='<p class="sum-empty">No tickets selected yet — add a ticket to begin.</p>';
+    lines.innerHTML='<p class="sum-empty">'+t('tix.empty')+'</p>';
   }else{
     lines.innerHTML=rows.map(function(t){
-      return '<div class="sum-row"><span class="nm">'+t.name+' <small>'+cart[t.id]+' × '+fmt0(t.price)+'</small></span>'+
+      return '<div class="sum-row"><span class="nm">'+NM+' <small>'+cart[t.id]+' × '+fmt0(t.price)+'</small></span>'+
         '<span class="amt">'+fmt0(t.price*cart[t.id])+'</span></div>';
     }).join('');
   }
@@ -1194,7 +1214,7 @@ function renderSummary(){
 }
 
 /* ---------- schedule ---------- */
-function priceTag(p){return '<span class="price-tag '+PLABEL[p][0]+'">'+PLABEL[p][1]+'</span>';}
+function priceTag(p){return '<span class="price-tag '+PLABEL[p][0]+'">'+t('price.'+p)+'</span>';}
 function renderEvents(day){
   var ev=$('#events');
   ev.innerHTML=SCHED[day].map(function(e){
@@ -1202,7 +1222,7 @@ function renderEvents(day){
       '<div class="ev-time">'+e.t+'</div>'+
       '<div class="ev-mid"><h4>'+e.n+'</h4><div class="meta"><b>'+e.who+'</b> · '+e.v+'</div></div>'+
       '<div class="ev-right">'+priceTag(e.p)+
-      '<a class="ev-book" href="'+(day===26?'#tickets':'https://wa.me/17867487247')+'">'+(day===26?'Buy Tickets':'Book Directly')+' →</a>'+
+      '<a class="ev-book" href="'+(day===26?'#tickets':'https://wa.me/17867487247')+'">'+(day===26?t('book.buy'):t('book.direct'))+' →</a>'+
       '</div></div>';
   }).join('');
 }
@@ -1210,14 +1230,14 @@ function renderDays(){
   var tabs=$('#dayTabs');
   tabs.innerHTML=DAYS.map(function(d,i){
     return '<button class="day-tab'+(d.num===26?' on':'')+'" role="tab" data-day="'+d.num+'">'+
-      '<span class="dow">'+d.dow+'</span><span class="dnum">'+d.num+'</span><span class="tag">'+d.tag+'</span></button>';
+      '<span class="dow">'+d.dow+'</span><span class="dnum">'+d.num+'</span><span class="tag">'+t('day.'+d.tag.toLowerCase())+'</span></button>';
   }).join('');
-  tabs.addEventListener('click',function(e){
+  if(!tabs.__b){tabs.__b=1;tabs.addEventListener('click',function(e){
     var b=e.target.closest('.day-tab');if(!b)return;
     tabs.querySelectorAll('.day-tab').forEach(function(x){x.classList.remove('on');});
     b.classList.add('on');
     renderEvents(+b.getAttribute('data-day'));
-  });
+  });}
   renderEvents(26);
 }
 
@@ -1281,36 +1301,36 @@ function renderHeroSponsors(){
 /* ---------- checkout modal ---------- */
 var modal=$('#modal'),lastFocus=null;
 function openCheckout(){
-  var tt=totals();
+  var tt=totals(),NM=t('tix.name');
   var rows=TICKETS.filter(function(t){return cart[t.id]>0;}).map(function(t){
-    return '<div class="r"><span>'+t.name+' × '+cart[t.id]+'</span><span>'+fmt0(t.price*cart[t.id])+'</span></div>';
+    return '<div class="r"><span>'+NM+' × '+cart[t.id]+'</span><span>'+fmt0(t.price*cart[t.id])+'</span></div>';
   }).join('');
-  $('#modalTitle').textContent='Secure Checkout';
+  $('#modalTitle').textContent=t('modal.checkout');
   $('#modalBody').innerHTML=
     '<div class="mini-sum">'+rows+
-      '<div class="r tot"><span>Total ('+tt.count+' ticket'+(tt.count>1?'s':'')+')</span><span>'+fmt(tt.total)+'</span></div></div>'+
+      '<div class="r tot"><span>'+t('tix.total')+' ('+tt.count+')</span><span>'+fmt(tt.total)+'</span></div></div>'+
     '<form id="payForm" novalidate>'+
-      '<div class="field"><label for="fName">Full Name</label><input id="fName" required autocomplete="name" placeholder="Your name"/></div>'+
-      '<div class="field"><label for="fEmail">Email (your tickets are sent here)</label><input id="fEmail" type="email" required autocomplete="email" placeholder="you@email.com"/></div>'+
-      '<div class="field"><label for="fPhone">WhatsApp / Phone</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="+1 …"/></div>'+
-      '<div class="field"><label for="fCard">Card Number</label><input id="fCard" inputmode="numeric" required placeholder="4242 4242 4242 4242"/></div>'+
-      '<div class="field two"><div><label for="fExp">Expiry</label><input id="fExp" required placeholder="MM / YY"/></div>'+
-      '<div><label for="fCvc">CVC</label><input id="fCvc" inputmode="numeric" required placeholder="123"/></div></div>'+
-      '<button type="submit" class="btn btn-gold" style="width:100%">Pay '+fmt(tt.total)+'</button>'+
-      '<p class="pay-note">Demo checkout — no real payment is processed. Connect Stripe or your ticketing provider to go live.</p>'+
+      '<div class="field"><label for="fName">'+t('f.name')+'</label><input id="fName" required autocomplete="name" placeholder="Your name"/></div>'+
+      '<div class="field"><label for="fEmail">'+t('f.email')+'</label><input id="fEmail" type="email" required autocomplete="email" placeholder="you@email.com"/></div>'+
+      '<div class="field"><label for="fPhone">'+t('f.phone')+'</label><input id="fPhone" type="tel" autocomplete="tel" placeholder="+1 …"/></div>'+
+      '<div class="field"><label for="fCard">'+t('f.card')+'</label><input id="fCard" inputmode="numeric" required placeholder="4242 4242 4242 4242"/></div>'+
+      '<div class="field two"><div><label for="fExp">'+t('f.exp')+'</label><input id="fExp" required placeholder="MM / YY"/></div>'+
+      '<div><label for="fCvc">'+t('f.cvc')+'</label><input id="fCvc" inputmode="numeric" required placeholder="123"/></div></div>'+
+      '<button type="submit" class="btn btn-gold" style="width:100%">'+t('modal.pay')+' '+fmt(tt.total)+'</button>'+
+      '<p class="pay-note">'+t('modal.payNote')+'</p>'+
     '</form>';
   $('#payForm').addEventListener('submit',function(e){
     e.preventDefault();
     var f=e.target;
     if(!f.checkValidity()){f.reportValidity();return;}
     var code='TYMF-'+Math.abs(hashStr($('#fEmail').value+tt.total+tt.count)).toString(36).toUpperCase().slice(0,6);
-    $('#modalTitle').textContent='Confirmed';
+    $('#modalTitle').textContent=t('modal.confirmed');
     $('#modalBody').innerHTML=
       '<div class="success"><div class="check">✓</div>'+
-      '<h3>You\'re in.</h3>'+
-      '<p>Your spot at Tulum Yoga Music Fest is reserved. A confirmation and e-tickets are on the way to <b>'+escapeHtml($('#fEmail').value)+'</b>.</p>'+
+      '<h3>'+t('succ.title')+'</h3>'+
+      '<p>'+t('succ.body')+' <b>'+escapeHtml($('#fEmail').value)+'</b>.</p>'+
       '<div class="code">'+code+'</div>'+
-      '<p>See you September 21–27 in Tulum. 🪷</p></div>';
+      '<p>'+t('succ.see')+'</p></div>';
     /* reset cart */
     TICKETS.forEach(function(t){cart[t.id]=0;});
     renderTickets();renderSummary();
@@ -1375,6 +1395,11 @@ var io=new IntersectionObserver(function(entries){
 /* ---------- boot ---------- */
 renderTickets();renderSummary();renderDays();renderPeople();renderArtists();
 renderPartners();renderAffiliates();renderVendors();renderSponsors();renderHeroSponsors();
+window.__rerender=function(){renderTickets();renderSummary();renderDays();};
+try{LANG=localStorage.getItem('tymf_lang')||'es';}catch(e){LANG='es';}
+var _lt=document.getElementById('langToggle');
+if(_lt)_lt.addEventListener('click',function(){setLang(LANG==='es'?'en':'es');});
+applyI18n();
 document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 tick();setInterval(tick,1000);
 })();
