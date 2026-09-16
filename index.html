@@ -146,7 +146,7 @@ section{position:relative}
 .theme-btn:hover{border-color:var(--gold);color:var(--gold)}
 .theme-btn svg{width:17px;height:17px}
 @media(max-width:1080px){
-  .nav-links{position:fixed;inset:64px 0 auto 0;flex-direction:column;gap:0;
+  .nav-links{position:fixed;inset:calc(env(safe-area-inset-top,0px) + 60px) 0 auto 0;flex-direction:column;gap:0;
     background:var(--bg-2);border-bottom:1px solid var(--line);padding:.5rem var(--gate) 1.5rem;
     transform:translateY(-120%);transition:.4s;margin-left:0;box-shadow:var(--shadow)}
   .nav-links.open{transform:translateY(0)}
@@ -155,6 +155,9 @@ section{position:relative}
   .nav-cta .btn-hero-nav{display:none}
   .nav-in{gap:.8rem}
   .nav-links{margin-left:0}
+  /* menu links are a fixed drawer (out of flow) on mobile — push the controls to the right edge */
+  .brand{margin-right:auto}
+  .nav-cta{margin-left:auto;gap:.65rem}
 }
 
 /* ============ HERO ============ */
@@ -217,7 +220,7 @@ section{position:relative}
 .hero-sponsors .wrap{padding-block:1.5rem}
 .hs-eyebrow{text-align:center;font-family:var(--sans);font-weight:500;letter-spacing:.26em;text-transform:uppercase;font-size:.6rem;color:#c9a44e;margin-bottom:1.1rem}
 .hs-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.1rem 2.2rem}
-.hs-logos img{height:30px;width:auto;object-fit:contain;opacity:.82;transition:.3s}
+.hs-logos img{height:34px;width:auto;max-width:150px;object-fit:contain;opacity:.85;transition:.3s}
 .hs-logos img:hover{opacity:1}
 .hs-logos .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:.82rem;color:#efe8d6;opacity:.72;transition:.3s;white-space:nowrap}
 .hs-logos .wm:hover{opacity:1;color:#e6c884}
@@ -1109,7 +1112,20 @@ var VENDORS=[
   {n:'Viento Surf',c:'Local Brand',ig:'@vientosurf',i:'🌊'}
 ];
 
-var SPONSORS=['SEDETUR','Holistika Tulum','Vesica','Kan Tulum','Ahau Tulum','The Space','Shakti Temple','Lokäh','Vikingos Fit Club','Tulum Despierta','Azulik','Oasis Tulum'];
+var SPONSORS=[
+  {name:'SEDETUR',file:'sedetur'},
+  {name:'Holistika Tulum',file:'holistika'},
+  {name:'Vesica',file:'vesica'},
+  {name:'Kan Tulum',file:'kan-tulum'},
+  {name:'Ahau Tulum',file:'ahau-tulum'},
+  {name:'The Space',file:'the-space'},
+  {name:'Shakti Temple',file:'shakti-temple'},
+  {name:'Lokäh',file:'lokah'},
+  {name:'Vikingos Fit Club',file:'vikingos-fit-club'},
+  {name:'Tulum Despierta',file:'tulum-despierta'},
+  {name:'Azulik',file:'azulik'},
+  {name:'Oasis Tulum',file:'oasis-tulum'}
+];
 
 /* ---------- cart / tickets ---------- */
 var cart={};
@@ -1232,14 +1248,24 @@ function renderVendors(){
 }
 function renderSponsors(){
   $('#sponsors').innerHTML=SPONSORS.map(function(s){
-    return '<div class="sp"><span class="nm">'+s+'</span></div>';
+    return '<div class="sp"><span class="nm">'+s.name+'</span></div>';
   }).join('');
 }
 function renderHeroSponsors(){
   var el=document.getElementById('heroSponsors'); if(!el)return;
-  // TODO: when white PNG logos are ready, swap the span for:
-  //   '<img src="logos/<file>.png" alt="'+s+'" loading="lazy">'
-  el.innerHTML=SPONSORS.map(function(s){ return '<span class="wm">'+s+'</span>'; }).join('');
+  el.innerHTML='';
+  SPONSORS.forEach(function(s){
+    // Auto-upgrade: drop a white PNG at logos/<file>.png and it appears here.
+    // Until the file exists, it falls back to the gold text wordmark below.
+    var img=new Image();
+    img.className='hs-logo'; img.alt=s.name; img.loading='lazy';
+    img.onerror=function(){
+      var sp=document.createElement('span'); sp.className='wm'; sp.textContent=s.name;
+      if(img.parentNode) el.replaceChild(sp,img);
+    };
+    img.src='logos/'+s.file+'.png';
+    el.appendChild(img);
+  });
 }
 
 /* ---------- checkout modal ---------- */
