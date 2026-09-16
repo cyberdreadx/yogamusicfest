@@ -127,10 +127,13 @@ section{position:relative}
   backdrop-filter:blur(14px);border-bottom-color:var(--line);box-shadow:0 10px 40px -30px #000}
 .nav-in{max-width:var(--maxw);margin:0 auto;padding:.85rem var(--gate);padding-top:max(.85rem,calc(env(safe-area-inset-top) + .35rem));
   display:flex;align-items:center;gap:1.4rem}
-.brand{display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.brand{display:flex;align-items:center;gap:.85rem;flex-shrink:0}
 .brand .mark{width:34px;height:34px;flex-shrink:0}
 .brand .mark svg{width:100%;height:100%;stroke:var(--gold)}
 .brand .mark img{width:100%;height:100%;object-fit:contain}
+.brand .brandtext{display:flex;flex-direction:column;justify-content:center;gap:.28rem;line-height:1}
+.brand .brandtext b{display:block}
+.brand .brandtext span{display:block}
 .brand b{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.14em;line-height:1;color:var(--cream)}
 .brand span{font-family:var(--sans);font-size:.56rem;letter-spacing:.34em;color:var(--gold);text-transform:uppercase}
 .nav-links{display:flex;gap:1.35rem;margin-left:auto;align-items:center}
@@ -603,7 +606,7 @@ img,svg,video{max-width:100%;height:auto}
   <div class="nav-in">
     <a class="brand" href="#top" aria-label="Tulum Yoga Music Fest home">
       <span class="mark" aria-hidden="true"><img src="mandala-gold.png" alt="" width="480" height="486" /></span>
-      <span><b>TYMF</b><span>Tulum 2026</span></span>
+      <span class="brandtext"><b>TYMF</b><span>Tulum 2026</span></span>
     </a>
     <div class="nav-links" id="navLinks">
       <a href="#festival">Festival</a>
@@ -959,7 +962,7 @@ img,svg,video{max-width:100%;height:auto}
               <circle cx="50" cy="50" r="3" fill="var(--gold)" stroke="none"/>
             </svg>
           </span>
-          <span><b>TYMF</b><span>Tulum 2026</span></span>
+          <span class="brandtext"><b>TYMF</b><span>Tulum 2026</span></span>
         </a>
         <p>Tulum Yoga Music Fest + Conference Week · September 21–27, 2026 · Tulum, Mexico. A week of yoga, wellness, music &amp; community.</p>
       </div>
