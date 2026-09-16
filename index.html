@@ -130,6 +130,7 @@ section{position:relative}
 .brand{display:flex;align-items:center;gap:.7rem;flex-shrink:0}
 .brand .mark{width:34px;height:34px;flex-shrink:0}
 .brand .mark svg{width:100%;height:100%;stroke:var(--gold)}
+.brand .mark img{width:100%;height:100%;object-fit:contain}
 .brand b{font-family:var(--display);font-weight:700;font-size:.95rem;letter-spacing:.14em;line-height:1;color:var(--cream)}
 .brand span{font-family:var(--sans);font-size:.56rem;letter-spacing:.34em;color:var(--gold);text-transform:uppercase}
 .nav-links{display:flex;gap:1.35rem;margin-left:auto;align-items:center}
@@ -158,9 +159,10 @@ section{position:relative}
 
 /* ============ HERO ============ */
 .hero{position:relative;min-height:100svh;display:flex;align-items:flex-end;justify-content:center;overflow:hidden;isolation:isolate}
-.hero-photo{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:50% 26%}
+.hero-photo{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
 .hero-scrim{position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(8,11,8,.6),rgba(8,11,8,.12) 28%,rgba(8,11,8,.32) 58%,rgba(8,11,8,.8) 84%,rgba(8,11,8,.96)),radial-gradient(120% 70% at 50% 108%,rgba(8,11,8,.85),transparent 60%)}
 .hero-content{position:relative;z-index:1;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1.6rem;padding:0 var(--gate) clamp(3.2rem,9vh,6rem);width:100%;max-width:1040px}
+.hero-mark{width:min(160px,34vw);height:auto;margin-bottom:.1rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
 .hero-wordmark{width:min(660px,88vw);height:auto;filter:drop-shadow(0 8px 26px rgba(0,0,0,.55))}
 .hero-dateline{width:min(500px,74vw);height:auto;filter:drop-shadow(0 5px 18px rgba(0,0,0,.55))}
 .hero-bg{position:absolute;inset:0;z-index:-3;
@@ -557,6 +559,7 @@ img,svg,video{max-width:100%;height:auto}
   :root{--gate:18px}
   .section-pad{padding-block:clamp(48px,12vw,72px)}
   .hero-content{gap:1.15rem;padding-bottom:clamp(2.6rem,9vh,4rem)}
+  .hero-mark{width:28vw;max-width:130px}
   .hero-wordmark{width:90vw}
   .hero-dateline{width:80vw}
   .hero-cta,.final .hero-cta{flex-direction:column;align-items:stretch;width:100%;max-width:340px;margin-inline:auto}
@@ -596,17 +599,7 @@ img,svg,video{max-width:100%;height:auto}
 <nav class="nav" id="nav">
   <div class="nav-in">
     <a class="brand" href="#top" aria-label="Tulum Yoga Music Fest home">
-      <span class="mark" aria-hidden="true">
-        <svg viewBox="0 0 100 100" fill="none" stroke-width="2">
-          <rect x="14" y="14" width="72" height="72" opacity=".5"/>
-          <circle cx="50" cy="50" r="30"/>
-          <polygon points="50,24 74,66 26,66"/>
-          <polygon points="50,76 26,34 74,34"/>
-          <polygon points="50,34 66,60 34,60"/>
-          <polygon points="50,66 34,40 66,40"/>
-          <circle cx="50" cy="50" r="3" fill="var(--gold)" stroke="none"/>
-        </svg>
-      </span>
+      <span class="mark" aria-hidden="true"><img src="mandala-gold.png" alt="" width="480" height="486" /></span>
       <span><b>TYMF</b><span>Tulum 2026</span></span>
     </a>
     <div class="nav-links" id="navLinks">
@@ -636,6 +629,7 @@ img,svg,video{max-width:100%;height:auto}
   <img class="hero-photo" src="hero-bg.jpg" alt="Yoga practice in the Tulum jungle at Oasis Tulum" fetchpriority="high" width="1200" height="1680" />
   <div class="hero-scrim" aria-hidden="true"></div>
   <div class="hero-content">
+    <img class="hero-mark reveal" src="mandala-gold.png" alt="Tulum Yoga Music Fest emblem" width="480" height="486" />
     <img class="hero-wordmark reveal" src="wordmark.png" alt="Mexico — Tulum Yoga Music Fest + Conference Week" width="1400" height="512" />
     <img class="hero-dateline reveal" src="dateline.png" alt="September 21–27, 2026 — A week of yoga, wellness, music &amp; community" width="1200" height="376" />
     <div class="hero-cta reveal">
