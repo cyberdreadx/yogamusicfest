@@ -722,9 +722,9 @@ img,svg,video{max-width:100%;height:auto}
 <section class="tickets section-pad" id="tickets">
   <div class="wrap">
     <div class="center reveal" style="max-width:640px;margin:0 auto">
-      <div class="eyebrow" style="justify-content:center">Passes &amp; Tickets</div>
-      <h2 class="sechead" style="margin:1rem 0 .8rem">Choose Your <span class="goldtext">Experience</span></h2>
-      <p class="lede" style="margin:0 auto">From a single festival day to the full seven-day journey across Tulum. Every pass supports the teachers, artists and spaces who make this community.</p>
+      <div class="eyebrow" style="justify-content:center">Festival Ticket</div>
+      <h2 class="sechead" style="margin:1rem 0 .8rem">Get Your <span class="goldtext">Ticket</span></h2>
+      <p class="lede" style="margin:0 auto">One ticket. One full day and night of yoga, music and community at Oasis Tulum.</p>
     </div>
 
     <div class="ticket-layout">
@@ -733,15 +733,11 @@ img,svg,video{max-width:100%;height:auto}
       <aside class="summary reveal" aria-label="Order summary">
         <h3>Your Order</h3>
         <div class="sum-lines" id="sumLines">
-          <p class="sum-empty">No passes selected yet — add a ticket to begin.</p>
+          <p class="sum-empty">No tickets selected yet — add a ticket to begin.</p>
         </div>
-        <div class="sum-sub" id="sumSub" hidden>
-          <div class="r"><span>Subtotal</span><span id="subtotal">$0</span></div>
-          <div class="r"><span>Service &amp; community fee (8%)</span><span id="fee">$0</span></div>
-        </div>
-        <div class="sum-total"><span>Total</span><span class="g" id="grandTotal">$0.00</span></div>
+        <div class="sum-total"><span>Total</span><span class="g" id="grandTotal">$0 MXN</span></div>
         <button class="btn btn-gold" id="checkoutBtn" disabled>Checkout</button>
-        <p class="fine">Prices in USD. Secure checkout · Instant e-ticket by email.<br/>Full week &amp; VIP passes include priority entry.</p>
+        <p class="fine">Prices in Mexican pesos (MXN). Instant e-ticket by email.<br/>$300 at the door on the day of the festival.</p>
       </aside>
     </div>
   </div>
@@ -1030,19 +1026,13 @@ img,svg,video{max-width:100%;height:auto}
 (function(){
 "use strict";
 var $=function(s,r){return (r||document).querySelector(s);};
-var fmt=function(n){return '$'+n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});};
+var fmt=function(n){return '$'+n.toLocaleString('en-US')+' MXN';};
 var fmt0=function(n){return '$'+n.toLocaleString('en-US');};
 
 /* ---------- data ---------- */
 var TICKETS=[
-  {id:'day',name:'Festival Day Pass',dates:'Saturday · Sept 26',price:75,
-   desc:'Full-day access to the Main Festival at Oasis Tulum, 11am–11pm — yoga, music, healing arts, market & more.'},
-  {id:'weekend',name:'Weekend Pass',dates:'Sept 25–27',price:145,
-   desc:'Festival day plus Integration Day, and entry to featured weekend gatherings across Tulum.'},
-  {id:'week',name:'Full Week Pass',dates:'Sept 21–27',price:320,feat:true,badge:'Best Value',
-   desc:'The complete seven-day journey — Conference Week access, the Main Festival, and Integration Day.'},
-  {id:'vip',name:'VIP Temple Pass',dates:'Sept 26 · Festival Day',price:550,badge:'Limited',
-   desc:'Priority entry, front-of-house at main performances, VIP lounge, welcome gifting & artisan refreshments.'}
+  {id:'festival',name:'Festival Ticket',dates:'Saturday · Sept 26 · 11am–11pm · Oasis Tulum',price:200,
+   desc:'Full-day access to the Main Festival — yoga, live music, healing arts, conscious market, food & community.'}
 ];
 
 var CAT={yoga:'var(--cat-yoga)',music:'var(--cat-music)',heal:'var(--cat-heal)',work:'var(--cat-work)',comm:'var(--cat-comm)'};
@@ -1164,7 +1154,7 @@ function renderTickets(){
       (t.badge?'<span class="tk-badge">'+t.badge+'</span>':'')+
       '<div class="tk-info"><h4>'+t.name+'</h4><div class="dates">'+t.dates+'</div>'+
       '<p class="desc">'+t.desc+'</p></div>'+
-      '<div class="tk-right"><div class="tk-price">'+fmt0(t.price)+'<small>per person</small></div>'+
+      '<div class="tk-right"><div class="tk-price">'+fmt(t.price)+'<small>$300 at the door (day of)</small></div>'+
       '<div class="stepper" data-id="'+t.id+'">'+
       '<button type="button" data-act="dec" aria-label="Remove one '+t.name+'">−</button>'+
       '<span class="q" data-q>'+cart[t.id]+'</span>'+
@@ -1184,7 +1174,7 @@ function renderTickets(){
 function totals(){
   var sub=0,count=0;
   TICKETS.forEach(function(t){sub+=t.price*cart[t.id];count+=cart[t.id];});
-  var fee=sub*0.08;
+  var fee=0;
   return {sub:sub,fee:fee,total:sub+fee,count:count};
 }
 
@@ -1192,16 +1182,12 @@ function renderSummary(){
   var lines=$('#sumLines'),tt=totals();
   var rows=TICKETS.filter(function(t){return cart[t.id]>0;});
   if(!rows.length){
-    lines.innerHTML='<p class="sum-empty">No passes selected yet — add a ticket to begin.</p>';
-    $('#sumSub').hidden=true;
+    lines.innerHTML='<p class="sum-empty">No tickets selected yet — add a ticket to begin.</p>';
   }else{
     lines.innerHTML=rows.map(function(t){
       return '<div class="sum-row"><span class="nm">'+t.name+' <small>'+cart[t.id]+' × '+fmt0(t.price)+'</small></span>'+
         '<span class="amt">'+fmt0(t.price*cart[t.id])+'</span></div>';
     }).join('');
-    $('#sumSub').hidden=false;
-    $('#subtotal').textContent=fmt0(tt.sub);
-    $('#fee').textContent=fmt(tt.fee);
   }
   $('#grandTotal').textContent=fmt(tt.total);
   $('#checkoutBtn').disabled=tt.count===0;
@@ -1302,8 +1288,7 @@ function openCheckout(){
   $('#modalTitle').textContent='Secure Checkout';
   $('#modalBody').innerHTML=
     '<div class="mini-sum">'+rows+
-      '<div class="r"><span>Service &amp; community fee</span><span>'+fmt(tt.fee)+'</span></div>'+
-      '<div class="r tot"><span>Total ('+tt.count+' pass'+(tt.count>1?'es':'')+')</span><span>'+fmt(tt.total)+'</span></div></div>'+
+      '<div class="r tot"><span>Total ('+tt.count+' ticket'+(tt.count>1?'s':'')+')</span><span>'+fmt(tt.total)+'</span></div></div>'+
     '<form id="payForm" novalidate>'+
       '<div class="field"><label for="fName">Full Name</label><input id="fName" required autocomplete="name" placeholder="Your name"/></div>'+
       '<div class="field"><label for="fEmail">Email (your tickets are sent here)</label><input id="fEmail" type="email" required autocomplete="email" placeholder="you@email.com"/></div>'+
