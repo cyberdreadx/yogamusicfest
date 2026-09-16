@@ -171,6 +171,27 @@ section{position:relative}
 .hero-mark{width:min(160px,34vw);height:auto;margin-bottom:.1rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,.6))}
 .hero-wordmark{width:min(660px,88vw);height:auto;filter:drop-shadow(0 8px 26px rgba(0,0,0,.55))}
 .hero-dateline{width:min(500px,74vw);height:auto;filter:drop-shadow(0 5px 18px rgba(0,0,0,.55))}
+/* Desktop: split layout — branding on a dark left panel, full pose on the right
+   (a portrait photo cover-cropped into a full-height column doesn't zoom like it does full-bleed) */
+@media(min-width:900px){
+  .hero{align-items:center;justify-content:flex-start}
+  .hero-photo{left:auto;right:0;width:53%;object-position:50% 20%}
+  .hero-scrim{background:
+    linear-gradient(90deg,var(--bg) 40%,rgba(8,11,8,.55) 53%,rgba(8,11,8,.14) 67%,transparent 80%),
+    linear-gradient(0deg,rgba(8,11,8,.45),transparent 42%)}
+  .hero-content{text-align:left;align-items:flex-start;max-width:min(600px,50%);
+    padding:0 0 0 clamp(48px,7vw,112px)}
+  .hero-mark{width:104px;margin-bottom:.5rem}
+  .hero-wordmark{width:min(430px,40vw)}
+  .hero-dateline{width:min(340px,32vw)}
+  .hero-cta{justify-content:flex-start}
+}
+:root[data-theme="light"] .hero-scrim{background:
+  linear-gradient(180deg,rgba(244,237,220,.5),rgba(244,237,220,.05) 28%,rgba(244,237,220,.3) 60%,rgba(244,237,220,.8) 86%,rgba(244,237,220,.96))}
+@media(min-width:900px){
+  :root[data-theme="light"] .hero-scrim{background:
+    linear-gradient(90deg,var(--bg) 40%,rgba(244,237,220,.6) 53%,rgba(244,237,220,.15) 67%,transparent 80%)}
+}
 .hero-bg{position:absolute;inset:0;z-index:-3;
   background:
     radial-gradient(120% 90% at 78% 20%,rgba(35,52,28,.55),transparent 55%),
