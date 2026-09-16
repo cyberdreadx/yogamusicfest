@@ -432,10 +432,23 @@ section{position:relative}
 .logo-cell .off{font-size:.66rem;color:var(--gold);margin-top:.5rem;font-family:var(--serif);font-style:italic;font-weight:500}
 .logo-cell .ig{font-size:.62rem;color:var(--text-dim);letter-spacing:.08em;margin-top:.4rem}
 
+/* affiliates (real cards) */
+.affiliates-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(288px,1fr));gap:1.2rem;margin-top:3rem}
+.aff-card{background:var(--bg-3);border:1px solid var(--line);border-radius:8px;padding:1.5rem;transition:.3s;display:flex;flex-direction:column;gap:.6rem}
+.aff-card:hover{border-color:var(--gold);transform:translateY(-3px)}
+.aff-top{display:flex;justify-content:space-between;align-items:flex-start;gap:.8rem}
+.aff-card h4{font-family:var(--display);font-weight:600;font-size:1.02rem;color:var(--cream);line-height:1.2}
+.aff-disc{flex-shrink:0;font-size:.6rem;letter-spacing:.08em;font-weight:600;color:#1a1405;background:linear-gradient(180deg,var(--gold-2),var(--gold-3));padding:.4em .7em;border-radius:100px;white-space:nowrap}
+.aff-card .d{font-size:.82rem;color:var(--text-dim);line-height:1.55;flex:1}
+.aff-meta{display:flex;flex-wrap:wrap;gap:.4rem 1rem;font-size:.72rem;letter-spacing:.04em;color:var(--sage)}
+.aff-meta a{transition:.2s}.aff-meta a:hover{color:var(--gold)}
+.aff-promo{font-size:.66rem;letter-spacing:.08em;color:var(--gold);border:1px dashed var(--line-strong);border-radius:5px;padding:.5em .8em;align-self:flex-start}
+
 /* vendors */
 .vendors{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:1rem;margin-top:3rem}
-.vendor{background:var(--bg-3);border:1px solid var(--line);border-radius:5px;padding:1.3rem 1rem;text-align:center;transition:.3s}
-.vendor:hover{transform:translateY(-3px);border-color:var(--line-strong)}
+.vendor{display:block;background:var(--bg-3);border:1px solid var(--line);border-radius:6px;padding:1.4rem;text-align:left;transition:.3s}
+.vendor:hover{transform:translateY(-3px);border-color:var(--gold)}
+.vendor .vd{font-size:.78rem;color:var(--text-dim);margin-top:.4rem;line-height:1.5}
 .vendor .ico{font-size:1.4rem;margin-bottom:.5rem}
 .vendor h5{font-family:var(--sans);font-weight:500;color:var(--cream);font-size:.86rem;margin:0}
 .vendor .c{font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-top:.3rem}
@@ -833,7 +846,7 @@ img,svg,video{max-width:100%;height:auto}
       <h2 class="sechead" style="margin-top:1rem" data-i18n="part.heading">Venues, Studios &amp; Spaces</h2>
       <p class="lede" style="margin-top:1rem" data-i18n="part.lede">The hotels, studios, spas and organizations opening their doors across Tulum.</p>
     </div>
-    <div class="partners" id="partners"></div>
+    <div class="partners" id="partnersGrid"></div>
   </div>
 </section>
 
@@ -845,7 +858,7 @@ img,svg,video{max-width:100%;height:auto}
       <h2 class="sechead" style="margin-top:1rem" data-i18n="aff.heading">Friends of the Festival</h2>
       <p class="lede" style="margin-top:1rem" data-i18n="aff.lede">Local businesses offering something special to festival-goers all week long.</p>
     </div>
-    <div class="logo-grid" id="affiliates"></div>
+    <div class="affiliates-list" id="affiliatesGrid"></div>
   </div>
 </section>
 
@@ -857,7 +870,7 @@ img,svg,video{max-width:100%;height:auto}
       <h2 class="sechead" style="margin-top:1rem" data-i18n="ven.heading">The Vendors</h2>
       <p class="lede" style="margin-top:1rem" data-i18n="ven.lede">Food, art, clothing, wellness and conscious products from local makers and brands.</p>
     </div>
-    <div class="vendors" id="vendors"></div>
+    <div class="vendors" id="vendorsGrid"></div>
     <div class="recruit reveal">
       <h3 data-i18n="ven.recruitH">Want to join as a vendor?</h3>
       <p data-i18n="ven.recruitP">Applications for the Conscious Market are open while space remains.</p>
@@ -953,7 +966,7 @@ img,svg,video{max-width:100%;height:auto}
       <h2 class="sechead" style="margin-top:1rem" data-i18n="spon.heading">Thank You</h2>
       <p class="lede" style="margin:1rem auto 0" data-i18n="spon.lede">To our sponsors and community partners who make this week possible.</p>
     </div>
-    <div class="sponsor-grid reveal" id="sponsors"></div>
+    <div class="sponsor-grid reveal" id="sponsorsGrid"></div>
   </div>
 </section>
 
@@ -1126,23 +1139,16 @@ var PARTNERS=[
 ];
 
 var AFFILIATES=[
-  {n:'Lokäh',off:'10% off festival week',ig:'@lokah.tulum'},
-  {n:'Vikingos Fit Club',off:'Free class for pass holders',ig:'@vikingos.fit'},
-  {n:'Tulum Despierta',off:'Ceremony discount',ig:'@tulumdespierta'},
-  {n:'Kan Tulum',off:'Welcome tea',ig:'@kan.tulum'},
-  {n:'Vesica',off:'Drop-in special',ig:'@vesica.tulum'},
-  {n:'Ahau Tulum',off:'Beach day rate',ig:'@ahautulum'}
+  {n:'Aiesha Cosmos · Jaguar Star Temple',disc:'20%',desc:'Oracle guidance sessions — personal or relationship, in person or online.',ig:'@jaguarstartemple',web:'aieshacosmos.com',url:'https://www.aieshacosmos.com'},
+  {n:'Somatic Shift Sessions',disc:'20%',desc:'Therapeutic yoga, breath and meditation sessions to move through somatics.',ig:'@conscious_caro',web:'consciouscaro.com',url:'https://www.consciouscaro.com/'},
+  {n:"Ganesha's Lounge",desc:'Deep-tissue & energetic cleansing massage — Gua-sha, trigger-point release, acupressure, Reiki, smoke cleansing, essential oils & herbal tinctures.',ig:'@ganeshaslounge',web:'ganesharose.com',url:'http://www.ganesharose.com'},
+  {n:'Youniq',disc:'20%',desc:'Wellbeing events app — a branded personal site with your schedule, packs and booking built in.',ig:'@youniq.app',web:'youniq.app',url:'https://youniq.app',promo:'YOGAFEST26'}
 ];
 
 var VENDORS=[
-  {n:'Selva Kitchen',c:'Food',ig:'@selvakitchen',i:'🥗'},
-  {n:'Jade Ceramics',c:'Art',ig:'@jadeceramics',i:'🏺'},
-  {n:'Luz Textiles',c:'Clothing',ig:'@luztextiles',i:'🧵'},
-  {n:'Copal & Co',c:'Wellness',ig:'@copalandco',i:'🌿'},
-  {n:'Miel Maya',c:'Conscious Products',ig:'@mielmaya',i:'🍯'},
-  {n:'Ámbar Jewels',c:'Local Brand',ig:'@ambarjewels',i:'💎'},
-  {n:'Raíz Cacao',c:'Food',ig:'@raizcacao',i:'🍫'},
-  {n:'Viento Surf',c:'Local Brand',ig:'@vientosurf',i:'🌊'}
+  {n:'Within the Temple Yoga',c:'Yoga',desc:'Mats, towels, bags & blocks',ig:'@templewthn',url:'https://shop.consciouscaro.com/'},
+  {n:'Boho Vegano',c:'Food',desc:'Plant-based desserts',ig:'@bohovegano',url:'https://instagram.com/bohovegano'},
+  {n:'174 Cacao',c:'Cacao',desc:'Organic ceremonial-grade cacao from Tabasco',ig:'@174cacao',url:'https://www.174cacao.com'}
 ];
 
 var SPONSORS=[
@@ -1260,24 +1266,33 @@ function renderArtists(){
   }).join('');
 }
 function renderPartners(){
-  $('#partners').innerHTML=PARTNERS.map(function(p){
+  $('#partnersGrid').innerHTML=PARTNERS.map(function(p){
     return '<article class="partner"><div class="logo">'+initials(p.n)+'</div>'+
       '<div><h4>'+p.n+'</h4><div class="cat">'+p.c+'</div><p>'+p.d+'</p>'+
       '<div class="links"><a href="#">Website</a><a href="#">Instagram</a></div></div></article>';
   }).join('');
 }
 function renderAffiliates(){
-  $('#affiliates').innerHTML=AFFILIATES.map(function(a){
-    return '<div class="logo-cell"><div class="nm">'+a.n+'</div><div class="off">'+a.off+'</div><div class="ig">'+a.ig+'</div></div>';
+  $('#affiliatesGrid').innerHTML=AFFILIATES.map(function(a){
+    var ig=a.ig?'<a href="https://instagram.com/'+a.ig.replace('@','')+'" target="_blank" rel="noopener">'+a.ig+'</a>':'';
+    var web=a.web?'<a href="'+a.url+'" target="_blank" rel="noopener">'+a.web+'</a>':'';
+    return '<article class="aff-card">'+
+      '<div class="aff-top"><h4>'+a.n+'</h4>'+(a.disc?'<span class="aff-disc">'+a.disc+'</span>':'')+'</div>'+
+      '<p class="d">'+a.desc+'</p>'+
+      '<div class="aff-meta">'+ig+web+'</div>'+
+      (a.promo?'<div class="aff-promo">Promo: '+a.promo+'</div>':'')+
+      '</article>';
   }).join('');
 }
 function renderVendors(){
-  $('#vendors').innerHTML=VENDORS.map(function(v){
-    return '<div class="vendor"><div class="ico">'+v.i+'</div><h5>'+v.n+'</h5><div class="c">'+v.c+'</div><div class="ig">'+v.ig+'</div></div>';
+  $('#vendorsGrid').innerHTML=VENDORS.map(function(v){
+    var ig=v.ig?'<a href="https://instagram.com/'+v.ig.replace('@','')+'" target="_blank" rel="noopener">'+v.ig+'</a>':'';
+    return '<a class="vendor" href="'+(v.url||'#')+'" target="_blank" rel="noopener">'+
+      '<div class="c">'+v.c+'</div><h5>'+v.n+'</h5><div class="vd">'+v.desc+'</div><div class="ig">'+v.ig+'</div></a>';
   }).join('');
 }
 function renderSponsors(){
-  $('#sponsors').innerHTML=SPONSORS.map(function(s){
+  $('#sponsorsGrid').innerHTML=SPONSORS.map(function(s){
     return '<div class="sp"><span class="nm">'+s.name+'</span></div>';
   }).join('');
 }
