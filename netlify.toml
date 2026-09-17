@@ -8,6 +8,12 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Pretty URL for the direct-link ticket checkout page
+[[redirects]]
+  from = "/checkout"
+  to = "/checkout.html"
+  status = 200
+
 # Pretty URLs for the staff check-in scanner and organizer panel
 [[redirects]]
   from = "/checkin"

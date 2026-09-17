@@ -34,11 +34,14 @@ exports.handler = async (event) => {
   let quantity = 1;
   let locale = 'auto';
   let ref = '';
+  let source = '';
   try {
     const body = JSON.parse(event.body || '{}');
     quantity = Math.max(1, Math.min(20, parseInt(body.quantity, 10) || 1));
     if (body.locale === 'es' || body.locale === 'en') locale = body.locale;
     if (typeof body.ref === 'string') ref = body.ref.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+    // Where the sale started, so we can return the buyer to the right page.
+    if (body.source === 'checkout') source = 'checkout';
   } catch (_) { /* fall back to defaults */ }
 
   const origin =
@@ -85,8 +88,8 @@ exports.handler = async (event) => {
         },
       ],
       phone_number_collection: { enabled: true },
-      success_url: origin + '/?paid=true',
-      cancel_url: origin + '/#tickets',
+      success_url: origin + (source === 'checkout' ? '/checkout?paid=true' : '/?paid=true'),
+      cancel_url: origin + (source === 'checkout' ? '/checkout' : '/#tickets'),
     };
     if (promoterAcct) {
       params.payment_intent_data = {
