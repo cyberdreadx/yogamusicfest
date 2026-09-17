@@ -41,7 +41,7 @@ const COPY = {
   },
 };
 
-function ticketHtml(t, code, qty, qrCid) {
+function ticketHtml(t, code, qty, qrUrl) {
   return `<!doctype html><html><body style="margin:0;background:#0a0d0a;font-family:Georgia,'Times New Roman',serif;color:#efe8d6">
   <span style="display:none;max-height:0;overflow:hidden;opacity:0">${t.preheader}</span>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0d0a;padding:28px 16px">
@@ -59,7 +59,7 @@ function ticketHtml(t, code, qty, qrCid) {
           <div style="display:inline-block;margin:16px 0 6px;padding:6px 16px;border:1px solid rgba(201,164,78,.4);border-radius:100px;color:#e6c884;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase">${t.admits(qty)}</div>
         </td></tr>
         <tr><td align="center" style="padding:14px 32px 4px">
-          <img src="cid:${qrCid}" width="220" height="220" alt="Ticket QR" style="display:block;background:#fff;border-radius:10px;padding:10px" />
+          <img src="${qrUrl}" width="220" height="220" alt="Ticket QR" style="display:block;background:#fff;border-radius:10px;padding:10px" />
         </td></tr>
         <tr><td style="padding:6px 32px 4px;text-align:center">
           <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:2px;color:#8a9a6e;text-transform:uppercase">${t.codeLabel}</div>
@@ -136,19 +136,23 @@ exports.handler = async (event) => {
 
   // 1) Buyer's QR ticket — critical. On failure, 500 so Stripe retries.
   try {
-    const qrPng = await QRCode.toBuffer('TYMF2026|' + code + '|x' + qty, {
+    const payload = 'TYMF2026|' + code + '|x' + qty;
+    const qrPng = await QRCode.toBuffer(payload, {
       margin: 1,
       width: 480,
       color: { dark: '#0a0d0a', light: '#ffffff' },
     });
+    const qrUrl =
+      (process.env.SITE_URL || 'https://yogamusicfest.mx') +
+      '/.netlify/functions/qr?d=' + encodeURIComponent(payload);
 
     await resend.emails.send({
       from,
       to: email,
       subject: t.subject,
-      html: ticketHtml(t, code, qty, 'tymfqr'),
+      html: ticketHtml(t, code, qty, qrUrl),
       attachments: [
-        { filename: 'tymf-2026-ticket.png', content: qrPng, contentId: 'tymfqr' },
+        { filename: 'tymf-2026-ticket.png', content: qrPng },
       ],
     });
   } catch (err) {
