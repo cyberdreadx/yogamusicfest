@@ -43,6 +43,7 @@ exports.handler = async (event) => {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       locale,
+      metadata: { quantity: String(quantity), locale: locale === 'auto' ? 'en' : locale },
       line_items: [
         {
           quantity,
