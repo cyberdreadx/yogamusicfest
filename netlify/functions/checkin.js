@@ -7,7 +7,7 @@
 // Response { status, code?, order?, message? }
 //   status: ok | used | invalid | error
 
-const { getStore } = require('@netlify/blobs');
+const { getStore, connectLambda } = require('@netlify/blobs');
 
 function json(status, obj) {
   return {
@@ -23,6 +23,7 @@ function json(status, obj) {
 }
 
 exports.handler = async (event) => {
+  connectLambda(event);
   if (event.httpMethod === 'OPTIONS') return json(204, {});
   if (event.httpMethod !== 'POST') return json(405, { status: 'error', message: 'Method not allowed' });
 

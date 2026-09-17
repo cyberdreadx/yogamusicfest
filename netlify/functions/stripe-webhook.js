@@ -11,7 +11,7 @@
 const Stripe = require('stripe');
 const QRCode = require('qrcode');
 const { Resend } = require('resend');
-const { getStore } = require('@netlify/blobs');
+const { getStore, connectLambda } = require('@netlify/blobs');
 
 const COPY = {
   en: {
@@ -134,6 +134,7 @@ exports.handler = async (event) => {
   // Save the order for door check-in (best effort — done before email so
   // check-in works even if the email step is misconfigured).
   try {
+    connectLambda(event);
     await getStore('orders').setJSON(code, {
       code,
       qty,
