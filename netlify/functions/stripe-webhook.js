@@ -74,6 +74,29 @@ function ticketHtml(t, code, qty, qrCid) {
   </table></body></html>`;
 }
 
+function esc(s) {
+  return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+  });
+}
+
+function adminHtml(d) {
+  const row = (k, v) =>
+    '<tr><td style="padding:7px 16px 7px 0;color:#8a9a6e;font:12px Arial,sans-serif;white-space:nowrap;vertical-align:top">' + k +
+    '</td><td style="padding:7px 0;color:#f4eeda;font:14px Arial,sans-serif">' + (esc(v) || '—') + '</td></tr>';
+  return '<div style="background:#0a0d0a;padding:24px;font-family:Arial,sans-serif">' +
+    '<div style="max-width:480px;margin:0 auto;background:#10160f;border:1px solid rgba(201,164,78,.28);border-radius:12px;padding:24px 28px">' +
+    '<div style="color:#e6c884;font:bold 12px Arial;letter-spacing:2px;text-transform:uppercase">TYMF 2026 · New order</div>' +
+    '<h2 style="color:#f4eeda;font:600 20px Georgia,serif;margin:8px 0 18px">' + esc(d.amount) + ' · ' + d.qty + ' ticket' + (d.qty > 1 ? 's' : '') + '</h2>' +
+    '<table role="presentation" cellpadding="0" cellspacing="0">' +
+    row('Order code', d.code) + row('Tickets', d.qty) + row('Amount', d.amount) +
+    row('Name', d.name) + row('Email', d.email) + row('Phone', d.phone) +
+    row('Stripe session', d.sid) +
+    '</table>' +
+    '<p style="color:#8a9a6e;font:12px Arial;margin-top:18px">Full details are in your Stripe dashboard.</p>' +
+    '</div></div>';
+}
+
 exports.handler = async (event) => {
   const key = process.env.STRIPE_SECRET_KEY;
   const whsec = process.env.STRIPE_WEBHOOK_SECRET;
@@ -108,15 +131,16 @@ exports.handler = async (event) => {
   if (!email) return { statusCode: 200, body: 'no email on session' };
   if (!process.env.RESEND_API_KEY) return { statusCode: 500, body: 'RESEND_API_KEY not set' };
 
+  const resend = new Resend(process.env.RESEND_API_KEY);
+  const from = process.env.TICKET_FROM_EMAIL || 'Tulum Yoga Music Fest <onboarding@resend.dev>';
+
+  // 1) Buyer's QR ticket — critical. On failure, 500 so Stripe retries.
   try {
     const qrPng = await QRCode.toBuffer('TYMF2026|' + code + '|x' + qty, {
       margin: 1,
       width: 480,
       color: { dark: '#0a0d0a', light: '#ffffff' },
     });
-
-    const resend = new Resend(process.env.RESEND_API_KEY);
-    const from = process.env.TICKET_FROM_EMAIL || 'Tulum Yoga Music Fest <onboarding@resend.dev>';
 
     await resend.emails.send({
       from,
@@ -128,8 +152,23 @@ exports.handler = async (event) => {
       ],
     });
   } catch (err) {
-    // Return 500 so Stripe retries delivery of the webhook.
     return { statusCode: 500, body: 'Ticket email failed: ' + (err.message || 'unknown') };
+  }
+
+  // 2) Organizer notification — best effort; never blocks/retries the buyer ticket.
+  try {
+    const cust = session.customer_details || {};
+    const amount =
+      '$' + ((session.amount_total || 0) / 100).toLocaleString('en-US', { minimumFractionDigits: 2 }) +
+      ' ' + (session.currency || 'mxn').toUpperCase();
+    await resend.emails.send({
+      from,
+      to: process.env.ADMIN_EMAIL || 'yogamusicfest.mx@gmail.com',
+      subject: 'New ticket order — ' + qty + ' x TYMF 2026 (' + amount + ')',
+      html: adminHtml({ code, qty, amount, name: cust.name, email: cust.email, phone: cust.phone, sid: session.id }),
+    });
+  } catch (e) {
+    console.log('Admin notification failed:', e && e.message);
   }
 
   return { statusCode: 200, body: 'ticket sent' };
