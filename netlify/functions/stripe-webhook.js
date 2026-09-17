@@ -135,6 +135,7 @@ exports.handler = async (event) => {
   // check-in works even if the email step is misconfigured).
   try {
     connectLambda(event);
+    const ref = (session.metadata && session.metadata.ref) || '';
     await getStore('orders').setJSON(code, {
       code,
       qty,
@@ -143,6 +144,8 @@ exports.handler = async (event) => {
       phone: (session.customer_details && session.customer_details.phone) || '',
       amount: session.amount_total,
       currency: session.currency,
+      ref,
+      commission: ref ? qty * 100 : 0,
       session: session.id,
       createdAt: new Date().toISOString(),
       used: false,

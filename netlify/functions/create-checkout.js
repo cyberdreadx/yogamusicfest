@@ -29,10 +29,12 @@ exports.handler = async (event) => {
   // Parse + clamp the requested quantity; never trust the client for the price.
   let quantity = 1;
   let locale = 'auto';
+  let ref = '';
   try {
     const body = JSON.parse(event.body || '{}');
     quantity = Math.max(1, Math.min(20, parseInt(body.quantity, 10) || 1));
     if (body.locale === 'es' || body.locale === 'en') locale = body.locale;
+    if (typeof body.ref === 'string') ref = body.ref.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
   } catch (_) { /* fall back to defaults */ }
 
   const origin =
@@ -43,7 +45,7 @@ exports.handler = async (event) => {
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       locale,
-      metadata: { quantity: String(quantity), locale: locale === 'auto' ? 'en' : locale },
+      metadata: { quantity: String(quantity), locale: locale === 'auto' ? 'en' : locale, ref },
       line_items: [
         {
           quantity,

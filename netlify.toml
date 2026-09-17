@@ -8,10 +8,15 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
-# Pretty URL for the staff check-in scanner
+# Pretty URLs for the staff check-in scanner and organizer panel
 [[redirects]]
   from = "/checkin"
   to = "/checkin.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin"
+  to = "/admin.html"
   status = 200
 
 [[headers]]
@@ -20,8 +25,13 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Content-Type-Options = "nosniff"
 
-# The check-in page must never be indexed
+# Staff/organizer pages must never be indexed
 [[headers]]
   for = "/checkin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/admin.html"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"
