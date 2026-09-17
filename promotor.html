@@ -4,16 +4,19 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
-<title>TYMF · Panel de Promotor</title>
+<title>TYMF · Promoter Panel</title>
 <style>
   :root{--bg:#0a0d0a;--card:#10160f;--line:rgba(201,164,78,.26);--gold:#e6c884;--gold2:#c9a44e;--text:#efe8d6;--dim:#a7a992;--good:#7fbf90}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
        min-height:100svh;padding:max(env(safe-area-inset-top),16px) 16px 40px}
   .wrap{max-width:440px;margin:0 auto}
-  header{text-align:center;padding:10px 0 18px}
+  header{text-align:center;padding:10px 0 18px;position:relative}
   header .m{font-family:Georgia,serif;letter-spacing:6px;font-weight:bold;color:var(--gold);font-size:20px}
   header .s{letter-spacing:3px;font-size:10px;color:var(--dim);text-transform:uppercase;margin-top:4px}
+  .lang{position:absolute;top:6px;right:0;display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;cursor:pointer}
+  .lang span{padding:4px 9px;font-size:11px;font-weight:600;color:var(--dim)}
+  .lang span[data-on]{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
   .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:14px}
   .hi{font-family:Georgia,serif;font-size:22px;color:var(--text);margin:0 0 2px}
   .hi b{color:var(--gold)}
@@ -40,60 +43,80 @@
 </head>
 <body>
 <div class="wrap">
-  <header><div class="m">T Y M F</div><div class="s">Panel de Promotor</div></header>
+  <header>
+    <div class="m">T Y M F</div><div class="s" data-t="subtitle">Panel de Promotor</div>
+    <button class="lang" id="lang" aria-label="Idioma / Language"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
+  </header>
 
-  <div id="loading" class="msg">Cargando…</div>
+  <div id="loading" class="msg" data-t="loading">Cargando…</div>
   <div id="error" class="msg hidden"></div>
 
   <div id="content" class="hidden">
     <div class="card">
-      <div class="hi">Hola, <b id="pcode">—</b></div>
-      <div class="muted">Gracias por difundir Tulum Yoga Music Fest 🪷</div>
-      <div class="big"><div class="n" id="tickets">0</div><div class="l">Boletos vendidos</div></div>
+      <div class="hi"><span data-t="hi">Hola</span>, <b id="pcode">—</b></div>
+      <div class="muted" data-t="thanks">Gracias por difundir Tulum Yoga Music Fest 🪷</div>
+      <div class="big"><div class="n" id="tickets">0</div><div class="l" data-t="ticketsSold">Boletos vendidos</div></div>
       <div class="grid">
-        <div class="box"><div class="n" id="earned">$0</div><div class="l">Ganado (total)</div></div>
-        <div class="box"><div class="n" id="rate">$100</div><div class="l">Por boleto</div></div>
+        <div class="box"><div class="n" id="earned">$0</div><div class="l" data-t="earnedTotal">Ganado (total)</div></div>
+        <div class="box"><div class="n" id="rate">$100</div><div class="l" data-t="perTicket">Por boleto</div></div>
       </div>
       <div id="payNote" class="note"></div>
     </div>
 
     <div class="card">
-      <label>Tu enlace para compartir</label>
+      <label data-t="yourLink">Tu enlace para compartir</label>
       <div class="lk" id="shareLink">—</div>
-      <button class="ghost" id="copyBtn">Copiar enlace</button>
-      <p class="muted center" style="margin:12px 0 0">Cada boleto que se compre con tu enlace suma $100 MXN a tu cuenta.</p>
+      <button class="ghost" id="copyBtn" data-t="copy">Copiar enlace</button>
+      <p class="muted center" style="margin:12px 0 0" data-t="linkNote">Cada boleto que se compre con tu enlace suma $100 MXN a tu cuenta.</p>
     </div>
 
-    <div class="center"><button class="ghost" id="refresh" style="width:auto;padding:9px 18px">Actualizar</button></div>
+    <div class="center"><button class="ghost" id="refresh" style="width:auto;padding:9px 18px" data-t="refresh">Actualizar</button></div>
   </div>
 </div>
 
 <script>
 (function(){
   var $=function(id){return document.getElementById(id);};
+  var TXT={
+    es:{subtitle:'Panel de Promotor',loading:'Cargando…',invalid:'Enlace inválido. Pide a la organización tu enlace de promotor.',loadFail:'No se pudo cargar tu panel.',connErr:'Error de conexión. Intenta de nuevo.',
+        hi:'Hola',thanks:'Gracias por difundir Tulum Yoga Music Fest 🪷',ticketsSold:'Boletos vendidos',earnedTotal:'Ganado (total)',perTicket:'Por boleto',
+        yourLink:'Tu enlace para compartir',copy:'Copiar enlace',copied:'¡Copiado!',copyManual:'Copia manual',linkNote:'Cada boleto que se compre con tu enlace suma $100 MXN a tu cuenta.',refresh:'Actualizar',
+        autoActive:'Pago automático activo',autoNote:function(a){return 'Tus comisiones ('+a+') se depositan automáticamente a tu banco vía Stripe. Consulta tus pagos en ';},
+        owedNote:function(a){return 'Comisión por pagar: <b>'+a+'</b> — ';},paidBy:'te la paga la organización directamente',paid:'Pagado',wantAuto:'¿Quieres cobro automático a tu banco? Pide a la organización activar tu pago con Stripe.'},
+    en:{subtitle:'Promoter Panel',loading:'Loading…',invalid:'Invalid link. Ask the organizers for your promoter link.',loadFail:'Could not load your panel.',connErr:'Connection error. Try again.',
+        hi:'Hi',thanks:'Thanks for spreading the word about Tulum Yoga Music Fest 🪷',ticketsSold:'Tickets sold',earnedTotal:'Earned (total)',perTicket:'Per ticket',
+        yourLink:'Your link to share',copy:'Copy link',copied:'Copied!',copyManual:'Copy manually',linkNote:'Every ticket bought with your link adds $100 MXN to your account.',refresh:'Refresh',
+        autoActive:'Auto-payout active',autoNote:function(a){return 'Your commissions ('+a+') are deposited automatically to your bank via Stripe. See your payouts at ';},
+        owedNote:function(a){return 'Commission pending: <b>'+a+'</b> — ';},paidBy:'the organizers pay you directly',paid:'Paid',wantAuto:'Want automatic payouts to your bank? Ask the organizers to enable your Stripe payout.'}
+  };
+  var L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
+  function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
+  function applyStatic(){ document.documentElement.lang=L;
+    document.querySelectorAll('[data-t]').forEach(function(el){var v=t(el.getAttribute('data-t')); if(typeof v==='string')el.textContent=v;});
+    document.querySelectorAll('[data-lang]').forEach(function(s){ if(s.getAttribute('data-lang')===L)s.setAttribute('data-on','1'); else s.removeAttribute('data-on'); }); }
+  $('lang').onclick=function(){ L=(L==='es'?'en':'es'); try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(last)render(last); };
+  applyStatic();
+
   var qs=new URLSearchParams(location.search);
   var code=(qs.get('p')||'').toLowerCase(), token=qs.get('k')||'';
-  var link=location.origin+'/?ref='+code;
+  var link=location.origin+'/?ref='+code, last=null;
 
-  if(!code||!token){ fail('Enlace inválido. Pide a la organización tu enlace de promotor.'); return; }
+  if(!code||!token){ fail(t('invalid')); return; }
   load();
   $('refresh').onclick=load;
   $('copyBtn').onclick=function(){ (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject())
-    .then(function(){ $('copyBtn').textContent='¡Copiado!'; }).catch(function(){ $('copyBtn').textContent='Copia manual'; }); };
+    .then(function(){ $('copyBtn').textContent=t('copied'); }).catch(function(){ $('copyBtn').textContent=t('copyManual'); }); };
 
   function fail(m){ $('loading').classList.add('hidden'); var e=$('error'); e.textContent=m; e.classList.remove('hidden'); }
-  function mxn(n){ return '$'+((n||0)).toLocaleString('es-MX')+' MXN'; }
+  function mxn(n){ return '$'+((n||0)).toLocaleString('en-US')+' MXN'; }
 
   function load(){
     fetch('/.netlify/functions/promoter-stats',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({code:code,token:token})})
       .then(function(r){ return r.json().then(function(d){return{s:r.status,d:d};}); })
-      .then(function(res){
-        if(res.s!==200){ fail(res.d&&res.d.error?res.d.error:'No se pudo cargar tu panel.'); return; }
-        render(res.d);
-      }).catch(function(){ fail('Error de conexión. Intenta de nuevo.'); });
+      .then(function(res){ if(res.s!==200){ fail(res.d&&res.d.error?res.d.error:t('loadFail')); return; } last=res.d; render(res.d); })
+      .catch(function(){ fail(t('connErr')); });
   }
-
   function render(d){
     $('loading').classList.add('hidden'); $('error').classList.add('hidden'); $('content').classList.remove('hidden');
     $('pcode').textContent=d.code;
@@ -102,11 +125,11 @@
     $('shareLink').textContent=link;
     var note='';
     if(d.autoEnabled){
-      note='<span class="pill good">Pago automático activo</span><br>Tus comisiones ('+mxn(d.commissionAuto)+') se depositan automáticamente a tu banco vía Stripe. '+
-           'Consulta tus pagos en <a href="https://connect.stripe.com/express_login" target="_blank" rel="noopener">connect.stripe.com/express_login</a>.';
+      note='<span class="pill good">'+t('autoActive')+'</span><br>'+t('autoNote')(mxn(d.commissionAuto))+
+           '<a href="https://connect.stripe.com/express_login" target="_blank" rel="noopener">connect.stripe.com/express_login</a>.';
     } else {
-      note='Comisión por pagar: <b>'+mxn(d.commissionOwed)+'</b> — '+(d.paidManual?'<span class="pill good">Pagado</span>':'te la paga la organización directamente')+'.'+
-           '<br><span class="muted">¿Quieres cobro automático a tu banco? Pide a la organización activar tu pago con Stripe.</span>';
+      note=t('owedNote')(mxn(d.commissionOwed))+(d.paidManual?'<span class="pill good">'+t('paid')+'</span>':t('paidBy'))+'.'+
+           '<br><span class="muted">'+t('wantAuto')+'</span>';
     }
     $('payNote').innerHTML=note;
   }
