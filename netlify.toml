@@ -8,8 +8,20 @@
   directory = "netlify/functions"
   node_bundler = "esbuild"
 
+# Pretty URL for the staff check-in scanner
+[[redirects]]
+  from = "/checkin"
+  to = "/checkin.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Content-Type-Options = "nosniff"
+
+# The check-in page must never be indexed
+[[headers]]
+  for = "/checkin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

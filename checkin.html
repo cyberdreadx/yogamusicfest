@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow" />
+<title>TYMF · Check-in</title>
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<style>
+  :root{--bg:#0a0d0a;--card:#10160f;--line:rgba(201,164,78,.28);--gold:#e6c884;--gold2:#c9a44e;--text:#efe8d6;--dim:#aeb09a;
+        --ok:#2f7d46;--okbg:#123a20;--warn:#8a5a12;--warnbg:#3a2a0e;--bad:#7d2f2f;--badbg:#3a1414}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       min-height:100svh;padding:max(env(safe-area-inset-top),12px) 14px 24px}
+  .wrap{max-width:460px;margin:0 auto}
+  header{text-align:center;padding:8px 0 14px}
+  header .m{font-family:Georgia,serif;letter-spacing:5px;font-weight:bold;color:var(--gold);font-size:18px}
+  header .s{letter-spacing:3px;font-size:10px;color:var(--dim);text-transform:uppercase;margin-top:3px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  label{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  input{width:100%;background:#0c120b;border:1px solid var(--line);border-radius:8px;padding:13px 14px;color:var(--text);
+        font-size:16px;letter-spacing:2px}
+  input:focus{outline:none;border-color:var(--gold)}
+  button{width:100%;border:0;border-radius:8px;padding:14px;font-size:14px;font-weight:600;letter-spacing:.1em;
+         text-transform:uppercase;cursor:pointer;margin-top:12px;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .hint{font-size:12px;color:var(--dim);margin-top:10px;text-align:center;line-height:1.5}
+  #reader{border-radius:12px;overflow:hidden;border:1px solid var(--line);margin-bottom:10px}
+  #reader video{display:block;width:100%!important}
+  .hidden{display:none!important}
+  .manual{margin-top:14px}
+  .result{border-radius:14px;padding:22px 18px;text-align:center;margin-bottom:14px;border:1px solid}
+  .result .big{font-size:30px;font-weight:800;letter-spacing:.02em;margin:0 0 6px}
+  .result .nm{font-size:20px;font-weight:600;margin:6px 0 2px}
+  .result .meta{font-size:13px;opacity:.9;margin-top:4px}
+  .result .code{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:2px;font-size:14px;margin-top:10px;opacity:.85}
+  .r-ok{background:var(--okbg);border-color:#3aa15e;color:#c8f2d5}
+  .r-used{background:var(--warnbg);border-color:#c99a3a;color:#f0d9a6}
+  .r-bad{background:var(--badbg);border-color:#c95a5a;color:#f2c8c8}
+  .count{text-align:center;font-size:12px;color:var(--dim);margin-top:14px}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .topbar a{font-size:12px;color:var(--gold);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="m">T Y M F</div>
+    <div class="s">Check-in · 2026</div>
+  </header>
+
+  <!-- PIN gate -->
+  <section id="pinScreen" class="card">
+    <label for="pin">PIN de acceso</label>
+    <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" />
+    <button id="pinBtn">Entrar</button>
+    <p id="pinErr" class="hint" style="color:#f2c8c8"></p>
+    <p class="hint">Solo para personal. Pide el PIN a la organización.</p>
+  </section>
+
+  <!-- Scanner -->
+  <section id="scanScreen" class="hidden">
+    <div class="topbar">
+      <span class="hint" style="margin:0">Apunta la cámara al código QR</span>
+      <a href="#" id="logout">Salir</a>
+    </div>
+    <div id="result" class="hidden"></div>
+    <div id="reader"></div>
+    <div id="scanControls">
+      <button id="rescanBtn" class="hidden">Escanear siguiente</button>
+    </div>
+    <div class="manual card" style="margin-top:14px">
+      <label for="manual">O ingresa el código manualmente</label>
+      <input id="manual" autocapitalize="characters" placeholder="TYMF-XXXXXXXX" />
+      <button id="manualBtn" class="ghost">Verificar código</button>
+    </div>
+    <div id="count" class="count"></div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var PIN='', scanner=null, scanning=false, checked=0;
+  var $=function(id){return document.getElementById(id);};
+
+  // restore PIN
+  try{ PIN=sessionStorage.getItem('tymf_pin')||''; }catch(e){}
+  if(PIN){ showScan(); }
+
+  $('pinBtn').onclick=function(){
+    PIN=$('pin').value.trim();
+    if(!PIN){ $('pinErr').textContent='Ingresa el PIN'; return; }
+    try{ sessionStorage.setItem('tymf_pin',PIN); }catch(e){}
+    $('pinErr').textContent='';
+    showScan();
+  };
+  $('pin').addEventListener('keydown',function(e){ if(e.key==='Enter') $('pinBtn').click(); });
+
+  $('logout').onclick=function(e){ e.preventDefault(); try{sessionStorage.removeItem('tymf_pin');}catch(_){}
+    stopScanner(); $('scanScreen').classList.add('hidden'); $('pinScreen').classList.remove('hidden'); $('pin').value=''; };
+
+  $('manualBtn').onclick=function(){ var v=$('manual').value.trim(); if(v){ validate(v); } };
+  $('manual').addEventListener('keydown',function(e){ if(e.key==='Enter') $('manualBtn').click(); });
+  $('rescanBtn').onclick=function(){ hideResult(); startScanner(); };
+
+  function showScan(){
+    $('pinScreen').classList.add('hidden');
+    $('scanScreen').classList.remove('hidden');
+    startScanner();
+  }
+
+  function startScanner(){
+    if(typeof Html5Qrcode==='undefined'){
+      $('reader').innerHTML='<p class="hint">Cámara no disponible en este navegador. Usa el código manual abajo.</p>';
+      return;
+    }
+    if(scanning) return;
+    if(!scanner) scanner=new Html5Qrcode('reader');
+    scanning=true;
+    $('rescanBtn').classList.add('hidden');
+    scanner.start({facingMode:'environment'},{fps:10,qrbox:{width:240,height:240}},
+      function(decoded){ if(scanning){ scanning=false; scanner.stop().then(function(){ validate(decoded); }).catch(function(){ validate(decoded); }); } },
+      function(){}
+    ).catch(function(err){
+      scanning=false;
+      $('reader').innerHTML='<p class="hint">No se pudo abrir la cámara ('+(err&&err.message||err)+'). Usa el código manual abajo.</p>';
+    });
+  }
+  function stopScanner(){ if(scanner&&scanning){ scanning=false; scanner.stop().catch(function(){}); } }
+
+  function validate(text){
+    showResult('r-used','Verificando…','','','');
+    fetch('/.netlify/functions/checkin',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({pin:PIN,code:text})})
+      .then(function(r){ return r.json().then(function(d){ return {s:r.status,d:d}; }); })
+      .then(function(res){
+        var st=res.s, d=res.d;
+        if(st===401){ alert('PIN incorrecto'); try{sessionStorage.removeItem('tymf_pin');}catch(_){}
+          location.reload(); return; }
+        if(d.status==='ok'){
+          checked++;
+          var o=d.order||{};
+          showResult('r-ok','✓ VÁLIDO', o.name||'—', 'Admite '+(o.qty||1)+(o.qty>1?' personas':' persona'), d.code);
+        } else if(d.status==='used'){
+          var o2=d.order||{}, when=o2.usedAt?new Date(o2.usedAt).toLocaleTimeString():'';
+          showResult('r-used','⚠ YA REGISTRADO', o2.name||'—', when?('Registrado a las '+when):'', d.code);
+        } else if(d.status==='invalid'){
+          showResult('r-bad','✗ NO ENCONTRADO','', 'Este código no existe', d.code||'');
+        } else {
+          showResult('r-bad','✗ ERROR','', d.message||'', '');
+        }
+        finishScan();
+      })
+      .catch(function(){ showResult('r-bad','✗ ERROR','','Sin conexión','' ); finishScan(); });
+  }
+
+  function showResult(cls,big,nm,meta,code){
+    var el=$('result');
+    el.className='result '+cls;
+    el.innerHTML='<div class="big">'+big+'</div>'+
+      (nm?'<div class="nm">'+escapeHtml(nm)+'</div>':'')+
+      (meta?'<div class="meta">'+escapeHtml(meta)+'</div>':'')+
+      (code?'<div class="code">'+escapeHtml(code)+'</div>':'');
+    el.classList.remove('hidden');
+  }
+  function hideResult(){ $('result').classList.add('hidden'); }
+  function finishScan(){
+    $('rescanBtn').classList.remove('hidden');
+    $('count').textContent = checked>0 ? ('Registrados en esta sesión: '+checked) : '';
+    $('manual').value='';
+    if(navigator.vibrate){ navigator.vibrate(120); }
+  }
+  function escapeHtml(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+})();
+</script>
+</body>
+</html>

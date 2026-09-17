@@ -11,6 +11,7 @@
 const Stripe = require('stripe');
 const QRCode = require('qrcode');
 const { Resend } = require('resend');
+const { getStore } = require('@netlify/blobs');
 
 const COPY = {
   en: {
@@ -129,6 +130,27 @@ exports.handler = async (event) => {
   const t = COPY[locale];
 
   if (!email) return { statusCode: 200, body: 'no email on session' };
+
+  // Save the order for door check-in (best effort — done before email so
+  // check-in works even if the email step is misconfigured).
+  try {
+    await getStore('orders').setJSON(code, {
+      code,
+      qty,
+      name: (session.customer_details && session.customer_details.name) || '',
+      email,
+      phone: (session.customer_details && session.customer_details.phone) || '',
+      amount: session.amount_total,
+      currency: session.currency,
+      session: session.id,
+      createdAt: new Date().toISOString(),
+      used: false,
+      usedAt: null,
+    });
+  } catch (e) {
+    console.log('Order store failed:', e && e.message);
+  }
+
   if (!process.env.RESEND_API_KEY) return { statusCode: 500, body: 'RESEND_API_KEY not set' };
 
   const resend = new Resend(process.env.RESEND_API_KEY);

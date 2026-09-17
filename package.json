@@ -2,8 +2,9 @@
   "name": "tulum-yoga-music-fest-2026",
   "version": "1.0.0",
   "private": true,
-  "description": "Tulum Yoga Music Fest 2026 website + Stripe checkout & QR ticketing (Netlify Functions)",
+  "description": "Tulum Yoga Music Fest 2026 website + Stripe checkout, QR ticketing & door check-in (Netlify Functions)",
   "dependencies": {
+    "@netlify/blobs": "^8.1.0",
     "qrcode": "^1.5.4",
     "resend": "^4.0.1",
     "stripe": "^17.7.0"
