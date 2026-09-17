@@ -335,15 +335,11 @@ section{position:relative;scroll-margin-top:88px}
 .summary .fine{font-size:.66rem;color:var(--text-dim);text-align:center;margin-top:.9rem;line-height:1.5}
 
 /* ============ PRESENTERS ============ */
-.lineup-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,5vw,4rem);margin-top:2.8rem}
-@media(max-width:760px){.lineup-grid{grid-template-columns:1fr;gap:2.6rem}}
-.lineup-col h3{font-family:var(--display);font-weight:600;font-size:1.35rem;color:var(--cream);letter-spacing:.03em;
-  padding-bottom:.9rem;margin-bottom:1.3rem;border-bottom:1px solid var(--line)}
-.lineup-names{display:grid;grid-template-columns:1fr 1fr;gap:.6rem 1.4rem;list-style:none;padding:0;margin:0}
-@media(max-width:440px){.lineup-names{grid-template-columns:1fr}}
-.lineup-names li{font-family:var(--sans);font-weight:400;letter-spacing:.09em;text-transform:uppercase;
-  font-size:.9rem;color:var(--text);display:flex;align-items:center;gap:.65em}
-.lineup-names li::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;opacity:.7}
+.lineup-flow{max-width:940px;margin:2.6rem auto 0;text-align:center;font-family:var(--display);
+  font-weight:600;line-height:1.6;font-size:clamp(1.1rem,2.5vw,1.7rem);letter-spacing:.02em;color:var(--gold-3)}
+.lineup-flow .nm{white-space:nowrap;text-transform:uppercase}
+.lineup-flow .nm.w{color:var(--cream)}
+.lineup-flow .nm.g{color:var(--gold)}
 .lineup-more{margin-top:2rem;text-align:center;font-family:var(--sans);letter-spacing:.2em;
   text-transform:uppercase;font-size:.78rem;color:var(--gold)}
 
@@ -804,37 +800,27 @@ img,svg,video{max-width:100%;height:auto}
     <div class="center reveal" style="max-width:640px;margin:0 auto">
       <div class="eyebrow" style="justify-content:center" data-i18n="line.eyebrow">Presenters</div>
     </div>
-    <div class="lineup-grid reveal">
-      <div class="lineup-col">
-        <h3 data-i18n="line.teachers">Teachers</h3>
-        <ul class="lineup-names">
-          <li>Itzel</li>
-          <li>Jayson</li>
-          <li>Yosef</li>
-          <li>Jose Troche</li>
-          <li>Belu</li>
-          <li>Narayani</li>
-          <li>Kat</li>
-          <li>Sylvia</li>
-          <li>Meta Rose</li>
-          <li>Begona</li>
-          <li>Laura</li>
-          <li>Mafe &amp; Shakti Familia</li>
-        </ul>
-      </div>
-      <div class="lineup-col">
-        <h3 data-i18n="line.musicians">Musicians</h3>
-        <ul class="lineup-names">
-          <li>Skyesia</li>
-          <li>Red Monk</li>
-          <li>Ona Munay</li>
-          <li>Ganesha &amp; Friends</li>
-          <li>Jay Hari</li>
-          <li>Shivan</li>
-          <li>Hang Element</li>
-          <li>Goiztri</li>
-        </ul>
-      </div>
+    <div class="lineup-flow reveal">
+      <span class="nm w">Itzel</span> ·
+      <span class="nm g">Jayson</span> ·
+      <span class="nm w">Yosef</span> ·
+      <span class="nm g">Jose Troche</span> ·
+      <span class="nm w">Belu</span> ·
+      <span class="nm g">Narayani</span> ·
+      <span class="nm w">Kat</span> ·
+      <span class="nm g">Sylvia</span> ·
+      <span class="nm w">Meta Rose</span> ·
+      <span class="nm g">Begona</span> ·
+      <span class="nm w">Laura</span> ·
+      <span class="nm g">Mafe &amp; Shakti Familia</span> ·
+      <span class="nm w">Skyesia</span> ·
+      <span class="nm g">Red Monk</span> ·
+      <span class="nm w">Ona Munay</span> ·
+      <span class="nm g">Ganesha &amp; Friends</span> ·
+      <span class="nm w">Jay Hari</span> ·
+      <span class="nm g">Shivan</span> ·
+      <span class="nm w">Hang Element</span> ·
+      <span class="nm g">Goiztri</span>
     </div>
     <p class="lineup-more reveal" data-i18n="line.more">&amp; More TBA</p>
   </div>
