@@ -1,0 +1,9 @@
+{
+  "name": "tulum-yoga-music-fest-2026",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tulum Yoga Music Fest 2026 website + Stripe checkout (Netlify Functions)",
+  "dependencies": {
+    "stripe": "^17.7.0"
+  }
+}

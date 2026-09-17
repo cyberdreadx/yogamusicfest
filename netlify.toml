@@ -1,9 +1,13 @@
-# Netlify configuration — static single-page site (no build step)
+# Netlify configuration — static site + Stripe checkout function
 [build]
   publish = "."
   command = ""
 
-# Long-cache the immutable asset-heavy page; adjust if you deploy often
+# Serverless functions (Stripe Checkout Session creation lives here)
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 [[headers]]
   for = "/*"
   [headers.values]

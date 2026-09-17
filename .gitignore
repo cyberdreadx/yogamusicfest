@@ -7,3 +7,12 @@ Thumbs.db
 
 # Netlify local
 .netlify/
+
+# Node / Stripe function deps
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Secrets — NEVER commit your Stripe keys (set them as Netlify env vars)
+.env
+.env.*
