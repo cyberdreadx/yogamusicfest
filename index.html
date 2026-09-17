@@ -689,7 +689,6 @@ img,svg,video{max-width:100%;height:auto}
       <a href="#tickets" data-i18n="nav.festival">Festival</a>
       <a href="#schedule" data-i18n="nav.schedule">Schedule</a>
       <a href="#teachers" data-i18n="nav.teachers">Teachers + Healers</a>
-      <a href="#music" data-i18n="nav.music">Music</a>
       <a href="#partners" data-i18n="nav.partners">Partners</a>
       <a href="#affiliates" data-i18n="nav.affiliates">Affiliates</a>
       <a href="#vendors" data-i18n="nav.vendors">Vendors</a>
@@ -883,19 +882,6 @@ img,svg,video{max-width:100%;height:auto}
   </div>
 </section>
 
-<!-- ============ MUSIC ============ -->
-<section class="section-pad" id="music" style="background:var(--bg-2);border-block:1px solid var(--line)">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="eyebrow" data-i18n="music.eyebrow">Musicians + Artists</div>
-      <h2 class="sechead" style="margin-top:1rem" data-i18n-html="music.heading">The <span class="goldtext">Sound</span> of the Week</h2>
-      <p class="lede" style="margin-top:1rem" data-i18n="music.lede">Conscious music, live sets, kirtan and ceremony — from headline performances to intimate gatherings.</p>
-    </div>
-    <div class="artist-feats" id="artistFeats"></div>
-    <div class="artist-grid" id="artistGrid"></div>
-  </div>
-</section>
-
 <!-- ============ PARTNERS ============ -->
 <section class="section-pad" id="partners">
   <div class="wrap">
@@ -925,10 +911,7 @@ img,svg,video{max-width:100%;height:auto}
   <div class="wrap">
     <div class="reveal">
       <div class="eyebrow" data-i18n="ven.eyebrow">Conscious Market</div>
-      <h2 class="sechead" style="margin-top:1rem" data-i18n="ven.heading">The Vendors</h2>
-      <p class="lede" style="margin-top:1rem" data-i18n="ven.lede">Food, art, clothing, wellness and conscious products from local makers and brands.</p>
     </div>
-    <div class="vendors" id="vendorsGrid"></div>
     <div class="recruit reveal">
       <h3 data-i18n="ven.recruitH">Want to join as a vendor?</h3>
       <p data-i18n="ven.recruitP">Applications for the Conscious Market are open while space remains.</p>
@@ -1064,7 +1047,6 @@ img,svg,video{max-width:100%;height:auto}
         <a href="#tickets" data-i18n="foot.mainFestival">Main Festival</a>
         <a href="#schedule" data-i18n="foot.fullSchedule">Full Schedule</a>
         <a href="#teachers" data-i18n="nav.teachers">Teachers + Healers</a>
-        <a href="#music" data-i18n="music.eyebrow">Musicians + Artists</a>
         <a href="#tickets" data-i18n="nav.buy">Buy Tickets</a>
       </div>
       <div class="foot-col">
@@ -1511,9 +1493,9 @@ var io=new IntersectionObserver(function(entries){
 },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
 
 /* ---------- boot ---------- */
-renderTickets();renderSummary();renderDays();renderPeople();renderArtists();
-renderPartners();renderAffiliates();renderVendors();renderSponsors();renderHeroSponsors();
-window.__rerender=function(){renderTickets();renderSummary();renderDays();renderAffiliates();renderVendors();};
+renderTickets();renderSummary();renderDays();renderPeople();
+renderPartners();renderAffiliates();renderSponsors();renderHeroSponsors();
+window.__rerender=function(){renderTickets();renderSummary();renderDays();renderAffiliates();};
 try{LANG=localStorage.getItem('tymf_lang')||'es';}catch(e){LANG='es';}
 var _lt=document.getElementById('langToggle');
 if(_lt)_lt.addEventListener('click',function(){setLang(LANG==='es'?'en':'es');});
