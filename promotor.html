@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>TYMF · Panel de Promotor</title>
+<style>
+  :root{--bg:#0a0d0a;--card:#10160f;--line:rgba(201,164,78,.26);--gold:#e6c884;--gold2:#c9a44e;--text:#efe8d6;--dim:#a7a992;--good:#7fbf90}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+       min-height:100svh;padding:max(env(safe-area-inset-top),16px) 16px 40px}
+  .wrap{max-width:440px;margin:0 auto}
+  header{text-align:center;padding:10px 0 18px}
+  header .m{font-family:Georgia,serif;letter-spacing:6px;font-weight:bold;color:var(--gold);font-size:20px}
+  header .s{letter-spacing:3px;font-size:10px;color:var(--dim);text-transform:uppercase;margin-top:4px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:14px}
+  .hi{font-family:Georgia,serif;font-size:22px;color:var(--text);margin:0 0 2px}
+  .hi b{color:var(--gold)}
+  .muted{color:var(--dim);font-size:13px}
+  .big{text-align:center;padding:8px 0}
+  .big .n{font-family:Georgia,serif;font-size:52px;color:var(--gold);line-height:1}
+  .big .l{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+  .box{background:#0c120b;border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
+  .box .n{font-family:Georgia,serif;font-size:22px;color:var(--text)}
+  .box .l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-top:4px}
+  .note{font-size:12px;color:var(--dim);line-height:1.6;margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+  .note a{color:var(--gold)}
+  label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+  .lk{font-family:ui-monospace,monospace;font-size:13px;color:var(--gold);background:#0c120b;border:1px dashed var(--line);border-radius:8px;padding:11px 12px;word-break:break-all}
+  button{border:0;border-radius:8px;padding:11px 15px;font-size:13px;font-weight:600;cursor:pointer;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405;margin-top:10px;width:100%}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:100px;border:1px solid var(--line);color:var(--dim)}
+  .pill.good{color:var(--good);border-color:rgba(127,191,144,.5)}
+  .center{text-align:center}
+  .hidden{display:none!important}
+  .msg{text-align:center;color:var(--dim);padding:30px 10px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><div class="m">T Y M F</div><div class="s">Panel de Promotor</div></header>
+
+  <div id="loading" class="msg">Cargando…</div>
+  <div id="error" class="msg hidden"></div>
+
+  <div id="content" class="hidden">
+    <div class="card">
+      <div class="hi">Hola, <b id="pcode">—</b></div>
+      <div class="muted">Gracias por difundir Tulum Yoga Music Fest 🪷</div>
+      <div class="big"><div class="n" id="tickets">0</div><div class="l">Boletos vendidos</div></div>
+      <div class="grid">
+        <div class="box"><div class="n" id="earned">$0</div><div class="l">Ganado (total)</div></div>
+        <div class="box"><div class="n" id="rate">$100</div><div class="l">Por boleto</div></div>
+      </div>
+      <div id="payNote" class="note"></div>
+    </div>
+
+    <div class="card">
+      <label>Tu enlace para compartir</label>
+      <div class="lk" id="shareLink">—</div>
+      <button class="ghost" id="copyBtn">Copiar enlace</button>
+      <p class="muted center" style="margin:12px 0 0">Cada boleto que se compre con tu enlace suma $100 MXN a tu cuenta.</p>
+    </div>
+
+    <div class="center"><button class="ghost" id="refresh" style="width:auto;padding:9px 18px">Actualizar</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var qs=new URLSearchParams(location.search);
+  var code=(qs.get('p')||'').toLowerCase(), token=qs.get('k')||'';
+  var link=location.origin+'/?ref='+code;
+
+  if(!code||!token){ fail('Enlace inválido. Pide a la organización tu enlace de promotor.'); return; }
+  load();
+  $('refresh').onclick=load;
+  $('copyBtn').onclick=function(){ (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject())
+    .then(function(){ $('copyBtn').textContent='¡Copiado!'; }).catch(function(){ $('copyBtn').textContent='Copia manual'; }); };
+
+  function fail(m){ $('loading').classList.add('hidden'); var e=$('error'); e.textContent=m; e.classList.remove('hidden'); }
+  function mxn(n){ return '$'+((n||0)).toLocaleString('es-MX')+' MXN'; }
+
+  function load(){
+    fetch('/.netlify/functions/promoter-stats',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({code:code,token:token})})
+      .then(function(r){ return r.json().then(function(d){return{s:r.status,d:d};}); })
+      .then(function(res){
+        if(res.s!==200){ fail(res.d&&res.d.error?res.d.error:'No se pudo cargar tu panel.'); return; }
+        render(res.d);
+      }).catch(function(){ fail('Error de conexión. Intenta de nuevo.'); });
+  }
+
+  function render(d){
+    $('loading').classList.add('hidden'); $('error').classList.add('hidden'); $('content').classList.remove('hidden');
+    $('pcode').textContent=d.code;
+    $('tickets').textContent=d.tickets||0;
+    $('earned').textContent=mxn(d.commission);
+    $('shareLink').textContent=link;
+    var note='';
+    if(d.autoEnabled){
+      note='<span class="pill good">Pago automático activo</span><br>Tus comisiones ('+mxn(d.commissionAuto)+') se depositan automáticamente a tu banco vía Stripe. '+
+           'Consulta tus pagos en <a href="https://connect.stripe.com/express_login" target="_blank" rel="noopener">connect.stripe.com/express_login</a>.';
+    } else {
+      note='Comisión por pagar: <b>'+mxn(d.commissionOwed)+'</b> — '+(d.paidManual?'<span class="pill good">Pagado</span>':'te la paga la organización directamente')+'.'+
+           '<br><span class="muted">¿Quieres cobro automático a tu banco? Pide a la organización activar tu pago con Stripe.</span>';
+    }
+    $('payNote').innerHTML=note;
+  }
+})();
+</script>
+</body>
+</html>

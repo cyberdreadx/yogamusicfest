@@ -19,6 +19,11 @@
   to = "/admin.html"
   status = 200
 
+[[redirects]]
+  from = "/promotor"
+  to = "/promotor.html"
+  status = 200
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -33,5 +38,10 @@
 
 [[headers]]
   for = "/admin.html"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/promotor.html"
   [headers.values]
     X-Robots-Tag = "noindex, nofollow"

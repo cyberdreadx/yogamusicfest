@@ -3,6 +3,8 @@
 // POST { pin, action:'setPaid', promoter, paid } -> mark a promoter paid/unpaid
 
 const { getStore, connectLambda } = require('@netlify/blobs');
+const crypto = require('crypto');
+const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
 
 function json(status, obj) {
   return {
@@ -38,6 +40,19 @@ exports.handler = async (event) => {
     if (!p) return json(200, { error: 'no promoter' });
     await payouts.setJSON(p, { paid: !!body.paid, paidAt: body.paid ? new Date().toISOString() : null });
     return json(200, { ok: true });
+  }
+
+  // Ensure/return a promoter's private stats token (for their self-service page)
+  if (body.action === 'promoLink') {
+    const p = slug(body.promoter);
+    if (!p) return json(200, { error: 'no promoter' });
+    const tokens = getStore('promoter_tokens');
+    let rec = await tokens.get(p, { type: 'json' });
+    if (!rec || !rec.token) {
+      rec = { token: crypto.randomBytes(9).toString('hex'), createdAt: new Date().toISOString() };
+      await tokens.setJSON(p, rec);
+    }
+    return json(200, { code: p, token: rec.token });
   }
 
   // Load all orders

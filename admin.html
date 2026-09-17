@@ -200,11 +200,19 @@
     var slug=slugify($('pname').value); if(!slug) return;
     var link=location.origin+'/?ref='+slug;
     var out=$('genOut'); out.classList.remove('hidden');
-    out.innerHTML='<b>Promotor "'+esc(slug)+'"</b><br>Enlace para compartir (rastrea sus ventas):<br>'+
-      '<span class="lk">'+esc(link)+'</span> <button class="ghost mini" id="cpRef">Copiar</button>'+
+    out.innerHTML='<b>Promotor "'+esc(slug)+'"</b>'+
+      '<div style="margin-top:8px">Enlace para vender (compártelo con clientes):<br><span class="lk">'+esc(link)+'</span> <button class="ghost mini" id="cpRef">Copiar</button></div>'+
+      '<div style="margin-top:12px" id="panelRow" class="sub" style="text-align:left">Generando panel del promotor…</div>'+
       '<div style="margin-top:12px"><button class="mini" id="actNow">Activar pago automático (Stripe)</button></div>';
     $('cpRef').onclick=function(){ copy(link,$('cpRef')); };
     $('actNow').onclick=function(){ activate(slug,$('actNow')); };
+    post('report',{action:'promoLink',promoter:slug}).then(function(res){
+      if(res.d&&res.d.token){
+        var plink=location.origin+'/promotor?p='+res.d.code+'&k='+res.d.token;
+        $('panelRow').innerHTML='Panel del promotor (para que vea sus ventas):<br><span class="lk">'+esc(plink)+'</span> <button class="ghost mini" id="cpPanel">Copiar</button>';
+        $('cpPanel').onclick=function(){ copy(plink,$('cpPanel')); };
+      } else { $('panelRow').textContent=''; }
+    }).catch(function(){ $('panelRow').textContent=''; });
   }
   function copy(text,btn){ (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
     .then(function(){ btn.textContent='¡Copiado!'; }).catch(function(){ btn.textContent='Copia manual'; }); }
