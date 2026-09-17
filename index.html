@@ -1323,7 +1323,7 @@ function renderEvents(day){
 function renderDays(){
   var tabs=$('#dayTabs');
   tabs.innerHTML=DAYS.map(function(d,i){
-    return '<button class="day-tab'+(d.num===26?' on':'')+'" role="tab" data-day="'+d.num+'">'+
+    return '<button class="day-tab'+(d.num===21?' on':'')+'" role="tab" data-day="'+d.num+'">'+
       '<span class="dow">'+d.dow+'</span><span class="dnum">'+d.num+'</span><span class="tag">'+t('day.'+d.tag.toLowerCase())+'</span></button>';
   }).join('');
   if(!tabs.__b){tabs.__b=1;tabs.addEventListener('click',function(e){
@@ -1332,7 +1332,7 @@ function renderDays(){
     b.classList.add('on');
     renderEvents(+b.getAttribute('data-day'));
   });}
-  renderEvents(26);
+  renderEvents(21);
 }
 
 /* ---------- people / artists / partners / etc ---------- */
