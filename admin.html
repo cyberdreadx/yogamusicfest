@@ -121,6 +121,10 @@
       data=res.d;
       $('pinScreen').classList.add('hidden'); $('dash').classList.remove('hidden');
       render();
+      // Just returned from Stripe onboarding? Refresh that promoter's status once.
+      try{ var cc=new URLSearchParams(location.search).get('connect');
+        if(cc && !window.__ccDone){ window.__ccDone=1; history.replaceState(null,'',location.pathname);
+          post('connect',{action:'status',promoter:cc}).then(load); } }catch(e){}
     }).catch(function(){ $('pinErr').textContent='Error de conexión'; });
   }
   function mxnCents(c){ return '$'+((c||0)/100).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
