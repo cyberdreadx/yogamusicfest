@@ -88,6 +88,9 @@ exports.handler = async (event) => {
           country: 'MX',
           business_type: 'individual',
           capabilities: { transfers: { requested: true } },
+          // Promoters only receive transfers (they're recipients, not merchants).
+          // MX requires the recipient service agreement for a transfers-only account.
+          tos_acceptance: { service_agreement: 'recipient' },
           metadata: { promoter: code },
         });
         acctId = acct.id;
