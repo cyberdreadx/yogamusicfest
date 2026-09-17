@@ -397,7 +397,23 @@ section{position:relative;scroll-margin-top:88px}
   border-left:2px solid var(--line-strong);padding-left:1rem}
 
 /* ============ PEOPLE GRIDS ============ */
-.people{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1.4rem;margin-top:3rem}
+.people-slider{position:relative;margin-top:3rem}
+.people{display:flex;gap:1.4rem;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;
+  -ms-overflow-style:none;scrollbar-width:none;padding:.4rem .2rem}
+.people::-webkit-scrollbar{display:none}
+.people .person{flex:0 0 300px;scroll-snap-align:center}
+@media(max-width:640px){.people .person{flex:0 0 84%}}
+.car-btn{position:absolute;top:44%;transform:translateY(-50%);z-index:3;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;background:color-mix(in srgb,var(--bg) 76%,transparent);backdrop-filter:blur(6px);
+  border:1px solid var(--line-strong);color:var(--gold);cursor:pointer;transition:.25s;font-size:1.5rem;line-height:1;font-family:var(--serif)}
+.car-btn:hover{border-color:var(--gold);background:var(--bg-4)}
+.car-btn.prev{left:-10px}
+.car-btn.next{right:-10px}
+.car-btn:disabled{opacity:.25;cursor:default}
+@media(max-width:640px){.car-btn.prev{left:0}.car-btn.next{right:0}}
+.car-dots{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-top:1.6rem}
+.car-dots button{width:8px;height:8px;border-radius:50%;border:0;background:var(--line-strong);cursor:pointer;transition:.25s;padding:0}
+.car-dots button[aria-current="true"]{background:var(--gold);transform:scale(1.35)}
 .person{background:var(--bg-3);border:1px solid var(--line);border-radius:6px;overflow:hidden;transition:.35s}
 .person:hover{transform:translateY(-4px);border-color:var(--line-strong)}
 .portrait{aspect-ratio:4/5;display:grid;place-items:center;position:relative;overflow:hidden;
@@ -858,7 +874,12 @@ img,svg,video{max-width:100%;height:auto}
       <h2 class="sechead" style="margin-top:1rem" data-i18n="teach.heading">Meet the Facilitators</h2>
       <p class="lede" style="margin-top:1rem" data-i18n="teach.lede">The teachers, guides and healers holding space across the week.</p>
     </div>
-    <div class="people" id="people"></div>
+    <div class="people-slider reveal">
+      <button class="car-btn prev" id="peoplePrev" type="button" aria-label="Previous facilitators">‹</button>
+      <div class="people" id="people"></div>
+      <button class="car-btn next" id="peopleNext" type="button" aria-label="More facilitators">›</button>
+      <div class="car-dots" id="peopleDots" aria-label="Facilitators"></div>
+    </div>
   </div>
 </section>
 
@@ -1058,7 +1079,7 @@ img,svg,video{max-width:100%;height:auto}
     <div class="foot-bottom">
       <p data-i18n="foot.copyright">© 2026 Tulum Yoga Music Fest + Conference Week. Made in community.</p>
       <div class="foot-sponsors">
-        <span>Oasis Tulum</span><span>Holistika</span><span>Azulik</span><span>SEDETUR</span><span>Vesica</span>
+        <span>Oasis Tulum</span><span>Holistika</span><span>Azulik</span><span>Vesica</span>
       </div>
     </div>
   </div>
@@ -1207,13 +1228,15 @@ var ARTISTS=[
 
 var PARTNERS=[
   {n:'Oasis Tulum',c:'Host Venue · La Veleta',d:'Home of the Main Festival — a lush jungle venue holding the full day and night of celebration.'},
-  {n:'Holistika Tulum',c:'Wellness Center',d:'A holistic hub of studios, art and gathering spaces hosting classes and circles all week.'},
+  {n:'Holistika',c:'Wellness Center',d:'A holistic hub of studios, art and gathering spaces hosting classes and circles all week.'},
   {n:'Azulik',c:'Art & Design',d:'An iconic space where architecture, art and nature meet — home to featured evening gatherings.'},
   {n:'Ahau Tulum',c:'Beachfront Studio',d:'Sunrise practice on the sand and beachfront gatherings throughout Conference Week.'},
   {n:'Vesica',c:'Yoga Studio',d:'A dedicated studio hosting Ashtanga, vinyasa and specialized workshops.'},
   {n:'Kan Tulum',c:'Community Space',d:'Workshops, breathwork and conscious-community talks in the heart of town.'},
   {n:'The Space',c:'Movement & Music',d:'A gathering space for kirtan, ecstatic dance and mantra workshops.'},
-  {n:'Shakti Temple',c:'Healing Sanctuary',d:'Sound baths, women\'s circles and healing ceremonies in a sacred setting.'}
+  {n:'Shakti Temple',c:'Healing Sanctuary',d:'Sound baths, women\'s circles and healing ceremonies in a sacred setting.'},
+  {n:'Quantika Spa',c:'Spa & Wellness',d:'Holistic spa treatments and wellness therapies to restore and recharge during the week.'},
+  {n:'Vortex Vitality Spa',c:'Spa & Wellness',d:'Rejuvenating spa rituals, bodywork and energy healing in a restorative setting.'}
 ];
 
 var AFFILIATES=[
@@ -1234,8 +1257,7 @@ var VENDORS=[
 ];
 
 var SPONSORS=[
-  {name:'SEDETUR',file:'sedetur'},
-  {name:'Holistika Tulum',file:'holistika'},
+  {name:'Holistika',file:'holistika'},
   {name:'Vesica',file:'vesica'},
   {name:'Kan Tulum',file:'kan-tulum'},
   {name:'Ahau Tulum',file:'ahau-tulum'},
@@ -1336,6 +1358,27 @@ function renderPeople(){
       '<div class="person-body"><h4>'+t.n+'</h4><div class="mod">'+t.m+'</div>'+
       '<p class="bio">'+t.b+'</p><div class="offer"><b>'+t.o+'</b>'+t.w+'</div></div></article>';
   }).join('');
+  initPeopleCarousel();
+}
+function initPeopleCarousel(){
+  var track=$('#people'),prev=$('#peoplePrev'),next=$('#peopleNext'),dotsC=$('#peopleDots');
+  if(!track||!prev||!next||!dotsC)return;
+  var cards=track.querySelectorAll('.person'); if(!cards.length)return;
+  function step(){var c=track.querySelector('.person');var g=parseFloat(getComputedStyle(track).gap)||22;return c.offsetWidth+g;}
+  dotsC.innerHTML=Array.prototype.map.call(cards,function(_,i){return '<button type="button" aria-label="Go to facilitator '+(i+1)+'"></button>';}).join('');
+  var dots=dotsC.querySelectorAll('button');
+  function update(){
+    var s=step(),idx=Math.round(track.scrollLeft/s);
+    Array.prototype.forEach.call(dots,function(d,i){d.setAttribute('aria-current',i===idx?'true':'false');});
+    prev.disabled=track.scrollLeft<4;
+    next.disabled=track.scrollLeft>=track.scrollWidth-track.clientWidth-4;
+  }
+  Array.prototype.forEach.call(dots,function(d,i){d.addEventListener('click',function(){track.scrollTo({left:i*step(),behavior:'smooth'});});});
+  prev.addEventListener('click',function(){track.scrollBy({left:-step(),behavior:'smooth'});});
+  next.addEventListener('click',function(){track.scrollBy({left:step(),behavior:'smooth'});});
+  track.addEventListener('scroll',function(){window.requestAnimationFrame(update);},{passive:true});
+  window.addEventListener('resize',update);
+  update();
 }
 function renderArtists(){
   $('#artistFeats').innerHTML=FEAT_ARTISTS.map(function(a){
