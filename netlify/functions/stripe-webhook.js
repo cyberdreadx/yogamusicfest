@@ -146,6 +146,7 @@ exports.handler = async (event) => {
       currency: session.currency,
       ref,
       commission: ref ? qty * 100 : 0,
+      autoPaid: (session.metadata && session.metadata.connect === '1') || false,
       session: session.id,
       createdAt: new Date().toISOString(),
       used: false,

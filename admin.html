@@ -6,19 +6,19 @@
 <meta name="robots" content="noindex, nofollow" />
 <title>TYMF · Panel</title>
 <style>
-  :root{--bg:#0a0d0a;--card:#10160f;--line:rgba(201,164,78,.24);--gold:#e6c884;--gold2:#c9a44e;--text:#efe8d6;--dim:#9ea08c;--good:#6fae7f}
+  :root{--bg:#0a0d0a;--card:#10160f;--line:rgba(201,164,78,.24);--gold:#e6c884;--gold2:#c9a44e;--text:#efe8d6;--dim:#9ea08c;--good:#6fae7f;--warn:#d8b25e}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:20px 16px 60px}
-  .wrap{max-width:1000px;margin:0 auto}
+  .wrap{max-width:1040px;margin:0 auto}
   h1{font-family:Georgia,serif;color:var(--gold);letter-spacing:3px;font-size:20px;text-align:center;margin:6px 0 2px}
   .sub{text-align:center;color:var(--dim);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
   label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
   input{width:100%;background:#0c120b;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:var(--text);font-size:16px}
   input:focus{outline:none;border-color:var(--gold)}
-  button{border:0;border-radius:8px;padding:12px 16px;font-size:13px;font-weight:600;letter-spacing:.06em;cursor:pointer;
-         background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
+  button{border:0;border-radius:8px;padding:11px 15px;font-size:13px;font-weight:600;letter-spacing:.05em;cursor:pointer;background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
   button.ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  button:disabled{opacity:.5;cursor:default}
   .hidden{display:none!important}
   .totals{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
   .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;text-align:center}
@@ -29,17 +29,21 @@
   .section h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin:0 0 10px}
   .row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
   .row>div{flex:1;min-width:180px}
-  .genlink{margin-top:12px;background:#0c120b;border:1px dashed var(--line);border-radius:8px;padding:12px;font-family:ui-monospace,monospace;font-size:13px;color:var(--gold);word-break:break-all}
+  .out{margin-top:12px;background:#0c120b;border:1px dashed var(--line);border-radius:8px;padding:12px;font-size:13px;word-break:break-all}
+  .out .lk{font-family:ui-monospace,monospace;color:var(--gold)}
   table{width:100%;border-collapse:collapse;font-size:13px}
-  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);white-space:nowrap;vertical-align:top}
   th{color:var(--dim);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
-  td.money{font-variant-numeric:tabular-nums}
   .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
   .pill{display:inline-block;font-size:11px;padding:2px 8px;border-radius:100px;border:1px solid var(--line);color:var(--dim)}
   .pill.in{color:var(--good);border-color:rgba(111,174,127,.5)}
-  .paidbtn{padding:5px 10px;font-size:11px}
+  .pill.ready{color:var(--good);border-color:rgba(111,174,127,.5)}
+  .pill.pend{color:var(--warn);border-color:rgba(216,178,94,.5)}
+  .mini{padding:5px 9px;font-size:11px}
+  .money{font-variant-numeric:tabular-nums}
   .err{color:#f2c8c8;font-size:13px;text-align:center;margin-top:8px}
-  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+  .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+  .stack{display:flex;flex-direction:column;gap:5px}
 </style>
 </head>
 <body>
@@ -68,20 +72,20 @@
     </div>
 
     <div class="section card">
-      <h2>Generar enlace de promotor</h2>
+      <h2>Nuevo promotor</h2>
       <div class="row">
-        <div><label for="pname">Nombre o alias del promotor</label><input id="pname" placeholder="ej. María, carlos, dj-selva" /></div>
-        <div style="flex:0 0 auto"><button id="genBtn">Generar</button></div>
+        <div><label for="pname">Nombre o alias</label><input id="pname" placeholder="ej. María, carlos, dj-selva" /></div>
+        <div style="flex:0 0 auto"><button id="genBtn">Crear enlace</button></div>
       </div>
-      <div id="genOut" class="genlink hidden"></div>
-      <p class="sub" style="text-align:left;margin:10px 0 0">Comparte el enlace. Cada boleto vendido con él acredita $100 MXN al promotor.</p>
+      <div id="genOut" class="out hidden"></div>
+      <p class="sub" style="text-align:left;margin:10px 0 0">Comparte el enlace. Cada boleto vendido con él acredita $100 MXN. Activa el pago automático para que Stripe le deposite su 50% directo a su banco.</p>
     </div>
 
     <div class="section">
-      <h2>Promotores · Comisiones</h2>
+      <h2>Promotores</h2>
       <div class="tablewrap"><table id="promoTable"><thead><tr>
-        <th>Promotor</th><th>Boletos</th><th>Comisión</th><th>Pagado</th></tr></thead><tbody></tbody></table></div>
-      <p id="promoEmpty" class="sub" style="text-align:left;margin-top:8px">Aún no hay ventas con promotor.</p>
+        <th>Promotor</th><th>Boletos</th><th>Comisión</th><th>Pago automático (Stripe)</th><th>Por pagar (manual)</th></tr></thead><tbody></tbody></table></div>
+      <p id="promoEmpty" class="sub" style="text-align:left;margin-top:8px">Aún no hay promotores.</p>
     </div>
 
     <div class="section">
@@ -106,12 +110,12 @@
   $('genBtn').onclick=genLink;
   $('pname').addEventListener('keydown',function(e){ if(e.key==='Enter') genLink(); });
 
-  function api(bodyObj){
-    return fetch('/.netlify/functions/report',{method:'POST',headers:{'Content-Type':'application/json'},
+  function post(fn,bodyObj){
+    return fetch('/.netlify/functions/'+fn,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify(Object.assign({pin:PIN},bodyObj||{}))}).then(function(r){return r.json().then(function(d){return{s:r.status,d:d};});});
   }
   function load(){
-    api().then(function(res){
+    post('report').then(function(res){
       if(res.s===401){ $('pinErr').textContent='PIN incorrecto'; try{sessionStorage.removeItem('tymf_apin');}catch(e){} return; }
       if(res.d.error){ $('pinErr').textContent=res.d.error; return; }
       data=res.d;
@@ -122,6 +126,7 @@
   function mxnCents(c){ return '$'+((c||0)/100).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function mxn(n){ return '$'+((n||0)).toLocaleString('es-MX'); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function slugify(s){ return s.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40); }
 
   function render(){
     var t=data.totals||{};
@@ -134,43 +139,78 @@
     var pb=$('promoTable').querySelector('tbody'); pb.innerHTML='';
     (data.promoters||[]).forEach(function(p){
       var tr=document.createElement('tr');
-      tr.innerHTML='<td>'+esc(p.code)+'</td><td>'+p.tickets+'</td><td class="money">'+mxn(p.commission)+'</td>'+
-        '<td><button class="paidbtn '+(p.paid?'':'ghost')+'" data-p="'+esc(p.code)+'" data-paid="'+(p.paid?'1':'0')+'">'+(p.paid?'✓ Pagado':'Marcar pagado')+'</button></td>';
+      // auto column
+      var autoCell, c=p.connect;
+      if(c&&c.ready){ autoCell='<span class="pill ready">✓ Activo</span><div class="sub" style="text-align:left;margin:4px 0 0">Auto: '+mxn(p.commissionAuto||0)+'</div>'; }
+      else if(c){ autoCell='<span class="pill pend">Registro pendiente</span><div class="stack" style="margin-top:6px"><button class="ghost mini" data-link="'+esc(p.code)+'">Enlace de registro</button><button class="ghost mini" data-cstat="'+esc(p.code)+'">Actualizar estado</button></div>'; }
+      else { autoCell='<button class="mini" data-activate="'+esc(p.code)+'">Activar pago automático</button>'; }
+      // owed column
+      var owed=p.commissionOwed||0, owedCell;
+      if(owed<=0){ owedCell='<span class="sub" style="text-align:left">—</span>'; }
+      else if(p.paid){ owedCell='<span class="pill in">✓ Pagado</span> <span class="money">'+mxn(owed)+'</span>'; }
+      else { owedCell='<span class="money">'+mxn(owed)+'</span> <button class="ghost mini" data-p="'+esc(p.code)+'" data-paid="0">Marcar pagado</button>'; }
+
+      tr.innerHTML='<td>'+esc(p.code)+'</td><td>'+(p.tickets||0)+'</td><td class="money">'+mxn(p.commission||0)+'</td><td>'+autoCell+'</td><td>'+owedCell+'</td>';
       pb.appendChild(tr);
     });
     $('promoEmpty').style.display=(data.promoters&&data.promoters.length)?'none':'block';
-    Array.prototype.forEach.call(pb.querySelectorAll('.paidbtn'),function(b){
-      b.onclick=function(){ var paid=b.getAttribute('data-paid')!=='1';
-        b.disabled=true; api({action:'setPaid',promoter:b.getAttribute('data-p'),paid:paid}).then(function(){ load(); }); };
-    });
+    wireRowButtons(pb);
 
     var ob=$('orderTable').querySelector('tbody'); ob.innerHTML='';
     (data.orders||[]).forEach(function(o){
       var tr=document.createElement('tr');
       tr.innerHTML='<td>'+esc(new Date(o.createdAt).toLocaleString('es-MX'))+'</td>'+
         '<td>'+esc(o.name)+'</td><td>'+esc(o.email)+'</td><td>'+(o.qty||1)+'</td>'+
-        '<td class="money">'+mxnCents(o.amount)+'</td><td>'+(o.ref?esc(o.ref):'—')+'</td>'+
+        '<td class="money">'+mxnCents(o.amount)+'</td><td>'+(o.ref?esc(o.ref):'—')+(o.autoPaid?' <span class="pill ready">auto</span>':'')+'</td>'+
         '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+'</td>';
       ob.appendChild(tr);
     });
   }
 
+  function wireRowButtons(pb){
+    pb.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ b.disabled=true;
+      post('report',{action:'setPaid',promoter:b.getAttribute('data-p'),paid:true}).then(load); }; });
+    pb.querySelectorAll('[data-activate]').forEach(function(b){ b.onclick=function(){ activate(b.getAttribute('data-activate'),b); }; });
+    pb.querySelectorAll('[data-link]').forEach(function(b){ b.onclick=function(){ activate(b.getAttribute('data-link'),b); }; });
+    pb.querySelectorAll('[data-cstat]').forEach(function(b){ b.onclick=function(){ b.disabled=true;
+      post('connect',{action:'status',promoter:b.getAttribute('data-cstat')}).then(load); }; });
+  }
+
+  function activate(code,btn){
+    btn.disabled=true; var old=btn.textContent; btn.textContent='…';
+    post('connect',{action:'create',promoter:code,origin:location.origin}).then(function(res){
+      btn.disabled=false; btn.textContent=old;
+      if(res.d&&res.d.url){ showOnboard(code,res.d.url); }
+      else { alert((res.d&&res.d.error)||'Error de Stripe Connect'); }
+    }).catch(function(){ btn.disabled=false; btn.textContent=old; alert('Error de conexión'); });
+  }
+  function showOnboard(code,url){
+    var out=$('genOut'); out.classList.remove('hidden');
+    out.innerHTML='<b>Registro de pago automático para "'+esc(code)+'"</b><br>Envía este enlace al promotor para que registre su banco en Stripe:<br>'+
+      '<span class="lk">'+esc(url)+'</span> <button class="ghost mini" id="cpOnb">Copiar</button>';
+    $('cpOnb').onclick=function(){ copy(url,$('cpOnb')); };
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
   function genLink(){
-    var slug=$('pname').value.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40);
-    if(!slug){ return; }
+    var slug=slugify($('pname').value); if(!slug) return;
     var link=location.origin+'/?ref='+slug;
     var out=$('genOut'); out.classList.remove('hidden');
-    out.innerHTML=esc(link)+' &nbsp; <button class="ghost" id="copyBtn" style="padding:4px 10px;font-size:12px">Copiar</button>';
-    $('copyBtn').onclick=function(){ (navigator.clipboard?navigator.clipboard.writeText(link):Promise.reject())
-      .then(function(){ $('copyBtn').textContent='¡Copiado!'; }).catch(function(){ $('copyBtn').textContent='Copia manual'; }); };
+    out.innerHTML='<b>Promotor "'+esc(slug)+'"</b><br>Enlace para compartir (rastrea sus ventas):<br>'+
+      '<span class="lk">'+esc(link)+'</span> <button class="ghost mini" id="cpRef">Copiar</button>'+
+      '<div style="margin-top:12px"><button class="mini" id="actNow">Activar pago automático (Stripe)</button></div>';
+    $('cpRef').onclick=function(){ copy(link,$('cpRef')); };
+    $('actNow').onclick=function(){ activate(slug,$('actNow')); };
   }
+  function copy(text,btn){ (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
+    .then(function(){ btn.textContent='¡Copiado!'; }).catch(function(){ btn.textContent='Copia manual'; }); }
 
   function exportCsv(){
     if(!data) return;
-    var head=['fecha','nombre','correo','telefono','boletos','monto_mxn','promotor','comision_mxn','codigo','checkin'];
+    var head=['fecha','nombre','correo','telefono','boletos','monto_mxn','promotor','comision_mxn','pago_auto','codigo','checkin'];
     var lines=[head.join(',')];
     (data.orders||[]).forEach(function(o){
-      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),o.code,(o.used?'si':'no')];
+      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),(o.autoPaid?'si':'no'),o.code,(o.used?'si':'no')];
       lines.push(r.map(function(x){ x=String(x==null?'':x); return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x; }).join(','));
     });
     var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8'});

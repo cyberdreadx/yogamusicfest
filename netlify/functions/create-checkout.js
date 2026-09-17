@@ -4,10 +4,14 @@
 // exposed to the browser and must never be committed to the repo.
 
 const Stripe = require('stripe');
+const { getStore, connectLambda } = require('@netlify/blobs');
 
 // $200.00 MXN per ticket, in centavos (MXN is a 2-decimal currency).
 const UNIT_AMOUNT = 20000;
 const CURRENCY = 'mxn';
+// Promoter share = 50% = $100.00/ticket. With a destination charge the platform
+// keeps the application fee and the promoter (destination) gets the remainder.
+const PROMOTER_SHARE = 10000; // centavos the platform keeps as its fee per ticket
 
 exports.handler = async (event) => {
   const cors = {
@@ -41,11 +45,32 @@ exports.handler = async (event) => {
     event.headers.origin ||
     (event.headers.host ? 'https://' + event.headers.host : '');
 
+  // If this sale came via a promoter who has an onboarded Stripe Connect
+  // account, split the payment automatically (destination charge).
+  let promoterAcct = null;
+  if (ref) {
+    try {
+      connectLambda(event);
+      const rec = await getStore('connect').get(ref, { type: 'json' });
+      if (rec && rec.acctId) {
+        const acct = await stripe.accounts.retrieve(rec.acctId);
+        if (acct && acct.charges_enabled && acct.payouts_enabled) {
+          promoterAcct = rec.acctId;
+        }
+      }
+    } catch (_) { /* fall back to a normal charge; commission tracked manually */ }
+  }
+
   try {
-    const session = await stripe.checkout.sessions.create({
+    const params = {
       mode: 'payment',
       locale,
-      metadata: { quantity: String(quantity), locale: locale === 'auto' ? 'en' : locale, ref },
+      metadata: {
+        quantity: String(quantity),
+        locale: locale === 'auto' ? 'en' : locale,
+        ref,
+        connect: promoterAcct ? '1' : '',
+      },
       line_items: [
         {
           quantity,
@@ -62,7 +87,14 @@ exports.handler = async (event) => {
       phone_number_collection: { enabled: true },
       success_url: origin + '/?paid=true',
       cancel_url: origin + '/#tickets',
-    });
+    };
+    if (promoterAcct) {
+      params.payment_intent_data = {
+        application_fee_amount: quantity * PROMOTER_SHARE, // platform keeps $100/ticket
+        transfer_data: { destination: promoterAcct },      // promoter auto-receives the other $100
+      };
+    }
+    const session = await stripe.checkout.sessions.create(params);
 
     return {
       statusCode: 200,

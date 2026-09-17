@@ -67,19 +67,44 @@ exports.handler = async (event) => {
     revenue += o.amount || 0; // centavos
     if (o.ref) {
       const c = typeof o.commission === 'number' ? o.commission : q * 100; // pesos
-      if (!promo[o.ref]) promo[o.ref] = { code: o.ref, tickets: 0, revenue: 0, commission: 0 };
+      if (!promo[o.ref]) promo[o.ref] = { code: o.ref, tickets: 0, revenue: 0, commission: 0, commissionAuto: 0, commissionOwed: 0 };
       promo[o.ref].tickets += q;
       promo[o.ref].revenue += o.amount || 0;
       promo[o.ref].commission += c;
+      if (o.autoPaid) promo[o.ref].commissionAuto += c; else promo[o.ref].commissionOwed += c;
       commission += c;
     }
   }
 
+  // Merge in Stripe Connect onboarding status (includes promoters with no sales yet)
+  const connectMap = {};
+  try {
+    const cs = getStore('connect');
+    const list = await cs.list();
+    for (const b of (list.blobs || [])) {
+      const r = await cs.get(b.key, { type: 'json' });
+      if (r) connectMap[b.key] = r;
+    }
+  } catch (_) {}
+
+  const codes = new Set([...Object.keys(promo), ...Object.keys(connectMap)]);
   const promoters = [];
-  for (const k of Object.keys(promo)) {
+  for (const k of codes) {
+    const base = promo[k] || { code: k, tickets: 0, revenue: 0, commission: 0, commissionAuto: 0, commissionOwed: 0 };
     let pd = null;
     try { pd = await payouts.get(k, { type: 'json' }); } catch (_) {}
-    promoters.push(Object.assign(promo[k], { paid: (pd && pd.paid) || false, paidAt: (pd && pd.paidAt) || null }));
+    const cm = connectMap[k];
+    promoters.push(Object.assign(base, {
+      paid: (pd && pd.paid) || false,
+      paidAt: (pd && pd.paidAt) || null,
+      connect: cm ? {
+        acctId: cm.acctId,
+        chargesEnabled: !!cm.chargesEnabled,
+        payoutsEnabled: !!cm.payoutsEnabled,
+        detailsSubmitted: !!cm.detailsSubmitted,
+        ready: !!(cm.chargesEnabled && cm.payoutsEnabled),
+      } : null,
+    }));
   }
   promoters.sort((a, b) => b.commission - a.commission);
 
