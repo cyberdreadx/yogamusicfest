@@ -626,6 +626,7 @@ section{position:relative;scroll-margin-top:88px}
 .sg-sm img{height:70px;max-width:210px}
 .sg-sm img[src="logos/paz-florita.png"]{mix-blend-mode:screen}
 .sg-sm img[src="logos/tcf.png"]{filter:brightness(0) invert(1)}
+.sg-sm img[src="logos/microphone-collaborator.jpg"]{mix-blend-mode:screen}
 .sg-sm .wm{font-size:1.05rem}
 .sg-host{align-items:center;text-align:center}
 .oasis-mark{display:flex;flex-direction:column;align-items:center;line-height:1}
@@ -1376,7 +1377,7 @@ var VENUES=[
 /* Sponsors & collaborators (smaller tier). */
 var COLLABS=[
   {name:'TCF',file:'tcf'},
-  {name:'Paz & Florita',file:'paz-florita'},
+  {name:'Microphone collaborator',file:'microphone-collaborator',ext:'jpg'},
   {name:'Vikingos Fit Club',file:'vikingos-fit-club'},
   {name:'Kuul Beach Club',file:'kuul-beach-club'},
   {name:"Ganesha's Lounge",file:'ganeshas-lounge'},
@@ -1389,7 +1390,8 @@ var COLLABS=[
   {name:'Qwalla',file:'qwalla'},
   {name:'Hunab',file:'hunab'},
   {name:'Lifeforce Tulum',file:'lifeforce-tulum'},
-  {name:'Ezens',file:'ezens'}
+  {name:'Ezens',file:'ezens'},
+  {name:'Paz & Florita',file:'paz-florita'}
 ];
 /* Institutions (own row). */
 var INSTITUTIONS=[
@@ -1571,7 +1573,7 @@ function renderLogoStrip(el,list){
       var sp=document.createElement('span'); sp.className='wm'+(s.big?' big':''); sp.textContent=s.name;
       if(img.parentNode) el.replaceChild(sp,img);
     };
-    img.src='logos/'+s.file+'.png';
+    img.src='logos/'+s.file+'.'+(s.ext||'png');
     el.appendChild(img);
   });
 }
