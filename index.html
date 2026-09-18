@@ -546,12 +546,13 @@ section{position:relative;scroll-margin-top:88px}
 .quote .who{margin-top:1rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 
 /* sponsors */
-.sponsor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1px;
-  margin-top:2.6rem;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
-.sp{background:var(--bg-2);padding:1.8rem 1rem;text-align:center;display:grid;place-items:center;min-height:100px;transition:.3s}
-.sp:hover{background:var(--bg-3)}
-.sp .nm{font-family:var(--display);font-weight:600;letter-spacing:.08em;color:var(--text-dim);font-size:.9rem;transition:.3s}
-.sp:hover .nm{color:var(--gold)}
+/* Combined logo wall (dark panel so the white logos read in both themes). */
+.sponsor-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.8rem 2.6rem;
+  margin-top:2.6rem;background:#0b0f0b;border:1px solid rgba(201,164,78,.18);border-radius:12px;padding:2.6rem 2rem}
+.sponsor-grid img{height:46px;width:auto;max-width:170px;object-fit:contain;opacity:.85;transition:.3s}
+.sponsor-grid img:hover{opacity:1;transform:translateY(-2px)}
+.sponsor-grid .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:.9rem;color:#efe8d6;opacity:.72;white-space:nowrap}
+@media(max-width:600px){.sponsor-grid{gap:1.3rem 1.8rem;padding:1.8rem 1.2rem}.sponsor-grid img{height:34px}}
 
 /* final cta */
 .final{text-align:center;background:
@@ -1238,21 +1239,42 @@ var VENDORS=[
   {n:'174 Cacao',c:{en:'Cacao',es:'Cacao'},ig:'@174cacao',url:'https://www.174cacao.com',desc:{en:'Organic ceremonial-grade cacao from Tabasco',es:'Cacao orgánico de grado ceremonial de Tabasco'}}
 ];
 
-var SPONSORS=[
+/* Venue logos — shown under the hero image (white logos on dark). Flyer order. */
+var VENUES=[
   {name:'Holistika',file:'holistika'},
   {name:'Vesica',file:'vesica'},
   {name:'Kan Tulum',file:'kan-tulum'},
   {name:'Ahau Tulum',file:'ahau-tulum'},
-  {name:'The Space',file:'the-space'},
+  {name:'Bikram Yoga Tulum',file:'bikram-yoga-tulum'},
+  {name:'Ashtanga Yoga Tulum',file:'ashtanga-yoga-tulum'},
   {name:'Shakti Temple',file:'shakti-temple'},
+  {name:'muTe',file:'mute'},
+  {name:'The Space',file:'the-space'},
   {name:'Lokäh',file:'lokah'},
-  {name:'Vikingos Fit Club',file:'vikingos-fit-club'},
-  {name:'Tulum Despierta',file:'tulum-despierta'},
-  {name:'Azulik',file:'azulik'},
-  {name:'Oasis Tulum',file:'oasis-tulum'},
-  {name:'Quantika Spa',file:'quantika-spa'},
-  {name:'Vortex Vitality Spa',file:'vortex-vitality-spa'}
+  {name:'Neek',file:'neek'},
+  {name:'Azulik',file:'azulik'}
 ];
+/* Sponsors, collaborators & institutions. */
+var SPONSORS=[
+  {name:'Tulum',file:'tulum'},
+  {name:'Municipio de Tulum',file:'municipio-tulum'},
+  {name:'Tulum Despierta',file:'tulum-despierta'},
+  {name:'Vikingos Fit Club',file:'vikingos-fit-club'},
+  {name:'Kuul Beach Club',file:'kuul-beach-club'},
+  {name:"Ganesha's Lounge",file:'ganeshas-lounge'},
+  {name:'Vortex Vitality',file:'vortex'},
+  {name:'Vivedharma',file:'vivedharma'},
+  {name:'Unite',file:'unite'},
+  {name:'Youniq',file:'youniq'},
+  {name:'Quantika Spa',file:'quantika-spa'},
+  {name:'Bliss Tulum',file:'bliss-tulum'},
+  {name:'Qwalla',file:'qwalla'},
+  {name:'Hunab',file:'hunab'},
+  {name:'Lifeforce Tulum',file:'lifeforce-tulum'},
+  {name:'Ezens',file:'ezens'}
+];
+/* Bottom strip shows everyone combined (venues first, per the flyer). */
+var ALLLOGOS=VENUES.concat(SPONSORS);
 
 /* ---------- cart / tickets ---------- */
 var cart={};
@@ -1400,19 +1422,13 @@ function renderVendors(){
       '<div class="c">'+tl(v.c)+'</div><h5>'+v.n+'</h5><div class="vd">'+tl(v.desc)+'</div><div class="ig">'+v.ig+'</div></a>';
   }).join('');
 }
-function renderSponsors(){
-  $('#sponsorsGrid').innerHTML=SPONSORS.map(function(s){
-    return '<div class="sp"><span class="nm">'+s.name+'</span></div>';
-  }).join('');
-}
-function renderHeroSponsors(){
-  var el=document.getElementById('heroSponsors'); if(!el)return;
-  el.innerHTML='';
-  SPONSORS.forEach(function(s){
-    // Auto-upgrade: drop a white PNG at logos/<file>.png and it appears here.
-    // Until the file exists, it falls back to the gold text wordmark below.
+// Render a strip of white logos into `el`; each falls back to a text wordmark
+// if its logos/<file>.png is missing.
+function renderLogoStrip(el,list){
+  if(!el)return; el.innerHTML='';
+  list.forEach(function(s){
     var img=new Image();
-    img.className='hs-logo'; img.alt=s.name; img.loading='lazy';
+    img.alt=s.name; img.loading='lazy';
     img.onerror=function(){
       var sp=document.createElement('span'); sp.className='wm'; sp.textContent=s.name;
       if(img.parentNode) el.replaceChild(sp,img);
@@ -1421,6 +1437,8 @@ function renderHeroSponsors(){
     el.appendChild(img);
   });
 }
+function renderSponsors(){ renderLogoStrip($('#sponsorsGrid'),ALLLOGOS); }        // bottom: everyone
+function renderHeroSponsors(){ renderLogoStrip(document.getElementById('heroSponsors'),VENUES); } // under hero: venues only
 
 /* ---------- checkout modal ---------- */
 var modal=$('#modal'),lastFocus=null;
