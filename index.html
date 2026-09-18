@@ -249,12 +249,12 @@ section{position:relative;scroll-margin-top:88px}
 .hero-sponsors{background:#0b0f0b;border-bottom:1px solid rgba(201,164,78,.16)}
 .hero-sponsors .wrap{padding-block:2.6rem}
 .hs-eyebrow{text-align:center;font-family:var(--sans);font-weight:500;letter-spacing:.26em;text-transform:uppercase;font-size:.6rem;color:#c9a44e;margin-bottom:1.1rem}
-.hs-logos{display:flex;flex-direction:column;align-items:center;gap:2.4rem;max-width:1120px;margin:0 auto}
-.hs-row{display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:2rem 3.2rem}
-.hs-row img{height:74px;width:auto;max-width:240px;object-fit:contain;opacity:.9;transition:.3s}
+.hs-logos{display:flex;flex-direction:column;align-items:center;gap:2rem;max-width:1340px;margin:0 auto}
+.hs-row{display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:1.8rem 2.4rem}
+.hs-row img{height:70px;width:auto;max-width:220px;object-fit:contain;opacity:.9;transition:.3s}
 .hs-row img:hover{opacity:1;transform:translateY(-2px)}
-.hs-row img.big{height:auto;max-width:none;width:min(430px,74vw)}
-.hs-row img.tall{height:104px}
+.hs-row img.big{height:auto;max-width:none;width:min(300px,70vw)}
+.hs-row img.tall{height:100px}
 .hs-row .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:1rem;color:#efe8d6;opacity:.72;transition:.3s;white-space:nowrap}
 .hs-row .wm:hover{opacity:1;color:#e6c884}
 @media(max-width:600px){.hs-logos{gap:1.8rem}.hs-row{gap:1.4rem 2rem}.hs-row img{height:52px;max-width:160px}.hs-row img.big{height:auto;max-width:none;width:min(300px,66vw)}.hs-row img.tall{height:72px}.hs-row .wm{font-size:.85rem}}
@@ -1481,12 +1481,13 @@ function renderSponsors(){                                                      
   renderLogoStrip($('#sgRest'),COLLABS);
   renderLogoStrip($('#sgInst'),INSTITUTIONS);
 }
-function renderHeroSponsors(){                                                     // under hero: venues, row 2 led by the City of Tulum marks
+function renderHeroSponsors(){                                                     // under hero: 3 rows — venues / City of Tulum / venues
   var el=document.getElementById('heroSponsors'); if(!el)return;
-  el.innerHTML='<div class="hs-row"></div><div class="hs-row"></div>';
+  el.innerHTML='<div class="hs-row"></div><div class="hs-row"></div><div class="hs-row"></div>';
   var rows=el.querySelectorAll('.hs-row');
-  renderLogoStrip(rows[0],VENUES.slice(0,6));
-  renderLogoStrip(rows[1],INSTITUTIONS.concat(VENUES.slice(6)));
+  renderLogoStrip(rows[0],VENUES.slice(0,6));   // venues
+  renderLogoStrip(rows[1],INSTITUTIONS);        // City of Tulum
+  renderLogoStrip(rows[2],VENUES.slice(6));     // venues
 }
 
 /* ---------- checkout modal ---------- */
