@@ -249,12 +249,12 @@ section{position:relative;scroll-margin-top:88px}
 .hero-sponsors{background:#0b0f0b;border-bottom:1px solid rgba(201,164,78,.16)}
 .hero-sponsors .wrap{padding-block:1.5rem}
 .hs-eyebrow{text-align:center;font-family:var(--sans);font-weight:500;letter-spacing:.26em;text-transform:uppercase;font-size:.6rem;color:#c9a44e;margin-bottom:1.1rem}
-.hs-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.1rem 2.2rem}
-.hs-logos img{height:34px;width:auto;max-width:150px;object-fit:contain;opacity:.85;transition:.3s}
-.hs-logos img:hover{opacity:1}
-.hs-logos .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:.82rem;color:#efe8d6;opacity:.72;transition:.3s;white-space:nowrap}
+.hs-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.6rem 2.8rem}
+.hs-logos img{height:58px;width:auto;max-width:210px;object-fit:contain;opacity:.9;transition:.3s}
+.hs-logos img:hover{opacity:1;transform:translateY(-2px)}
+.hs-logos .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:1rem;color:#efe8d6;opacity:.72;transition:.3s;white-space:nowrap}
 .hs-logos .wm:hover{opacity:1;color:#e6c884}
-@media(max-width:600px){.hs-logos{gap:.85rem 1.5rem}.hs-logos .wm{font-size:.72rem}}
+@media(max-width:600px){.hs-logos{gap:1.1rem 1.8rem}.hs-logos img{height:44px;max-width:150px}.hs-logos .wm{font-size:.82rem}}
 
 /* countdown */
 .countbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -546,13 +546,21 @@ section{position:relative;scroll-margin-top:88px}
 .quote .who{margin-top:1rem;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
 
 /* sponsors */
-/* Combined logo wall (dark panel so the white logos read in both themes). */
-.sponsor-grid{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.8rem 2.6rem;
-  margin-top:2.6rem;background:#0b0f0b;border:1px solid rgba(201,164,78,.18);border-radius:12px;padding:2.6rem 2rem}
-.sponsor-grid img{height:46px;width:auto;max-width:170px;object-fit:contain;opacity:.85;transition:.3s}
-.sponsor-grid img:hover{opacity:1;transform:translateY(-2px)}
-.sponsor-grid .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:.9rem;color:#efe8d6;opacity:.72;white-space:nowrap}
-@media(max-width:600px){.sponsor-grid{gap:1.3rem 1.8rem;padding:1.8rem 1.2rem}.sponsor-grid img{height:34px}}
+/* Combined logo wall (dark panel so the white logos read in both themes).
+   Two tiers like the flyer: venues larger on top, everyone else below. */
+.sponsor-grid{display:flex;flex-direction:column;gap:2rem;
+  margin-top:2.6rem;background:#0b0f0b;border:1px solid rgba(201,164,78,.18);border-radius:12px;padding:3rem 2rem}
+.sg-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center}
+.sg-row img{width:auto;object-fit:contain;opacity:.9;transition:.3s}
+.sg-row img:hover{opacity:1;transform:translateY(-2px)}
+.sg-row .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;color:#efe8d6;opacity:.72;white-space:nowrap}
+.sg-lg{gap:2.2rem 3.2rem}
+.sg-lg img{height:76px;max-width:240px}
+.sg-lg .wm{font-size:1.15rem}
+.sg-sm{gap:1.8rem 2.6rem;padding-top:2rem;border-top:1px solid rgba(201,164,78,.14)}
+.sg-sm img{height:52px;max-width:170px}
+.sg-sm .wm{font-size:.95rem}
+@media(max-width:600px){.sponsor-grid{padding:1.8rem 1.1rem;gap:1.4rem}.sg-lg{gap:1.5rem 2rem}.sg-lg img{height:52px;max-width:160px}.sg-sm{gap:1.2rem 1.7rem;padding-top:1.4rem}.sg-sm img{height:38px;max-width:130px}}
 
 /* final cta */
 .final{text-align:center;background:
@@ -1437,7 +1445,12 @@ function renderLogoStrip(el,list){
     el.appendChild(img);
   });
 }
-function renderSponsors(){ renderLogoStrip($('#sponsorsGrid'),ALLLOGOS); }        // bottom: everyone
+function renderSponsors(){                                                        // bottom: everyone, two tiers (flyer style)
+  var el=$('#sponsorsGrid'); if(!el)return;
+  el.innerHTML='<div class="sg-row sg-lg"></div><div class="sg-row sg-sm"></div>';
+  renderLogoStrip(el.querySelector('.sg-lg'),VENUES);
+  renderLogoStrip(el.querySelector('.sg-sm'),SPONSORS);
+}
 function renderHeroSponsors(){ renderLogoStrip(document.getElementById('heroSponsors'),VENUES); } // under hero: venues only
 
 /* ---------- checkout modal ---------- */
