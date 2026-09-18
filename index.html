@@ -1291,7 +1291,7 @@ var EVENTS=[
   {days:[26],c:'comm',t:'11:00 AM',end:'11:00 PM',n:'TULUM: YOGA MUSIC FESTIVAL',v:'Oasis Tulum',festival:true,k:660},
 
   /* ---- Sept 27 ---- */
-  {days:[27],c:'yoga',t:'8:30 AM',end:'10:00 AM',n:'Master Yoga Class · International Day of Tourism',who:'Ayuntamiento de Tulum',v:'Palacio Plaza Square of Tulum',p:'free',k:510},
+  {days:[27],c:'yoga',t:'8:30 AM',end:'10:00 AM',n:'Master Yoga Class · International Day of Tourism',who:'Ayuntamiento de Tulum',v:'Palacio Plaza Square of Tulum',p:'free',featured:true,featuredLogos:[{file:'municipio-tulum',name:'Ayuntamiento de Tulum'}],k:510},
   {days:[27],c:'comm',t:'10:00 AM',end:'3:00 PM',n:'Soul Sunday',who:'Mafe',v:'Shakti Temple',p:'tba',k:600},
   {days:[27],c:'yoga',t:'9:00 AM',end:'10:30 AM',n:'Kundalini Class',who:'Belu Kundalini',v:'Ikal',p:'paid',pr:'$100 local',k:540},
   {days:[27],c:'yoga',t:'10:30 AM',end:'12:00 PM',n:'Progressive Vinyasa',who:'Itzel',v:'Holistika',p:'paid',k:630},
@@ -1474,7 +1474,7 @@ function renderEvents(day){
   ev.innerHTML=SCHED[day].map(function(e){
     if(e.festival)return '<div class="ev-festival"><div class="ev-venue-logo ev-festival-logo"><img src="logos/oasis-tulum.png" alt="Oasis Tulum logo" loading="lazy"></div><div class="ev-festival-time">'+e.t+' – '+e.end+'</div><h4>'+e.n+'</h4><div class="ev-festival-venue">'+e.v+'</div><p class="ev-festival-note">LINEUP AND SCHEDULE TBD</p></div>';
     return '<div class="ev'+(e.featured?' ev-featured':'')+'" style="--cat:'+CAT[e.c]+'">'+
-      (e.featured?'<div class="ev-expo-logos"><div class="ev-venue-logo ev-expo-logo"><img src="logos/oasis-tulum.png" alt="Oasis Tulum logo" loading="lazy"></div><div class="ev-venue-logo ev-expo-logo"><img src="logos/tulum-despierta.png" alt="Tulum Despierta logo" loading="lazy"></div></div>':'')+
+      (e.featured?'<div class="ev-expo-logos">'+(e.featuredLogos||[{file:'oasis-tulum',name:'Oasis Tulum'},{file:'tulum-despierta',name:'Tulum Despierta'}]).map(function(logo){return '<div class="ev-venue-logo ev-expo-logo"><img src="logos/'+logo.file+'.png" alt="'+logo.name+' logo" loading="lazy"></div>';}).join('')+'</div>':'')+
       '<div class="ev-time">'+e.t+(e.end?'<span class="ev-end">'+e.end+'</span>':'')+'</div>'+
       '<div class="ev-mid">'+(e.special?'<span class="ev-special">SPECIAL CLASS</span>':'')+eventTitle(e,true,e.featured)+'</div>'+
       '<div class="ev-right">'+priceTag(e)+
