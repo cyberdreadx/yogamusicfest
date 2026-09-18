@@ -252,10 +252,10 @@ section{position:relative;scroll-margin-top:88px}
 .hs-logos{display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:1.8rem 3rem;max-width:1060px;margin:0 auto}
 .hs-logos img{height:60px;width:auto;max-width:210px;object-fit:contain;opacity:.9;transition:.3s}
 .hs-logos img:hover{opacity:1;transform:translateY(-2px)}
-.hs-logos img.big{height:76px;max-width:320px}
+.hs-logos img.big{height:auto;max-width:none;width:min(400px,72vw)}
 .hs-logos .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:1rem;color:#efe8d6;opacity:.72;transition:.3s;white-space:nowrap}
 .hs-logos .wm:hover{opacity:1;color:#e6c884}
-@media(max-width:600px){.hs-logos{gap:1.3rem 2rem}.hs-logos img{height:46px;max-width:150px}.hs-logos img.big{height:56px;max-width:230px}.hs-logos .wm{font-size:.85rem}}
+@media(max-width:600px){.hs-logos{gap:1.3rem 2rem}.hs-logos img{height:46px;max-width:150px}.hs-logos img.big{height:auto;max-width:none;width:min(300px,66vw)}.hs-logos .wm{font-size:.85rem}}
 
 /* countdown */
 .countbar{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
@@ -560,7 +560,7 @@ section{position:relative;scroll-margin-top:88px}
 .sg-row .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;color:#efe8d6;opacity:.72;white-space:nowrap}
 .sg-lg{gap:2.6rem 3.8rem}
 .sg-lg img{height:104px;max-width:300px}
-.sg-lg img.big{height:auto;max-width:none;width:min(400px,78vw)}
+.sg-lg img.big{height:auto;max-width:none;width:min(460px,80vw)}
 .sg-lg .wm{font-size:1.4rem}
 .sg-sm{gap:2.2rem 3rem}
 .sg-sm img{height:70px;max-width:210px}
