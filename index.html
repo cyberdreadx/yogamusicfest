@@ -252,6 +252,7 @@ section{position:relative;scroll-margin-top:88px}
 .hs-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2.2rem 3.4rem}
 .hs-logos img{height:88px;width:auto;max-width:260px;object-fit:contain;opacity:.9;transition:.3s}
 .hs-logos img:hover{opacity:1;transform:translateY(-2px)}
+.hs-logos img.big{height:auto;max-width:none;width:clamp(240px,34vw,460px)}
 .hs-logos .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:1.15rem;color:#efe8d6;opacity:.72;transition:.3s;white-space:nowrap}
 .hs-logos .wm:hover{opacity:1;color:#e6c884}
 @media(max-width:600px){.hs-logos{gap:1.4rem 2rem}.hs-logos img{height:60px;max-width:170px}.hs-logos .wm{font-size:.9rem}}
@@ -559,6 +560,7 @@ section{position:relative;scroll-margin-top:88px}
 .sg-row .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;color:#efe8d6;opacity:.72;white-space:nowrap}
 .sg-lg{gap:2.6rem 3.8rem}
 .sg-lg img{height:104px;max-width:300px}
+.sg-lg img.big{height:auto;max-width:none;width:clamp(280px,34vw,480px)}
 .sg-lg .wm{font-size:1.4rem}
 .sg-sm{gap:2.2rem 3rem}
 .sg-sm img{height:70px;max-width:210px}
@@ -1285,7 +1287,7 @@ var VENUES=[
   {name:'The Space',file:'the-space'},
   {name:'Lokäh',file:'lokah'},
   {name:'Neek',file:'neek'},
-  {name:'Azulik',file:'azulik'}
+  {name:'Azulik',file:'azulik',big:true}
 ];
 /* Sponsors & collaborators (smaller tier). */
 var COLLABS=[
@@ -1462,7 +1464,7 @@ function renderLogoStrip(el,list){
   if(!el)return; el.innerHTML='';
   list.forEach(function(s){
     var img=new Image();
-    img.alt=s.name; img.loading='lazy';
+    img.alt=s.name; img.loading='lazy'; if(s.big)img.className='big';
     img.onerror=function(){
       var sp=document.createElement('span'); sp.className='wm'; sp.textContent=s.name;
       if(img.parentNode) el.replaceChild(sp,img);
