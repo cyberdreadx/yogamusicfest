@@ -1,0 +1,265 @@
+TULUM YOGA MUSIC FESTIVAL — BRAND PALETTE AND FONTS
+Extracted from the current website, September 18, 2026.
+
+PRIMARY BRAND COLORS
+Gold: #C9A44E
+Light gold: #E6C884
+Deep gold: #9C7A33
+Sage: #8A9A6E
+Cream: #F4EEDA
+Warm ivory text: #EFE8D6
+Muted text: #AEB09A
+Deep forest background: #0A0D0A
+Logo panel background: #0B0F0B
+
+FONTS
+Cinzel: headings, display text, presenter names, schedule times.
+Loaded weights: 500, 600, 700, 800, 900.
+Fallbacks: Georgia, Times New Roman, serif.
+
+Cormorant Garamond: introductory copy and italic accents.
+Loaded styles: normal 500/600; italic 400/500.
+Fallbacks: Georgia, serif.
+
+Jost: body copy, navigation, buttons, labels, schedule class titles.
+Loaded weights: 300, 400, 500, 600.
+Fallbacks: Century Gothic, system-ui, -apple-system, sans-serif.
+
+COLOR TOKEN KEY
+bg: page background; bg-2/3/4: layered surfaces.
+line / line-strong: borders; gold / gold-2 / gold-3: gold accents.
+text: body text; text-dim: secondary text; cream: heading text.
+cat-yoga: yoga/movement; cat-music: music; cat-heal: healing.
+cat-work: workshops; cat-comm: community.
+good: free pricing; don: donation pricing; paid: paid pricing.
+Light theme inherits category and pricing colors from the default tokens.
+
+DARK THEME / DEFAULT TOKENS
+bg: #0a0d0a
+bg-2: #0f140e
+bg-3: #141b12
+bg-4: #1a2317
+line: rgba(201,164,78,0.18)
+line-strong: rgba(201,164,78,0.34)
+gold: #c9a44e
+gold-2: #e6c884
+gold-3: #9c7a33
+sage: #8a9a6e
+text: #efe8d6
+text-dim: #aeb09a
+cream: #f4eeda
+shadow: 0 30px 70px -30px rgba(0,0,0,.8)
+cat-yoga: #5f9e7d
+cat-music: #d8b25e
+cat-heal: #a58fce
+cat-work: #d18f5c
+cat-comm: #6fa3c7
+good: #6fae7f
+don: #d8b25e
+paid: #c98a5c
+
+LIGHT THEME
+bg: #f4eddc
+bg-2: #efe6d1
+bg-3: #fbf7ec
+bg-4: #f3ecd9
+line: rgba(120,90,30,0.22)
+line-strong: rgba(120,90,30,0.4)
+gold: #8f6d22
+gold-2: #a67c2a
+gold-3: #6b4f16
+sage: #4d5c38
+text: #22301b
+text-dim: #5c6350
+cream: #2a3420
+shadow: 0 24px 60px -30px rgba(60,45,15,.35)
+
+GOLD GRADIENT
+Top to bottom: light gold -> gold -> deep gold.
+Dark: #E6C884 -> #C9A44E -> #9C7A33.
+Light: #A67C2A -> #8F6D22 -> #6B4F16.
+
+COMPLETE CSS COLOR AND FONT INVENTORY BY PAGE
+Includes supporting colors, shadows, and translucent overlays.
+Colors embedded in photos and logo images are not included.
+CSS also uses transparent, currentColor, inheritance and color-mix() blends.
+
+admin.html
+Colors:
+#0a0d0a
+#0c120b
+#10160f
+#1a1405
+#6fae7f
+#9ea08c
+#c9a44e
+#d8b25e
+#e6c884
+#efe8d6
+#f2c8c8
+rgba(111,174,127,.5)
+rgba(201,164,78,.24)
+rgba(216,178,94,.5)
+Font-family declarations: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; Georgia,serif; ui-monospace,monospace
+
+checkin.html
+Colors:
+#0a0d0a
+#0c120b
+#10160f
+#123a20
+#1a1405
+#2f7d46
+#3a1414
+#3a2a0e
+#3aa15e
+#7d2f2f
+#8a5a12
+#aeb09a
+#c8f2d5
+#c95a5a
+#c99a3a
+#c9a44e
+#e6c884
+#efe8d6
+#f0d9a6
+#f2c8c8
+rgba(201,164,78,.28)
+Font-family declarations: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; Georgia,serif; ui-monospace,Menlo,Consolas,monospace
+
+checkout.html
+Colors:
+#0a0d0a
+#0f140e
+#141b12
+#1a1405
+#1a2317
+#22301b
+#2a3420
+#4d5c38
+#5c6350
+#6b4f16
+#6fae7f
+#8a9a6e
+#8f6d22
+#9c7a33
+#a67c2a
+#aeb09a
+#c9a44e
+#e6c884
+#efe6d1
+#efe8d6
+#f3ecd9
+#f4eddc
+#f4eeda
+#fbf7ec
+rgba(0,0,0,.8)
+rgba(120,90,30,0.22)
+rgba(120,90,30,0.4)
+rgba(201,164,78,.06)
+rgba(201,164,78,.1)
+rgba(201,164,78,.6)
+rgba(201,164,78,.7)
+rgba(201,164,78,.8)
+rgba(201,164,78,0.18)
+rgba(201,164,78,0.34)
+rgba(60,45,15,.35)
+Font-family declarations: var(--sans); var(--display); var(--serif)
+
+index.html
+Colors:
+#000
+#070a07
+#0a0d0a
+#0b0f0b
+#0c120b
+#0f140e
+#141b12
+#1a1405
+#1a2317
+#22301b
+#2a3420
+#4d5c38
+#5c6350
+#5f9e7d
+#6b4f16
+#6fa3c7
+#6fae7f
+#8a9a6e
+#8f6d22
+#9c7a33
+#a58fce
+#a67c2a
+#aeb09a
+#c98a5c
+#c9a44e
+#d18f5c
+#d8b25e
+#e6c884
+#e7dcc2
+#efe6d1
+#efe8d6
+#f3ecd9
+#f4eddc
+#f4eeda
+#f6efdf
+#fbf7ec
+rgba(0,0,0,.4)
+rgba(0,0,0,.55)
+rgba(0,0,0,.6)
+rgba(0,0,0,.8)
+rgba(10,13,10,.4)
+rgba(120,90,30,0.22)
+rgba(120,90,30,0.4)
+rgba(180,160,90,.28)
+rgba(180,160,90,.35)
+rgba(20,32,16,.9)
+rgba(201,164,78,.06)
+rgba(201,164,78,.09)
+rgba(201,164,78,.1)
+rgba(201,164,78,.12)
+rgba(201,164,78,.14)
+rgba(201,164,78,.16)
+rgba(201,164,78,.18)
+rgba(201,164,78,.5)
+rgba(201,164,78,.6)
+rgba(201,164,78,.8)
+rgba(201,164,78,0.18)
+rgba(201,164,78,0.34)
+rgba(210,198,160,.6)
+rgba(244,237,220,.05)
+rgba(244,237,220,.15)
+rgba(244,237,220,.3)
+rgba(244,237,220,.5)
+rgba(244,237,220,.6)
+rgba(244,237,220,.8)
+rgba(244,237,220,.96)
+rgba(35,52,28,.55)
+rgba(35,52,28,.6)
+rgba(5,8,5,.82)
+rgba(60,45,15,.35)
+rgba(8,11,8,.12)
+rgba(8,11,8,.14)
+rgba(8,11,8,.32)
+rgba(8,11,8,.45)
+rgba(8,11,8,.55)
+rgba(8,11,8,.6)
+rgba(8,11,8,.8)
+rgba(8,11,8,.85)
+rgba(8,11,8,.96)
+Font-family declarations: var(--sans); var(--display); var(--serif)
+
+promotor.html
+Colors:
+#0a0d0a
+#0c120b
+#10160f
+#1a1405
+#7fbf90
+#a7a992
+#c9a44e
+#e6c884
+#efe8d6
+rgba(127,191,144,.5)
+rgba(201,164,78,.26)
+Font-family declarations: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; Georgia,serif; ui-monospace,monospace
