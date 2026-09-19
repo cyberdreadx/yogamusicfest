@@ -117,7 +117,7 @@
       activateAuto:'Activar pago automático', paid:'✓ Pagado', markPaid:'Marcar pagado', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promotor "'+code+'"';},
       sellLink:'Enlace para vender (compártelo con clientes):', generatingPanel:'Generando panel del promotor…', activateStripe:'Activar pago automático (Stripe)',
       promoterPanel:'Panel del promotor (para que vea sus ventas):', autoSignupFor:function(code){return 'Registro de pago automático para "'+code+'"';}, sendStripeLink:'Envía este enlace al promotor para que registre su banco en Stripe:',
-      copy:'Copiar', copied:'¡Copiado!', copyManual:'Copia manual', stripeConnectError:'Error de Stripe Connect', languageToggle:'Cambiar idioma'
+      copy:'Copiar', copied:'¡Copiado!', copyManual:'Copia manual', stripeConnectError:'Error de Stripe Connect', languageToggle:'Cambiar idioma', languageGroup:'Selector de idioma'
     },
     en:{
       subtitle:'Dashboard · Sales and Promoters', adminPin:'Admin PIN', enter:'Enter', updated:'Updated', refresh:'Refresh', exportCsv:'Export CSV', logout:'Log out',
@@ -129,7 +129,7 @@
       activateAuto:'Enable auto-payout', paid:'✓ Paid', markPaid:'Mark paid', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promoter "'+code+'"';},
       sellLink:'Sales link (share it with customers):', generatingPanel:'Generating promoter panel…', activateStripe:'Enable auto-payout (Stripe)',
       promoterPanel:'Promoter panel (to track their sales):', autoSignupFor:function(code){return 'Auto-payout signup for "'+code+'"';}, sendStripeLink:'Send this link so the promoter can connect their bank in Stripe:',
-      copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error', languageToggle:'Switch language'
+      copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error', languageToggle:'Switch language', languageGroup:'Language selector'
     }
   };
   var DATA_LOCALE='es-MX', EVENT_TIME_ZONE='America/Cancun';
@@ -137,6 +137,7 @@
   function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
   function applyStatic(){
     document.documentElement.lang=L;
+    $('lang').setAttribute('aria-label',t('languageGroup'));
     $('pname').placeholder=t('promoterPlaceholder');
     document.querySelectorAll('[data-t]').forEach(function(el){ var v=t(el.getAttribute('data-t')); if(typeof v==='string') el.textContent=v; });
     document.querySelectorAll('[data-lang]').forEach(function(s){

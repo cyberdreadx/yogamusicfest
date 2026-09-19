@@ -93,7 +93,7 @@
       enterPin:'Ingresa el PIN', cameraUnavailable:'Cámara no disponible en este navegador. Usa el código manual abajo.', cameraOpenError:function(err){ return 'No se pudo abrir la cámara ('+err+'). Usa el código manual abajo.'; },
       verifying:'Verificando…', badPin:'PIN incorrecto', valid:'✓ VÁLIDO', admits:function(qty){ return 'Admite '+qty+(qty>1?' personas':' persona'); },
       alreadyUsed:'⚠ YA REGISTRADO', checkedAt:function(when){ return 'Registrado a las '+when; }, notFound:'✗ NO ENCONTRADO', codeMissing:'Este código no existe',
-      error:'✗ ERROR', offline:'Sin conexión', sessionCount:function(n){ return 'Registrados en esta sesión: '+n; }, languageToggle:'Cambiar idioma'
+      error:'✗ ERROR', offline:'Sin conexión', sessionCount:function(n){ return 'Registrados en esta sesión: '+n; }, languageToggle:'Cambiar idioma', languageGroup:'Selector de idioma'
     },
     en:{
       subtitle:'Check-in · 2026', accessPin:'Access PIN', enter:'Enter', staffOnly:'Staff only. Ask the organizers for the PIN.',
@@ -101,13 +101,15 @@
       enterPin:'Enter the PIN', cameraUnavailable:'Camera is not available in this browser. Use the manual code field below.', cameraOpenError:function(err){ return 'Could not open the camera ('+err+'). Use the manual code field below.'; },
       verifying:'Checking…', badPin:'Incorrect PIN', valid:'✓ VALID', admits:function(qty){ return 'Admits '+qty+(qty>1?' people':' person'); },
       alreadyUsed:'⚠ ALREADY CHECKED IN', checkedAt:function(when){ return 'Checked in at '+when; }, notFound:'✗ NOT FOUND', codeMissing:'This code does not exist',
-      error:'✗ ERROR', offline:'Offline', sessionCount:function(n){ return 'Checked in this session: '+n; }, languageToggle:'Switch language'
+      error:'✗ ERROR', offline:'Offline', sessionCount:function(n){ return 'Checked in this session: '+n; }, languageToggle:'Switch language', languageGroup:'Language selector'
     }
   };
+  var CHECKIN_TIME_LOCALE='es-MX';
   var lastResult=null, L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
   function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
   function applyStatic(){
     document.documentElement.lang=L;
+    $('lang').setAttribute('aria-label',t('languageGroup'));
     document.querySelectorAll('[data-t]').forEach(function(el){ var v=t(el.getAttribute('data-t')); if(typeof v==='string') el.textContent=v; });
     document.querySelectorAll('[data-lang]').forEach(function(s){
       var active=s.getAttribute('data-lang')===L;
@@ -211,7 +213,7 @@
       return;
     }
     if(lastResult.kind==='used'){
-      var o2=lastResult.order||{}, when=o2.usedAt?new Date(o2.usedAt).toLocaleTimeString():'';
+      var o2=lastResult.order||{}, when=o2.usedAt?new Date(o2.usedAt).toLocaleTimeString(CHECKIN_TIME_LOCALE):'';
       showResult('r-used',t('alreadyUsed'), o2.name||'—', when?t('checkedAt')(when):'', lastResult.code||'');
       return;
     }
