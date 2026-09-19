@@ -636,18 +636,18 @@ section{position:relative;scroll-margin-top:88px}
 .oasis-mark .o-sub{font-family:var(--sans);font-weight:500;letter-spacing:.55em;text-transform:uppercase;font-size:.8rem;color:var(--gold);margin-top:.5rem;padding-left:.55em}
 @media(max-width:600px){.sponsor-grid{padding:2rem 1.1rem;gap:2rem}.sg-tier+.sg-tier{padding-top:1.8rem}.sg-lg{gap:1.8rem 2.2rem}.sg-lg img{height:66px;max-width:180px}.sg-sm{gap:1.4rem 1.9rem}.sg-sm img{height:50px;max-width:150px}}
 
-/* Seven equal spaces per venue row; Azulik occupies exactly two. */
-.hs-row.venue-logos,.sg-lg.venue-logos{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1.8rem 1.4rem;width:100%;align-items:center;justify-items:center}
+/* Azulik leads on its own row, followed by equal venue logo cells. */
+.hs-row.venue-logos,.sg-lg.venue-logos{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1.8rem 1.4rem;width:100%;align-items:center;justify-items:center}
 .venue-logos img,.venue-logos img.tall{width:100%;max-width:110px;height:80px}
-.venue-logos img.big{grid-column:span 2;width:100%;max-width:220px;height:80px}
+.venue-logos img.big{grid-column:1 / -1;width:100%;max-width:420px;height:110px}
 /* Frame the supplied portrait artwork and blend its black background into the panel. */
 .venue-logos img[src="logos/oasis-tulum.png"]{object-fit:cover;object-position:center 46%;mix-blend-mode:screen}
 .venue-logos .wm{white-space:normal;text-align:center;max-width:100%}
-.venue-logos .wm.big{grid-column:span 2}
+.venue-logos .wm.big{grid-column:1 / -1}
 @media(max-width:600px){
   .hs-row.venue-logos,.sg-lg.venue-logos{grid-template-columns:repeat(3,minmax(0,1fr));gap:1.4rem 1rem}
   .venue-logos img,.venue-logos img.tall{height:60px;max-width:85px}
-  .venue-logos img.big{height:60px;max-width:170px}
+  .venue-logos img.big{height:80px;max-width:300px}
 }
 
 /* final cta */
@@ -1277,6 +1277,8 @@ var EVENTS=[
   {days:[24],c:'music',t:'6:00 PM',end:'8:00 PM',n:'Kirtan',who:'Ganesha and Friends',v:'Oasis',p:'don',k:1080},
 
   /* ---- Sept 25 ---- */
+  {days:[25],c:'work',t:'10:00 AM',end:'11:30 AM',n:'Tempering — Learning to Release Fascia',who:'Dr. Rick Potts & Garrett Wood',v:'Lifeforce Tulum',p:'free',k:600},
+  {days:[25],c:'music',t:'6:00 PM',end:'11:00 PM',n:'Kirtan, Cacao & Downtempo Aquatic Dance',who:'Ganesha',v:'Vortex Vitality',p:'free',k:1080},
   {days:[25],c:'heal',t:'5:45 PM',end:'7:00 PM',n:'Osho Kundalini Meditation',who:'Mafe',v:'Shakti Temple (LILA)',p:'free',k:1065},
   {days:[25],c:'yoga',t:'8:00 AM',n:'Pilates',who:'Audrey',v:'Kan Tulum',p:'paid',pr:'$250',k:480},
   {days:[25],c:'heal',t:'9:00 AM',end:'10:00 AM',n:'Embodied Breathwork',who:'Sylvia',v:'The Space',p:'don',k:540},
@@ -1297,7 +1299,7 @@ var EVENTS=[
 
   /* ---- Multi-day offerings ---- */
   {days:[21,24],c:'heal',t:'9:00 AM',end:'10:30 AM',n:'Meditation + Breathwork',who:'Ganesha',v:'Holistika',p:'tba',k:540},
-  {days:[24,25],c:'music',t:'7:30 PM',n:'Harmonizing Sound Journey',who:'Katarina',v:'Shakti Temple (LILA)',p:'paid',pr:'$333',k:1170},
+  {days:[25],c:'music',t:'7:30 PM',n:'Harmonizing Sound Journey',who:'Katarina',v:'Shakti Temple (LILA)',p:'paid',pr:'$333',k:1170},
 ];
 var SCHED={};
 DAYS.forEach(function(d){SCHED[d.num]=[];});
@@ -1349,8 +1351,8 @@ var VENDORS=[
 
 /* Venue logos — shown under the hero image (white logos on dark). Flyer order. */
 var VENUES=[
-  {name:'Holistika',file:'holistika',tall:true},
   {name:'Azulik',file:'azulik',big:true},
+  {name:'Holistika',file:'holistika',tall:true},
   {name:'Kan Tulum',file:'kan-tulum'},
   {name:'Vesica',file:'vesica'},
   {name:'Ahau Tulum',file:'ahau-tulum'},
@@ -1457,6 +1459,8 @@ function eventTitle(e,withMeta,hideLogo){
   else if(venue==='Lokah Yoga Studio')file='lokah';
   else if(venue==='The Space')file='the-space';
   else if(venue==='Centro Calea')file='calea';
+  else if(venue==='Vortex Vitality')file='vortex';
+  else if(venue==='Lifeforce Tulum')file='lifeforce-tulum';
   else if(venue==='Mute')file='mute';
   else if(venue==='Neek Tulum')file='neek';
   else if(venue.indexOf('Selvadentro')===0)file='selvadentro';
