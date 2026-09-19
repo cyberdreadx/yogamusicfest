@@ -132,9 +132,9 @@
       copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error', languageToggle:'Switch language'
     }
   };
+  var DATA_LOCALE='es-MX', EVENT_TIME_ZONE='America/Cancun';
   var L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
   function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
-  function locale(){ return L==='es'?'es-MX':'en-US'; }
   function applyStatic(){
     document.documentElement.lang=L;
     $('pname').placeholder=t('promoterPlaceholder');
@@ -177,8 +177,8 @@
           post('connect',{action:'status',promoter:cc}).then(load); } }catch(e){}
     }).catch(function(){ $('pinErr').textContent=t('connectionError'); });
   }
-  function mxnCents(c){ return '$'+((c||0)/100).toLocaleString(locale(),{minimumFractionDigits:2,maximumFractionDigits:2}); }
-  function mxn(n){ return '$'+((n||0)).toLocaleString(locale()); }
+  function mxnCents(c){ return '$'+((c||0)/100).toLocaleString(DATA_LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function mxn(n){ return '$'+((n||0)).toLocaleString(DATA_LOCALE); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function slugify(s){ return s.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40); }
 
@@ -188,7 +188,7 @@
     $('tTickets').textContent=totals.tickets||0;
     $('tRevenue').textContent=mxnCents(totals.revenue);
     $('tCommission').textContent=mxn(totals.commission);
-    $('stamp').textContent=new Date().toLocaleString(locale());
+    $('stamp').textContent=new Date().toLocaleString(DATA_LOCALE,{timeZone:EVENT_TIME_ZONE});
 
     var pb=$('promoTable').querySelector('tbody'); pb.innerHTML='';
     (data.promoters||[]).forEach(function(p){
@@ -213,7 +213,7 @@
     var ob=$('orderTable').querySelector('tbody'); ob.innerHTML='';
     (data.orders||[]).forEach(function(o){
       var tr=document.createElement('tr');
-      tr.innerHTML='<td>'+esc(new Date(o.createdAt).toLocaleString(locale()))+'</td>'+
+      tr.innerHTML='<td>'+esc(new Date(o.createdAt).toLocaleString(DATA_LOCALE,{timeZone:EVENT_TIME_ZONE}))+'</td>'+
         '<td>'+esc(o.name)+'</td><td>'+esc(o.email)+'</td><td>'+(o.qty||1)+'</td>'+
         '<td class="money">'+mxnCents(o.amount)+'</td><td>'+(o.ref?esc(o.ref):t('manualDash'))+(o.autoPaid?' <span class="pill ready">'+t('auto')+'</span>':'')+'</td>'+
         '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+'</td>';
