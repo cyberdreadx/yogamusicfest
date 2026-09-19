@@ -104,7 +104,6 @@
       error:'✗ ERROR', offline:'Offline', sessionCount:function(n){ return 'Checked in this session: '+n; }, languageToggle:'Switch language'
     }
   };
-  var EVENT_LOCALE='es-MX', EVENT_TIME_ZONE='America/Cancun';
   var lastResult=null, L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
   function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
   function applyStatic(){
@@ -212,7 +211,7 @@
       return;
     }
     if(lastResult.kind==='used'){
-      var o2=lastResult.order||{}, when=o2.usedAt?new Date(o2.usedAt).toLocaleTimeString(EVENT_LOCALE,{timeZone:EVENT_TIME_ZONE}):'';
+      var o2=lastResult.order||{}, when=o2.usedAt?new Date(o2.usedAt).toLocaleTimeString():'';
       showResult('r-used',t('alreadyUsed'), o2.name||'—', when?t('checkedAt')(when):'', lastResult.code||'');
       return;
     }
