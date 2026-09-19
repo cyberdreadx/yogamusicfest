@@ -149,7 +149,7 @@
     });
   }
   try{ PIN=sessionStorage.getItem('tymf_apin')||''; }catch(e){}
-  document.querySelectorAll('#lang [data-lang]').forEach(function(btn){ btn.onclick=function(){ var next=btn.getAttribute('data-lang'); if(next===L) return; L=next; try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); if(genState) renderGenState(); }; });
+  document.querySelectorAll('#lang [data-lang]').forEach(function(btn){ btn.onclick=function(){ var next=btn.getAttribute('data-lang'); if(next===L) return; L=next; try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); else if(genState) renderGenState(); }; });
   applyStatic();
   if(PIN){ load(); }
 
@@ -220,6 +220,7 @@
         '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+'</td>';
       ob.appendChild(tr);
     });
+    if(genState) renderGenState();
   }
 
   function wireRowButtons(pb){
