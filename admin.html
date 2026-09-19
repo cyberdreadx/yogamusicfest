@@ -274,13 +274,13 @@
     out.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
   function copy(text,btn){
+    function resetCopyLabel(){
+      clearTimeout(btn.__copyTimer);
+      btn.__copyTimer=setTimeout(function(){ btn.textContent=t(btn.getAttribute('data-label-key')||'copy'); },1200);
+    }
     (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
-      .then(function(){ btn.textContent=t('copied'); })
-      .catch(function(){ btn.textContent=t('copyManual'); })
-      .finally(function(){
-        clearTimeout(btn.__copyTimer);
-        btn.__copyTimer=setTimeout(function(){ btn.textContent=t(btn.getAttribute('data-label-key')||'copy'); },1200);
-      });
+      .then(function(){ btn.textContent=t('copied'); resetCopyLabel(); })
+      .catch(function(){ btn.textContent=t('copyManual'); resetCopyLabel(); });
   }
 
   function exportCsv(){
