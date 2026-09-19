@@ -55,7 +55,7 @@
   <div class="head">
     <h1>T Y M F</h1>
     <div class="sub" data-t="subtitle">Panel · Ventas y Promotores</div>
-    <button class="lang" id="lang" aria-label="Idioma / Language" aria-pressed="false"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
+    <button class="lang" id="lang" type="button" aria-label="Idioma / Language" aria-pressed="false"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
   </div>
 
   <section id="pinScreen" class="card" style="max-width:380px;margin:0 auto">
@@ -271,14 +271,12 @@
     out.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
   function copy(text,btn){
-    var label=btn.getAttribute('data-label')||btn.textContent;
-    btn.setAttribute('data-label',label);
     (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
       .then(function(){ btn.textContent=t('copied'); })
       .catch(function(){ btn.textContent=t('copyManual'); })
       .finally(function(){
         clearTimeout(btn.__copyTimer);
-        btn.__copyTimer=setTimeout(function(){ btn.textContent=label; },1200);
+        btn.__copyTimer=setTimeout(function(){ btn.textContent=t(btn.getAttribute('data-label-key')||'copy'); },1200);
       });
   }
 
