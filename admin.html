@@ -14,9 +14,9 @@
   .sub{text-align:center;color:var(--dim);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
   .head{position:relative;padding-top:6px}
-  .lang{position:absolute;top:0;right:0;display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;cursor:pointer;background:transparent}
-  .lang span{padding:4px 9px;font-size:11px;font-weight:600;color:var(--dim)}
-  .lang span[data-on]{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
+  .lang{position:absolute;top:0;right:0;display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;background:transparent}
+  .lang button{border:0;background:transparent;color:var(--dim);padding:4px 9px;font-size:11px;font-weight:600;margin:0;border-radius:0;width:auto;letter-spacing:0}
+  .lang button[data-on]{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
   label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
   input{width:100%;background:#0c120b;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:var(--text);font-size:16px}
   input:focus{outline:none;border-color:var(--gold)}
@@ -55,7 +55,7 @@
   <div class="head">
     <h1>T Y M F</h1>
     <div class="sub" data-t="subtitle">Panel · Ventas y Promotores</div>
-    <button class="lang" id="lang" type="button" aria-label="Idioma / Language" aria-pressed="false"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
+    <div class="lang" id="lang" role="tablist" aria-label="Idioma / Language"><button type="button" data-lang="es" role="tab">ES</button><button type="button" data-lang="en" role="tab">EN</button></div>
   </div>
 
   <section id="pinScreen" class="card" style="max-width:380px;margin:0 auto">
@@ -138,18 +138,18 @@
   function applyStatic(){
     document.documentElement.lang=L;
     $('pname').placeholder=t('promoterPlaceholder');
-    $('lang').setAttribute('aria-pressed',L==='en'?'true':'false');
-    $('lang').setAttribute('aria-label',t('languageToggle'));
     document.querySelectorAll('[data-t]').forEach(function(el){ var v=t(el.getAttribute('data-t')); if(typeof v==='string') el.textContent=v; });
     document.querySelectorAll('[data-lang]').forEach(function(s){
       var active=s.getAttribute('data-lang')===L;
       s.setAttribute('aria-label',s.getAttribute('data-lang')==='es'?'Español':'English');
-      if(active){ s.setAttribute('data-on','1'); s.setAttribute('aria-current','true'); }
-      else { s.removeAttribute('data-on'); s.removeAttribute('aria-current'); }
+      s.setAttribute('aria-selected',active?'true':'false');
+      s.setAttribute('tabindex',active?'0':'-1');
+      if(active) s.setAttribute('data-on','1');
+      else s.removeAttribute('data-on');
     });
   }
   try{ PIN=sessionStorage.getItem('tymf_apin')||''; }catch(e){}
-  $('lang').onclick=function(){ L=(L==='es'?'en':'es'); try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); else if(genState) renderGenState(); };
+  document.querySelectorAll('#lang [data-lang]').forEach(function(btn){ btn.onclick=function(){ var next=btn.getAttribute('data-lang'); if(next===L) return; L=next; try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); else if(genState) renderGenState(); }; });
   applyStatic();
   if(PIN){ load(); }
 
