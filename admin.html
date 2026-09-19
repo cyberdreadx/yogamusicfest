@@ -265,11 +265,16 @@
     } else {
       out.innerHTML='<b>'+esc(t('promoterLabel')(genState.slug))+'</b>'+
         '<div style="margin-top:8px">'+esc(t('sellLink'))+'<br><span class="lk">'+esc(genState.link)+'</span> <button class="ghost mini" id="cpRef" data-label-key="copy">'+esc(t('copy'))+'</button></div>'+
-        '<div style="margin-top:12px" id="panelRow" class="sub">'+(genState.panelLink?(esc(t('promoterPanel'))+'<br><span class="lk">'+esc(genState.panelLink)+'</span> <button class="ghost mini" id="cpPanel" data-label-key="copy">'+esc(t('copy'))+'</button>'):t('generatingPanel'))+'</div>'+
+        '<div style="margin-top:12px" id="panelRow" class="sub"></div>'+
         '<div style="margin-top:12px"><button class="mini" id="actNow">'+esc(t('activateStripe'))+'</button></div>';
       $('cpRef').onclick=function(){ copy(genState.link,$('cpRef')); };
       $('actNow').onclick=function(){ activate(genState.slug,$('actNow')); };
-      if(genState.panelLink){ $('cpPanel').onclick=function(){ copy(genState.panelLink,$('cpPanel')); }; }
+      if(genState.panelLink){
+        $('panelRow').innerHTML=esc(t('promoterPanel'))+'<br><span class="lk">'+esc(genState.panelLink)+'</span> <button class="ghost mini" id="cpPanel" data-label-key="copy">'+esc(t('copy'))+'</button>';
+        $('cpPanel').onclick=function(){ copy(genState.panelLink,$('cpPanel')); };
+      } else {
+        $('panelRow').textContent=t('generatingPanel');
+      }
     }
     out.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
