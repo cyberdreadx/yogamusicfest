@@ -181,7 +181,7 @@
   function mxnCents(c){ return '$'+((c||0)/100).toLocaleString(DATA_LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function mxn(n){ return '$'+((n||0)).toLocaleString(DATA_LOCALE); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-  function slugify(s){ return s.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40); }
+  function slugify(s){ return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40); }
 
   function render(){
     var totals=data.totals||{};
