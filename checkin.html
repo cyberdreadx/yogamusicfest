@@ -13,9 +13,12 @@
   body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
        min-height:100svh;padding:max(env(safe-area-inset-top),12px) 14px 24px}
   .wrap{max-width:460px;margin:0 auto}
-  header{text-align:center;padding:8px 0 14px}
+  header{text-align:center;padding:8px 0 14px;position:relative}
   header .m{font-family:Georgia,serif;letter-spacing:5px;font-weight:bold;color:var(--gold);font-size:18px}
   header .s{letter-spacing:3px;font-size:10px;color:var(--dim);text-transform:uppercase;margin-top:3px}
+  .lang{position:absolute;top:0;right:0;display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;cursor:pointer;background:transparent}
+  .lang span{padding:4px 9px;font-size:11px;font-weight:600;color:var(--dim)}
+  .lang span[data-on]{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
   label{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
   input{width:100%;background:#0c120b;border:1px solid var(--line);border-radius:8px;padding:13px 14px;color:var(--text);
@@ -46,33 +49,34 @@
 <div class="wrap">
   <header>
     <div class="m">T Y M F</div>
-    <div class="s">Check-in · 2026</div>
+    <div class="s" data-t="subtitle">Check-in · 2026</div>
+    <button class="lang" id="lang" aria-label="Idioma / Language"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
   </header>
 
   <!-- PIN gate -->
   <section id="pinScreen" class="card">
-    <label for="pin">PIN de acceso</label>
+    <label for="pin" data-t="accessPin">PIN de acceso</label>
     <input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="••••" />
-    <button id="pinBtn">Entrar</button>
+    <button id="pinBtn" data-t="enter">Entrar</button>
     <p id="pinErr" class="hint" style="color:#f2c8c8"></p>
-    <p class="hint">Solo para personal. Pide el PIN a la organización.</p>
+    <p class="hint" data-t="staffOnly">Solo para personal. Pide el PIN a la organización.</p>
   </section>
 
   <!-- Scanner -->
   <section id="scanScreen" class="hidden">
     <div class="topbar">
-      <span class="hint" style="margin:0">Apunta la cámara al código QR</span>
-      <a href="#" id="logout">Salir</a>
+      <span class="hint" style="margin:0" data-t="cameraHint">Apunta la cámara al código QR</span>
+      <a href="#" id="logout" data-t="logout">Salir</a>
     </div>
     <div id="result" class="hidden"></div>
     <div id="reader"></div>
     <div id="scanControls">
-      <button id="rescanBtn" class="hidden">Escanear siguiente</button>
+      <button id="rescanBtn" class="hidden" data-t="scanNext">Escanear siguiente</button>
     </div>
     <div class="manual card" style="margin-top:14px">
-      <label for="manual">O ingresa el código manualmente</label>
+      <label for="manual" data-t="manualLabel">O ingresa el código manualmente</label>
       <input id="manual" autocapitalize="characters" placeholder="TYMF-XXXXXXXX" />
-      <button id="manualBtn" class="ghost">Verificar código</button>
+      <button id="manualBtn" class="ghost" data-t="verifyCode">Verificar código</button>
     </div>
     <div id="count" class="count"></div>
   </section>
@@ -82,14 +86,44 @@
 (function(){
   var PIN='', scanner=null, scanning=false, checked=0;
   var $=function(id){return document.getElementById(id);};
+  var TXT={
+    es:{
+      subtitle:'Check-in · 2026', accessPin:'PIN de acceso', enter:'Entrar', staffOnly:'Solo para personal. Pide el PIN a la organización.',
+      cameraHint:'Apunta la cámara al código QR', logout:'Salir', scanNext:'Escanear siguiente', manualLabel:'O ingresa el código manualmente', verifyCode:'Verificar código',
+      enterPin:'Ingresa el PIN', cameraUnavailable:'Cámara no disponible en este navegador. Usa el código manual abajo.', cameraOpenError:function(err){ return 'No se pudo abrir la cámara ('+err+'). Usa el código manual abajo.'; },
+      verifying:'Verificando…', badPin:'PIN incorrecto', valid:'✓ VÁLIDO', admits:function(qty){ return 'Admite '+qty+(qty>1?' personas':' persona'); },
+      alreadyUsed:'⚠ YA REGISTRADO', checkedAt:function(when){ return 'Registrado a las '+when; }, notFound:'✗ NO ENCONTRADO', codeMissing:'Este código no existe',
+      error:'✗ ERROR', offline:'Sin conexión', sessionCount:function(n){ return 'Registrados en esta sesión: '+n; }
+    },
+    en:{
+      subtitle:'Check-in · 2026', accessPin:'Access PIN', enter:'Enter', staffOnly:'Staff only. Ask the organizers for the PIN.',
+      cameraHint:'Point the camera at the QR code', logout:'Log out', scanNext:'Scan next', manualLabel:'Or enter the code manually', verifyCode:'Verify code',
+      enterPin:'Enter the PIN', cameraUnavailable:'Camera is not available in this browser. Use the manual code field below.', cameraOpenError:function(err){ return 'Could not open the camera ('+err+'). Use the manual code field below.'; },
+      verifying:'Checking…', badPin:'Incorrect PIN', valid:'✓ VALID', admits:function(qty){ return 'Admits '+qty+(qty>1?' people':' person'); },
+      alreadyUsed:'⚠ ALREADY CHECKED IN', checkedAt:function(when){ return 'Checked in at '+when; }, notFound:'✗ NOT FOUND', codeMissing:'This code does not exist',
+      error:'✗ ERROR', offline:'Offline', sessionCount:function(n){ return 'Checked in this session: '+n; }
+    }
+  };
+  var lastResult=null, L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
+  function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
+  function locale(){ return L==='es'?'es-MX':'en-US'; }
+  function applyStatic(){
+    document.documentElement.lang=L;
+    document.querySelectorAll('[data-t]').forEach(function(el){ var v=t(el.getAttribute('data-t')); if(typeof v==='string') el.textContent=v; });
+    document.querySelectorAll('[data-lang]').forEach(function(s){ if(s.getAttribute('data-lang')===L) s.setAttribute('data-on','1'); else s.removeAttribute('data-on'); });
+    updateCount();
+    if(lastResult) showResultState();
+  }
 
   // restore PIN
   try{ PIN=sessionStorage.getItem('tymf_pin')||''; }catch(e){}
+  $('lang').onclick=function(){ L=(L==='es'?'en':'es'); try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); };
+  applyStatic();
   if(PIN){ showScan(); }
 
   $('pinBtn').onclick=function(){
     PIN=$('pin').value.trim();
-    if(!PIN){ $('pinErr').textContent='Ingresa el PIN'; return; }
+    if(!PIN){ $('pinErr').textContent=t('enterPin'); return; }
     try{ sessionStorage.setItem('tymf_pin',PIN); }catch(e){}
     $('pinErr').textContent='';
     showScan();
@@ -111,7 +145,7 @@
 
   function startScanner(){
     if(typeof Html5Qrcode==='undefined'){
-      $('reader').innerHTML='<p class="hint">Cámara no disponible en este navegador. Usa el código manual abajo.</p>';
+      $('reader').innerHTML='<p class="hint">'+escapeHtml(t('cameraUnavailable'))+'</p>';
       return;
     }
     if(scanning) return;
@@ -123,35 +157,35 @@
       function(){}
     ).catch(function(err){
       scanning=false;
-      $('reader').innerHTML='<p class="hint">No se pudo abrir la cámara ('+(err&&err.message||err)+'). Usa el código manual abajo.</p>';
+      $('reader').innerHTML='<p class="hint">'+escapeHtml(t('cameraOpenError')(err&&err.message||err))+'</p>';
     });
   }
   function stopScanner(){ if(scanner&&scanning){ scanning=false; scanner.stop().catch(function(){}); } }
 
   function validate(text){
-    showResult('r-used','Verificando…','','','');
+    lastResult={kind:'verifying'};
+    showResultState();
     fetch('/.netlify/functions/checkin',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({pin:PIN,code:text})})
       .then(function(r){ return r.json().then(function(d){ return {s:r.status,d:d}; }); })
       .then(function(res){
         var st=res.s, d=res.d;
-        if(st===401){ alert('PIN incorrecto'); try{sessionStorage.removeItem('tymf_pin');}catch(_){}
+        if(st===401){ alert(t('badPin')); try{sessionStorage.removeItem('tymf_pin');}catch(_){}
           location.reload(); return; }
         if(d.status==='ok'){
           checked++;
-          var o=d.order||{};
-          showResult('r-ok','✓ VÁLIDO', o.name||'—', 'Admite '+(o.qty||1)+(o.qty>1?' personas':' persona'), d.code);
+          lastResult={kind:'ok',code:d.code,order:d.order||{}};
         } else if(d.status==='used'){
-          var o2=d.order||{}, when=o2.usedAt?new Date(o2.usedAt).toLocaleTimeString():'';
-          showResult('r-used','⚠ YA REGISTRADO', o2.name||'—', when?('Registrado a las '+when):'', d.code);
+          lastResult={kind:'used',code:d.code,order:d.order||{}};
         } else if(d.status==='invalid'){
-          showResult('r-bad','✗ NO ENCONTRADO','', 'Este código no existe', d.code||'');
+          lastResult={kind:'invalid',code:d.code||''};
         } else {
-          showResult('r-bad','✗ ERROR','', d.message||'', '');
+          lastResult={kind:'error',message:d.message||''};
         }
+        showResultState();
         finishScan();
       })
-      .catch(function(){ showResult('r-bad','✗ ERROR','','Sin conexión','' ); finishScan(); });
+      .catch(function(){ lastResult={kind:'error',message:t('offline')}; showResultState(); finishScan(); });
   }
 
   function showResult(cls,big,nm,meta,code){
@@ -163,13 +197,32 @@
       (code?'<div class="code">'+escapeHtml(code)+'</div>':'');
     el.classList.remove('hidden');
   }
+  function showResultState(){
+    if(!lastResult) return;
+    if(lastResult.kind==='verifying'){ showResult('r-used',t('verifying'),'','',''); return; }
+    if(lastResult.kind==='ok'){
+      var o=lastResult.order||{};
+      showResult('r-ok',t('valid'), o.name||'—', t('admits')(o.qty||1), lastResult.code||'');
+      return;
+    }
+    if(lastResult.kind==='used'){
+      var o2=lastResult.order||{}, when=o2.usedAt?new Date(o2.usedAt).toLocaleTimeString(locale()):'';
+      showResult('r-used',t('alreadyUsed'), o2.name||'—', when?t('checkedAt')(when):'', lastResult.code||'');
+      return;
+    }
+    if(lastResult.kind==='invalid'){ showResult('r-bad',t('notFound'),'',
+      t('codeMissing'), lastResult.code||''); return; }
+    showResult('r-bad',t('error'),'',
+      lastResult.message||'', '');
+  }
   function hideResult(){ $('result').classList.add('hidden'); }
   function finishScan(){
     $('rescanBtn').classList.remove('hidden');
-    $('count').textContent = checked>0 ? ('Registrados en esta sesión: '+checked) : '';
+    updateCount();
     $('manual').value='';
     if(navigator.vibrate){ navigator.vibrate(120); }
   }
+  function updateCount(){ $('count').textContent = checked>0 ? t('sessionCount')(checked) : ''; }
   function escapeHtml(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
 })();
 </script>

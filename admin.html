@@ -13,6 +13,10 @@
   h1{font-family:Georgia,serif;color:var(--gold);letter-spacing:3px;font-size:20px;text-align:center;margin:6px 0 2px}
   .sub{text-align:center;color:var(--dim);font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:22px}
   .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+  .head{position:relative;padding-top:6px}
+  .lang{position:absolute;top:0;right:0;display:inline-flex;border:1px solid var(--line);border-radius:100px;overflow:hidden;cursor:pointer;background:transparent}
+  .lang span{padding:4px 9px;font-size:11px;font-weight:600;color:var(--dim)}
+  .lang span[data-on]{background:linear-gradient(180deg,var(--gold),var(--gold2));color:#1a1405}
   label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
   input{width:100%;background:#0c120b;border:1px solid var(--line);border-radius:8px;padding:12px 14px;color:var(--text);font-size:16px}
   input:focus{outline:none;border-color:var(--gold)}
@@ -48,58 +52,102 @@
 </head>
 <body>
 <div class="wrap">
-  <h1>T Y M F</h1>
-  <div class="sub">Panel · Ventas y Promotores</div>
+  <div class="head">
+    <h1>T Y M F</h1>
+    <div class="sub" data-t="subtitle">Panel · Ventas y Promotores</div>
+    <button class="lang" id="lang" aria-label="Idioma / Language"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
+  </div>
 
   <section id="pinScreen" class="card" style="max-width:380px;margin:0 auto">
-    <label for="pin">PIN de administrador</label>
+    <label for="pin" data-t="adminPin">PIN de administrador</label>
     <input id="pin" type="password" inputmode="numeric" placeholder="••••" />
-    <button id="pinBtn" style="width:100%;margin-top:12px">Entrar</button>
+    <button id="pinBtn" style="width:100%;margin-top:12px" data-t="enter">Entrar</button>
     <p id="pinErr" class="err"></p>
   </section>
 
   <section id="dash" class="hidden">
     <div class="bar">
-      <span class="sub" style="margin:0">Actualizado <span id="stamp">—</span></span>
-      <span><button id="refresh" class="ghost">Actualizar</button> <button id="csv" class="ghost">Exportar CSV</button> <button id="logout" class="ghost">Salir</button></span>
+      <span class="sub" style="margin:0"><span data-t="updated">Actualizado</span> <span id="stamp">—</span></span>
+      <span><button id="refresh" class="ghost" data-t="refresh">Actualizar</button> <button id="csv" class="ghost" data-t="exportCsv">Exportar CSV</button> <button id="logout" class="ghost" data-t="logout">Salir</button></span>
     </div>
 
     <div class="totals">
-      <div class="stat"><div class="n" id="tOrders">—</div><div class="l">Órdenes</div></div>
-      <div class="stat"><div class="n" id="tTickets">—</div><div class="l">Boletos</div></div>
-      <div class="stat"><div class="n" id="tRevenue">—</div><div class="l">Ingresos</div></div>
-      <div class="stat"><div class="n" id="tCommission">—</div><div class="l">Comisiones</div></div>
+      <div class="stat"><div class="n" id="tOrders">—</div><div class="l" data-t="orders">Órdenes</div></div>
+      <div class="stat"><div class="n" id="tTickets">—</div><div class="l" data-t="tickets">Boletos</div></div>
+      <div class="stat"><div class="n" id="tRevenue">—</div><div class="l" data-t="revenue">Ingresos</div></div>
+      <div class="stat"><div class="n" id="tCommission">—</div><div class="l" data-t="commissions">Comisiones</div></div>
     </div>
 
     <div class="section card">
-      <h2>Nuevo promotor</h2>
+      <h2 data-t="newPromoter">Nuevo promotor</h2>
       <div class="row">
-        <div><label for="pname">Nombre o alias</label><input id="pname" placeholder="ej. María, carlos, dj-selva" /></div>
-        <div style="flex:0 0 auto"><button id="genBtn">Crear enlace</button></div>
+        <div><label for="pname" data-t="nameOrAlias">Nombre o alias</label><input id="pname" /></div>
+        <div style="flex:0 0 auto"><button id="genBtn" data-t="createLink">Crear enlace</button></div>
       </div>
       <div id="genOut" class="out hidden"></div>
-      <p class="sub" style="text-align:left;margin:10px 0 0">Comparte el enlace. Cada boleto vendido con él acredita $100 MXN. Activa el pago automático para que Stripe le deposite su 50% directo a su banco.</p>
+      <p class="sub" style="text-align:left;margin:10px 0 0" data-t="shareHint">Comparte el enlace. Cada boleto vendido con él acredita $100 MXN. Activa el pago automático para que Stripe le deposite su 50% directo a su banco.</p>
     </div>
 
     <div class="section">
-      <h2>Promotores</h2>
+      <h2 data-t="promoters">Promotores</h2>
       <div class="tablewrap"><table id="promoTable"><thead><tr>
-        <th>Promotor</th><th>Boletos</th><th>Comisión</th><th>Pago automático (Stripe)</th><th>Por pagar (manual)</th></tr></thead><tbody></tbody></table></div>
-      <p id="promoEmpty" class="sub" style="text-align:left;margin-top:8px">Aún no hay promotores.</p>
+        <th data-t="promoter">Promotor</th><th data-t="tickets">Boletos</th><th data-t="commission">Comisión</th><th data-t="autoPayout">Pago automático (Stripe)</th><th data-t="manualOwed">Por pagar (manual)</th></tr></thead><tbody></tbody></table></div>
+      <p id="promoEmpty" class="sub" style="text-align:left;margin-top:8px" data-t="noPromoters">Aún no hay promotores.</p>
     </div>
 
     <div class="section">
-      <h2>Órdenes · Lista de invitados</h2>
+      <h2 data-t="ordersGuestList">Órdenes · Lista de invitados</h2>
       <div class="tablewrap"><table id="orderTable"><thead><tr>
-        <th>Fecha</th><th>Nombre</th><th>Correo</th><th>Bol.</th><th>Monto</th><th>Promotor</th><th>Check-in</th></tr></thead><tbody></tbody></table></div>
+        <th data-t="date">Fecha</th><th data-t="name">Nombre</th><th data-t="email">Correo</th><th data-t="qtyShort">Bol.</th><th data-t="amount">Monto</th><th data-t="promoter">Promotor</th><th data-t="checkin">Check-in</th></tr></thead><tbody></tbody></table></div>
     </div>
   </section>
 </div>
 
 <script>
 (function(){
-  var PIN='', data=null, $=function(id){return document.getElementById(id);};
+  var PIN='', data=null, genState=null, $=function(id){return document.getElementById(id);};
+  var TXT={
+    es:{
+      subtitle:'Panel · Ventas y Promotores', adminPin:'PIN de administrador', enter:'Entrar', updated:'Actualizado', refresh:'Actualizar', exportCsv:'Exportar CSV', logout:'Salir',
+      orders:'Órdenes', tickets:'Boletos', revenue:'Ingresos', commissions:'Comisiones', newPromoter:'Nuevo promotor', nameOrAlias:'Nombre o alias', promoterPlaceholder:'ej. María, carlos, dj-selva',
+      createLink:'Crear enlace', shareHint:'Comparte el enlace. Cada boleto vendido con él acredita $100 MXN. Activa el pago automático para que Stripe le deposite su 50% directo a su banco.',
+      promoters:'Promotores', promoter:'Promotor', commission:'Comisión', autoPayout:'Pago automático (Stripe)', manualOwed:'Por pagar (manual)', noPromoters:'Aún no hay promotores.',
+      ordersGuestList:'Órdenes · Lista de invitados', date:'Fecha', name:'Nombre', email:'Correo', qtyShort:'Bol.', amount:'Monto', checkin:'Check-in',
+      badPin:'PIN incorrecto', connectionError:'Error de conexión', active:'✓ Activo', autoLabel:'Auto', pending:'Registro pendiente', signupLink:'Enlace de registro', updateStatus:'Actualizar estado',
+      activateAuto:'Activar pago automático', paid:'✓ Pagado', markPaid:'Marcar pagado', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promotor "'+code+'"';},
+      sellLink:'Enlace para vender (compártelo con clientes):', generatingPanel:'Generando panel del promotor…', activateStripe:'Activar pago automático (Stripe)',
+      promoterPanel:'Panel del promotor (para que vea sus ventas):', autoSignupFor:function(code){return 'Registro de pago automático para "'+code+'"';}, sendStripeLink:'Envía este enlace al promotor para que registre su banco en Stripe:',
+      copy:'Copiar', copied:'¡Copiado!', copyManual:'Copia manual', stripeConnectError:'Error de Stripe Connect', csvName:'tymf-ordenes.csv',
+      csvHeaders:['fecha','nombre','correo','telefono','boletos','monto_mxn','promotor','comision_mxn','pago_auto','codigo','checkin'],
+      yes:'si', no:'no'
+    },
+    en:{
+      subtitle:'Dashboard · Sales and Promoters', adminPin:'Admin PIN', enter:'Enter', updated:'Updated', refresh:'Refresh', exportCsv:'Export CSV', logout:'Log out',
+      orders:'Orders', tickets:'Tickets', revenue:'Revenue', commissions:'Commissions', newPromoter:'New promoter', nameOrAlias:'Name or alias', promoterPlaceholder:'e.g. Maria, carlos, jungle-dj',
+      createLink:'Create link', shareHint:'Share the link. Every ticket sold through it credits $100 MXN. Enable auto-payout so Stripe sends their 50% directly to their bank.',
+      promoters:'Promoters', promoter:'Promoter', commission:'Commission', autoPayout:'Auto-payout (Stripe)', manualOwed:'Manual payout due', noPromoters:'No promoters yet.',
+      ordersGuestList:'Orders · Guest list', date:'Date', name:'Name', email:'Email', qtyShort:'Qty.', amount:'Amount', checkin:'Check-in',
+      badPin:'Incorrect PIN', connectionError:'Connection error', active:'✓ Active', autoLabel:'Auto', pending:'Signup pending', signupLink:'Signup link', updateStatus:'Refresh status',
+      activateAuto:'Enable auto-payout', paid:'✓ Paid', markPaid:'Mark paid', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promoter "'+code+'"';},
+      sellLink:'Sales link (share it with customers):', generatingPanel:'Generating promoter panel…', activateStripe:'Enable auto-payout (Stripe)',
+      promoterPanel:'Promoter panel (to track their sales):', autoSignupFor:function(code){return 'Auto-payout signup for "'+code+'"';}, sendStripeLink:'Send this link so the promoter can connect their bank in Stripe:',
+      copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error', csvName:'tymf-orders.csv',
+      csvHeaders:['date','name','email','phone','tickets','amount_mxn','promoter','commission_mxn','auto_payout','code','checkin'],
+      yes:'yes', no:'no'
+    }
+  };
+  var L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
+  function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
+  function locale(){ return L==='es'?'es-MX':'en-US'; }
+  function applyStatic(){
+    document.documentElement.lang=L;
+    $('pname').placeholder=t('promoterPlaceholder');
+    document.querySelectorAll('[data-t]').forEach(function(el){ var v=t(el.getAttribute('data-t')); if(typeof v==='string') el.textContent=v; });
+    document.querySelectorAll('[data-lang]').forEach(function(s){ if(s.getAttribute('data-lang')===L) s.setAttribute('data-on','1'); else s.removeAttribute('data-on'); });
+  }
   try{ PIN=sessionStorage.getItem('tymf_apin')||''; }catch(e){}
+  $('lang').onclick=function(){ L=(L==='es'?'en':'es'); try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); if(genState) renderGenState(); };
+  applyStatic();
   if(PIN){ load(); }
 
   $('pinBtn').onclick=function(){ PIN=$('pin').value.trim(); if(!PIN)return; try{sessionStorage.setItem('tymf_apin',PIN);}catch(e){} load(); };
@@ -116,7 +164,7 @@
   }
   function load(){
     post('report').then(function(res){
-      if(res.s===401){ $('pinErr').textContent='PIN incorrecto'; try{sessionStorage.removeItem('tymf_apin');}catch(e){} return; }
+      if(res.s===401){ $('pinErr').textContent=t('badPin'); try{sessionStorage.removeItem('tymf_apin');}catch(e){} return; }
       if(res.d.error){ $('pinErr').textContent=res.d.error; return; }
       data=res.d;
       $('pinScreen').classList.add('hidden'); $('dash').classList.remove('hidden');
@@ -125,34 +173,34 @@
       try{ var cc=new URLSearchParams(location.search).get('connect');
         if(cc && !window.__ccDone){ window.__ccDone=1; history.replaceState(null,'',location.pathname);
           post('connect',{action:'status',promoter:cc}).then(load); } }catch(e){}
-    }).catch(function(){ $('pinErr').textContent='Error de conexión'; });
+    }).catch(function(){ $('pinErr').textContent=t('connectionError'); });
   }
-  function mxnCents(c){ return '$'+((c||0)/100).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
-  function mxn(n){ return '$'+((n||0)).toLocaleString('es-MX'); }
+  function mxnCents(c){ return '$'+((c||0)/100).toLocaleString(locale(),{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  function mxn(n){ return '$'+((n||0)).toLocaleString(locale()); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
   function slugify(s){ return s.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40); }
 
   function render(){
-    var t=data.totals||{};
-    $('tOrders').textContent=t.orders||0;
-    $('tTickets').textContent=t.tickets||0;
-    $('tRevenue').textContent=mxnCents(t.revenue);
-    $('tCommission').textContent=mxn(t.commission);
-    $('stamp').textContent=new Date().toLocaleString('es-MX');
+    var totals=data.totals||{};
+    $('tOrders').textContent=totals.orders||0;
+    $('tTickets').textContent=totals.tickets||0;
+    $('tRevenue').textContent=mxnCents(totals.revenue);
+    $('tCommission').textContent=mxn(totals.commission);
+    $('stamp').textContent=new Date().toLocaleString(locale());
 
     var pb=$('promoTable').querySelector('tbody'); pb.innerHTML='';
     (data.promoters||[]).forEach(function(p){
       var tr=document.createElement('tr');
       // auto column
       var autoCell, c=p.connect;
-      if(c&&c.ready){ autoCell='<span class="pill ready">✓ Activo</span><div class="sub" style="text-align:left;margin:4px 0 0">Auto: '+mxn(p.commissionAuto||0)+'</div>'; }
-      else if(c){ autoCell='<span class="pill pend">Registro pendiente</span><div class="stack" style="margin-top:6px"><button class="ghost mini" data-link="'+esc(p.code)+'">Enlace de registro</button><button class="ghost mini" data-cstat="'+esc(p.code)+'">Actualizar estado</button></div>'; }
-      else { autoCell='<button class="mini" data-activate="'+esc(p.code)+'">Activar pago automático</button>'; }
+      if(c&&c.ready){ autoCell='<span class="pill ready">'+t('active')+'</span><div class="sub" style="text-align:left;margin:4px 0 0">'+t('autoLabel')+': '+mxn(p.commissionAuto||0)+'</div>'; }
+      else if(c){ autoCell='<span class="pill pend">'+t('pending')+'</span><div class="stack" style="margin-top:6px"><button class="ghost mini" data-link="'+esc(p.code)+'">'+t('signupLink')+'</button><button class="ghost mini" data-cstat="'+esc(p.code)+'">'+t('updateStatus')+'</button></div>'; }
+      else { autoCell='<button class="mini" data-activate="'+esc(p.code)+'">'+t('activateAuto')+'</button>'; }
       // owed column
       var owed=p.commissionOwed||0, owedCell;
-      if(owed<=0){ owedCell='<span class="sub" style="text-align:left">—</span>'; }
-      else if(p.paid){ owedCell='<span class="pill in">✓ Pagado</span> <span class="money">'+mxn(owed)+'</span>'; }
-      else { owedCell='<span class="money">'+mxn(owed)+'</span> <button class="ghost mini" data-p="'+esc(p.code)+'" data-paid="0">Marcar pagado</button>'; }
+      if(owed<=0){ owedCell='<span class="sub" style="text-align:left">'+t('manualDash')+'</span>'; }
+      else if(p.paid){ owedCell='<span class="pill in">'+t('paid')+'</span> <span class="money">'+mxn(owed)+'</span>'; }
+      else { owedCell='<span class="money">'+mxn(owed)+'</span> <button class="ghost mini" data-p="'+esc(p.code)+'" data-paid="0">'+t('markPaid')+'</button>'; }
 
       tr.innerHTML='<td>'+esc(p.code)+'</td><td>'+(p.tickets||0)+'</td><td class="money">'+mxn(p.commission||0)+'</td><td>'+autoCell+'</td><td>'+owedCell+'</td>';
       pb.appendChild(tr);
@@ -163,9 +211,9 @@
     var ob=$('orderTable').querySelector('tbody'); ob.innerHTML='';
     (data.orders||[]).forEach(function(o){
       var tr=document.createElement('tr');
-      tr.innerHTML='<td>'+esc(new Date(o.createdAt).toLocaleString('es-MX'))+'</td>'+
+      tr.innerHTML='<td>'+esc(new Date(o.createdAt).toLocaleString(locale()))+'</td>'+
         '<td>'+esc(o.name)+'</td><td>'+esc(o.email)+'</td><td>'+(o.qty||1)+'</td>'+
-        '<td class="money">'+mxnCents(o.amount)+'</td><td>'+(o.ref?esc(o.ref):'—')+(o.autoPaid?' <span class="pill ready">auto</span>':'')+'</td>'+
+        '<td class="money">'+mxnCents(o.amount)+'</td><td>'+(o.ref?esc(o.ref):t('manualDash'))+(o.autoPaid?' <span class="pill ready">'+t('auto')+'</span>':'')+'</td>'+
         '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+'</td>';
       ob.appendChild(tr);
     });
@@ -185,48 +233,57 @@
     post('connect',{action:'create',promoter:code,origin:location.origin}).then(function(res){
       btn.disabled=false; btn.textContent=old;
       if(res.d&&res.d.url){ showOnboard(code,res.d.url); }
-      else { alert((res.d&&res.d.error)||'Error de Stripe Connect'); }
-    }).catch(function(){ btn.disabled=false; btn.textContent=old; alert('Error de conexión'); });
+      else { alert((res.d&&res.d.error)||t('stripeConnectError')); }
+    }).catch(function(){ btn.disabled=false; btn.textContent=old; alert(t('connectionError')); });
   }
   function showOnboard(code,url){
-    var out=$('genOut'); out.classList.remove('hidden');
-    out.innerHTML='<b>Registro de pago automático para "'+esc(code)+'"</b><br>Envía este enlace al promotor para que registre su banco en Stripe:<br>'+
-      '<span class="lk">'+esc(url)+'</span> <button class="ghost mini" id="cpOnb">Copiar</button>';
-    $('cpOnb').onclick=function(){ copy(url,$('cpOnb')); };
-    out.scrollIntoView({behavior:'smooth',block:'nearest'});
+    genState={type:'onboard',code:code,url:url};
+    renderGenState();
   }
 
   function genLink(){
     var slug=slugify($('pname').value); if(!slug) return;
     var link=location.origin+'/?ref='+slug;
-    var out=$('genOut'); out.classList.remove('hidden');
-    out.innerHTML='<b>Promotor "'+esc(slug)+'"</b>'+
-      '<div style="margin-top:8px">Enlace para vender (compártelo con clientes):<br><span class="lk">'+esc(link)+'</span> <button class="ghost mini" id="cpRef">Copiar</button></div>'+
-      '<div style="margin-top:12px" id="panelRow" class="sub" style="text-align:left">Generando panel del promotor…</div>'+
-      '<div style="margin-top:12px"><button class="mini" id="actNow">Activar pago automático (Stripe)</button></div>';
-    $('cpRef').onclick=function(){ copy(link,$('cpRef')); };
-    $('actNow').onclick=function(){ activate(slug,$('actNow')); };
+    genState={type:'promo',slug:slug,link:link,panelLink:''};
+    renderGenState();
     post('report',{action:'promoLink',promoter:slug}).then(function(res){
       if(res.d&&res.d.token){
         var plink=location.origin+'/promotor?p='+res.d.code+'&k='+res.d.token;
-        $('panelRow').innerHTML='Panel del promotor (para que vea sus ventas):<br><span class="lk">'+esc(plink)+'</span> <button class="ghost mini" id="cpPanel">Copiar</button>';
-        $('cpPanel').onclick=function(){ copy(plink,$('cpPanel')); };
-      } else { $('panelRow').textContent=''; }
-    }).catch(function(){ $('panelRow').textContent=''; });
+        if(genState&&genState.slug===slug){ genState.panelLink=plink; renderGenState(); }
+      } else if(genState&&genState.slug===slug){ genState.panelLink=''; renderGenState(); }
+    }).catch(function(){ if(genState&&genState.slug===slug){ genState.panelLink=''; renderGenState(); } });
+  }
+  function renderGenState(){
+    if(!genState) return;
+    var out=$('genOut'); out.classList.remove('hidden');
+    if(genState.type==='onboard'){
+      out.innerHTML='<b>'+esc(t('autoSignupFor')(genState.code))+'</b><br>'+esc(t('sendStripeLink'))+'<br>'+
+        '<span class="lk">'+esc(genState.url)+'</span> <button class="ghost mini" id="cpOnb">'+esc(t('copy'))+'</button>';
+      $('cpOnb').onclick=function(){ copy(genState.url,$('cpOnb')); };
+    } else {
+      out.innerHTML='<b>'+esc(t('promoterLabel')(genState.slug))+'</b>'+
+        '<div style="margin-top:8px">'+esc(t('sellLink'))+'<br><span class="lk">'+esc(genState.link)+'</span> <button class="ghost mini" id="cpRef">'+esc(t('copy'))+'</button></div>'+
+        '<div style="margin-top:12px" id="panelRow" class="sub">'+(genState.panelLink?(esc(t('promoterPanel'))+'<br><span class="lk">'+esc(genState.panelLink)+'</span> <button class="ghost mini" id="cpPanel">'+esc(t('copy'))+'</button>'):esc(t('generatingPanel')))+'</div>'+
+        '<div style="margin-top:12px"><button class="mini" id="actNow">'+esc(t('activateStripe'))+'</button></div>';
+      $('cpRef').onclick=function(){ copy(genState.link,$('cpRef')); };
+      $('actNow').onclick=function(){ activate(genState.slug,$('actNow')); };
+      if(genState.panelLink){ $('cpPanel').onclick=function(){ copy(genState.panelLink,$('cpPanel')); }; }
+    }
+    out.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
   function copy(text,btn){ (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
-    .then(function(){ btn.textContent='¡Copiado!'; }).catch(function(){ btn.textContent='Copia manual'; }); }
+    .then(function(){ btn.textContent=t('copied'); }).catch(function(){ btn.textContent=t('copyManual'); }); }
 
   function exportCsv(){
     if(!data) return;
-    var head=['fecha','nombre','correo','telefono','boletos','monto_mxn','promotor','comision_mxn','pago_auto','codigo','checkin'];
+    var head=t('csvHeaders');
     var lines=[head.join(',')];
     (data.orders||[]).forEach(function(o){
-      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),(o.autoPaid?'si':'no'),o.code,(o.used?'si':'no')];
+      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),(o.autoPaid?t('yes'):t('no')),o.code,(o.used?t('yes'):t('no'))];
       lines.push(r.map(function(x){ x=String(x==null?'':x); return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x; }).join(','));
     });
     var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8'});
-    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='tymf-ordenes.csv'; a.click();
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=t('csvName'); a.click();
   }
 })();
 </script>
