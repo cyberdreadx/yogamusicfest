@@ -167,7 +167,15 @@
   }
   function load(){
     post('report').then(function(res){
-      if(res.s===401){ PIN=''; $('pinErr').textContent=t('badPin'); try{sessionStorage.removeItem('tymf_apin');}catch(e){} return; }
+      if(res.s===401){
+        PIN=''; data=null; genState=null;
+        $('pinErr').textContent=t('badPin');
+        $('dash').classList.add('hidden');
+        $('pinScreen').classList.remove('hidden');
+        $('genOut').classList.add('hidden');
+        try{sessionStorage.removeItem('tymf_apin');}catch(e){}
+        return;
+      }
       if(res.d.error){ $('pinErr').textContent=res.d.error; return; }
       data=res.d;
       $('pinScreen').classList.add('hidden'); $('dash').classList.remove('hidden');
@@ -259,6 +267,7 @@
   function renderGenState(){
     if(!genState) return;
     var out=$('genOut'); out.classList.remove('hidden');
+    out.querySelectorAll('button').forEach(function(btn){ if(btn.__copyTimer) clearTimeout(btn.__copyTimer); });
     if(genState.type==='onboard'){
       out.innerHTML='<b>'+esc(t('autoSignupFor')(genState.code))+'</b><br>'+esc(t('sendStripeLink'))+'<br>'+
         '<span class="lk">'+esc(genState.url)+'</span> <button class="ghost mini" id="cpOnb" data-label-key="copy">'+esc(t('copy'))+'</button>';
