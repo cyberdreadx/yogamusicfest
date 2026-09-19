@@ -55,7 +55,7 @@
   <div class="head">
     <h1>T Y M F</h1>
     <div class="sub" data-t="subtitle">Panel · Ventas y Promotores</div>
-    <button class="lang" id="lang" aria-label="Idioma / Language"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
+    <button class="lang" id="lang" aria-label="Idioma / Language" aria-pressed="false"><span data-lang="es">ES</span><span data-lang="en">EN</span></button>
   </div>
 
   <section id="pinScreen" class="card" style="max-width:380px;margin:0 auto">
@@ -117,7 +117,7 @@
       activateAuto:'Activar pago automático', paid:'✓ Pagado', markPaid:'Marcar pagado', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promotor "'+code+'"';},
       sellLink:'Enlace para vender (compártelo con clientes):', generatingPanel:'Generando panel del promotor…', activateStripe:'Activar pago automático (Stripe)',
       promoterPanel:'Panel del promotor (para que vea sus ventas):', autoSignupFor:function(code){return 'Registro de pago automático para "'+code+'"';}, sendStripeLink:'Envía este enlace al promotor para que registre su banco en Stripe:',
-      copy:'Copiar', copied:'¡Copiado!', copyManual:'Copia manual', stripeConnectError:'Error de Stripe Connect'
+      copy:'Copiar', copied:'¡Copiado!', copyManual:'Copia manual', stripeConnectError:'Error de Stripe Connect', languageToggle:'Cambiar idioma'
     },
     en:{
       subtitle:'Dashboard · Sales and Promoters', adminPin:'Admin PIN', enter:'Enter', updated:'Updated', refresh:'Refresh', exportCsv:'Export CSV', logout:'Log out',
@@ -129,7 +129,7 @@
       activateAuto:'Enable auto-payout', paid:'✓ Paid', markPaid:'Mark paid', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promoter "'+code+'"';},
       sellLink:'Sales link (share it with customers):', generatingPanel:'Generating promoter panel…', activateStripe:'Enable auto-payout (Stripe)',
       promoterPanel:'Promoter panel (to track their sales):', autoSignupFor:function(code){return 'Auto-payout signup for "'+code+'"';}, sendStripeLink:'Send this link so the promoter can connect their bank in Stripe:',
-      copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error'
+      copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error', languageToggle:'Switch language'
     }
   };
   var L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
@@ -138,11 +138,13 @@
   function applyStatic(){
     document.documentElement.lang=L;
     $('pname').placeholder=t('promoterPlaceholder');
+    $('lang').setAttribute('aria-pressed',L==='en'?'true':'false');
+    $('lang').setAttribute('aria-label',t('languageToggle'));
     document.querySelectorAll('[data-t]').forEach(function(el){ var v=t(el.getAttribute('data-t')); if(typeof v==='string') el.textContent=v; });
     document.querySelectorAll('[data-lang]').forEach(function(s){ if(s.getAttribute('data-lang')===L) s.setAttribute('data-on','1'); else s.removeAttribute('data-on'); });
   }
   try{ PIN=sessionStorage.getItem('tymf_apin')||''; }catch(e){}
-  $('lang').onclick=function(){ L=(L==='es'?'en':'es'); try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); if(genState) renderGenState(); };
+  $('lang').onclick=function(){ L=(L==='es'?'en':'es'); try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); else if(genState) renderGenState(); };
   applyStatic();
   if(PIN){ load(); }
 
@@ -213,6 +215,7 @@
         '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+'</td>';
       ob.appendChild(tr);
     });
+    if(genState) renderGenState();
   }
 
   function wireRowButtons(pb){
