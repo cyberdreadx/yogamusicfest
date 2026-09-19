@@ -5,6 +5,11 @@
 const { getStore, connectLambda } = require('@netlify/blobs');
 const crypto = require('crypto');
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
+const isLiveOrder = (o) => {
+  if (!o) return false;
+  if (typeof o.liveMode === 'boolean') return o.liveMode;
+  return !/^cs_test_/i.test(String(o.session || ''));
+};
 
 function json(status, obj) {
   return {
@@ -69,7 +74,7 @@ exports.handler = async (event) => {
     if (b.key === '__diag__') continue;
     try {
       const o = await orders.get(b.key, { type: 'json' });
-      if (o) rows.push(o);
+      if (isLiveOrder(o)) rows.push(o);
     } catch (_) {}
   }
   rows.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
