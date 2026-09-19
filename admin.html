@@ -247,14 +247,14 @@
   function genLink(){
     var slug=slugify($('pname').value); if(!slug) return;
     var link=location.origin+'/?ref='+slug;
-    genState={type:'promo',slug:slug,link:link,panelLink:''};
+    genState={type:'promo',slug:slug,link:link,panelLink:'',panelStatus:'loading'};
     renderGenState();
     post('report',{action:'promoLink',promoter:slug}).then(function(res){
       if(res.d&&res.d.token){
         var plink=location.origin+'/promotor?p='+res.d.code+'&k='+res.d.token;
-        if(genState&&genState.slug===slug){ genState.panelLink=plink; renderGenState(); }
-      } else if(genState&&genState.slug===slug){ genState.panelLink=''; renderGenState(); }
-    }).catch(function(){ if(genState&&genState.slug===slug){ genState.panelLink=''; renderGenState(); } });
+        if(genState&&genState.slug===slug){ genState.panelLink=plink; genState.panelStatus='ready'; renderGenState(); }
+      } else if(genState&&genState.slug===slug){ genState.panelLink=''; genState.panelStatus='none'; renderGenState(); }
+    }).catch(function(){ if(genState&&genState.slug===slug){ genState.panelLink=''; genState.panelStatus='none'; renderGenState(); } });
   }
   function renderGenState(){
     if(!genState) return;
@@ -273,8 +273,10 @@
       if(genState.panelLink){
         $('panelRow').innerHTML=esc(t('promoterPanel'))+'<br><span class="lk">'+esc(genState.panelLink)+'</span> <button class="ghost mini" id="cpPanel" data-label-key="copy">'+esc(t('copy'))+'</button>';
         $('cpPanel').onclick=function(){ copy(genState.panelLink,$('cpPanel')); };
-      } else {
+      } else if(genState.panelStatus==='loading') {
         $('panelRow').textContent=t('generatingPanel');
+      } else {
+        $('panelRow').textContent='';
       }
     }
     out.scrollIntoView({behavior:'smooth',block:'nearest'});
