@@ -114,7 +114,6 @@
       var active=s.getAttribute('data-lang')===L;
       s.setAttribute('aria-label',s.getAttribute('data-lang')==='es'?'Español':'English');
       s.setAttribute('aria-pressed',active?'true':'false');
-      s.setAttribute('tabindex',active?'0':'-1');
       if(active) s.setAttribute('data-on','1');
       else s.removeAttribute('data-on');
     });
