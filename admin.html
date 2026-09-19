@@ -109,7 +109,7 @@
   var TXT={
     es:{
       subtitle:'Panel · Ventas y Promotores', adminPin:'PIN de administrador', enter:'Entrar', updated:'Actualizado', refresh:'Actualizar', exportCsv:'Exportar CSV', logout:'Salir',
-      orders:'Órdenes', tickets:'Boletos', revenue:'Ingresos', commissions:'Comisiones', newPromoter:'Nuevo promotor', nameOrAlias:'Nombre o alias', promoterPlaceholder:'ej. María, carlos, dj-selva',
+      orders:'Órdenes', tickets:'Boletos', revenue:'Ingresos', commissions:'Comisiones', newPromoter:'Nuevo promotor', nameOrAlias:'Nombre o alias', promoterPlaceholder:'ej. maria, carlos, dj-selva',
       createLink:'Crear enlace', shareHint:'Comparte el enlace. Cada boleto vendido con él acredita $100 MXN. Activa el pago automático para que Stripe le deposite su 50% directo a su banco.',
       promoters:'Promotores', promoter:'Promotor', commission:'Comisión', autoPayout:'Pago automático (Stripe)', manualOwed:'Por pagar (manual)', noPromoters:'Aún no hay promotores.',
       ordersGuestList:'Órdenes · Lista de invitados', date:'Fecha', name:'Nombre', email:'Correo', qtyShort:'Bol.', amount:'Monto', checkin:'Check-in',
@@ -181,7 +181,7 @@
   function mxnCents(c){ return '$'+((c||0)/100).toLocaleString(FIXED_DATA_LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2}); }
   function mxn(n){ return '$'+((n||0)).toLocaleString(FIXED_DATA_LOCALE); }
   function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
-  function slugify(s){ return s.trim().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40); }
+  function slugify(s){ return s.trim().toLowerCase().replace(/[^a-z0-9-]/g,'-').replace(/-+/g,'-').replace(/^-|-$/g,'').slice(0,40); }
 
   function render(){
     var totals=data.totals||{};
