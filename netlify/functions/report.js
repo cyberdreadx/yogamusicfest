@@ -3,6 +3,7 @@
 // POST { pin, action:'setPaid', promoter, paid } -> mark a promoter paid/unpaid
 
 const { getStore, connectLambda } = require('@netlify/blobs');
+const { attendance } = require('../lib/tickets');
 const crypto = require('crypto');
 const slug = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
 const isLiveOrder = (o) => {
@@ -74,8 +75,8 @@ exports.handler = async (event) => {
     if (b.key === '__diag__') continue;
     try {
       const o = await orders.get(b.key, { type: 'json' });
-      if (isLiveOrder(o)) rows.push(o);
-    } catch (_) {}
+      if (isLiveOrder(o)) rows.push(await attendance(o));
+    } catch (_) { return json(500, { error: 'Order attendance could not be loaded. Please retry.' }); }
   }
   rows.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 

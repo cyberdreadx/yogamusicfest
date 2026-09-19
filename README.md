@@ -6,6 +6,25 @@ A single self-contained page (`index.html`) — no build step, no dependencies. 
 
 ## Features
 
+### Ticket delivery and entry
+
+New paid orders receive one email containing a numbered QR ticket and PNG attachment
+for each admission. Each individual QR admits one person, and guests can arrive
+separately. The order code shown in the organizer dashboard is not an admission QR.
+
+Sales and commissions remain one record per order in `orders`. Individual codes
+live in `tickets`; one-time check-in receipts live in `ticket-admissions`.
+The organizer dashboard displays the checked-in count for each order.
+Webhook retries preserve issued codes and admission receipts. Email delivery
+uses a delivery record plus a Resend idempotency key.
+
+Previously issued shared tickets remain valid for their original quantity.
+This change does not automatically split, invalidate, or resend them. Do not
+create additional valid admissions for an old order without retiring its shared
+code as part of a deliberate reissue workflow.
+
+Run `npm test` for isolated ticketing tests; they do not charge cards or send email.
+
 - One-page scroll: hero, main festival, the week, color-coded 7-day schedule, teachers + healers, musicians + artists, partners, affiliates, vendors, about, gallery, organizers, sponsors, contact.
 - Live ticketing UI — tiered passes, quantity steppers, order summary, checkout modal, confirmation.
 - Countdown to the festival, light/dark themes, responsive, reduced-motion friendly.

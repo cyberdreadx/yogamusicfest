@@ -11,7 +11,8 @@
 const Stripe = require('stripe');
 const QRCode = require('qrcode');
 const { Resend } = require('resend');
-const { getStore, connectLambda } = require('@netlify/blobs');
+const { connectLambda } = require('@netlify/blobs');
+const { store, codesFor } = require('../lib/tickets');
 
 const COPY = {
   en: {
@@ -42,7 +43,7 @@ const COPY = {
   },
 };
 
-function ticketHtml(t, code, qty, qrUrl) {
+function ticketHtml(t, code, qty, qrUrl, label = '') {
   return `<!doctype html><html><body style="margin:0;background:#0a0d0a;font-family:Georgia,'Times New Roman',serif;color:#efe8d6">
   <span style="display:none;max-height:0;overflow:hidden;opacity:0">${t.preheader}</span>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0a0d0a;padding:28px 16px">
@@ -57,7 +58,7 @@ function ticketHtml(t, code, qty, qrUrl) {
           <p style="color:#aeb09a;font-size:15px;line-height:1.6;margin:0 0 14px">${t.intro}</p>
           <div style="font-family:Georgia,serif;color:#e6c884;font-size:20px">${t.when}</div>
           <div style="color:#aeb09a;font-size:13px;letter-spacing:1px;margin-top:4px">${t.time}</div>
-          <div style="display:inline-block;margin:16px 0 6px;padding:6px 16px;border:1px solid rgba(201,164,78,.4);border-radius:100px;color:#e6c884;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase">${t.admits(qty)}</div>
+          <div style="display:inline-block;margin:16px 0 6px;padding:6px 16px;border:1px solid rgba(201,164,78,.4);border-radius:100px;color:#e6c884;font-family:Arial,sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase">${label ? label + ' · ' : ''}${t.admits(qty)}</div>
         </td></tr>
         <tr><td align="center" style="padding:14px 32px 4px">
           <img src="${qrUrl}" width="220" height="220" alt="Ticket QR" style="display:block;background:#fff;border-radius:10px;padding:10px" />
@@ -124,19 +125,23 @@ exports.handler = async (event) => {
 
   const email =
     (session.customer_details && session.customer_details.email) || session.customer_email;
-  const qty = Math.max(1, parseInt((session.metadata && session.metadata.quantity) || '1', 10) || 1);
+  const qty = Number((session.metadata && session.metadata.quantity) || 1);
+  if (!Number.isInteger(qty) || qty < 1 || qty > 20) return { statusCode: 400, body: 'Invalid ticket quantity' };
   const locale = (session.metadata && session.metadata.locale) === 'es' ? 'es' : 'en';
   const code = 'TYMF-' + String(session.id).replace(/[^a-zA-Z0-9]/g, '').slice(-8).toUpperCase();
   const t = COPY[locale];
 
   if (!email) return { statusCode: 200, body: 'no email on session' };
 
-  // Save the order for door check-in (best effort — done before email so
-  // check-in works even if the email step is misconfigured).
+  // One immutable financial order, with separate admission codes. Retried
+  // webhooks must not overwrite a used order or create additional admissions.
+  let order;
   try {
     connectLambda(event);
     const ref = (session.metadata && session.metadata.ref) || '';
-    await getStore('orders').setJSON(code, {
+    const orders = store('orders');
+    order = await orders.get(code, { type: 'json' });
+    if (!order) await orders.setJSON(code, {
       code,
       qty,
       name: (session.customer_details && session.customer_details.name) || '',
@@ -152,9 +157,21 @@ exports.handler = async (event) => {
       createdAt: new Date().toISOString(),
       used: false,
       usedAt: null,
-    });
+      ticketCodes: codesFor(session.id, qty),
+    }, { onlyIfNew: true });
+    order = await orders.get(code, { type: 'json' });
+    if (!order || order.session !== session.id || order.qty !== qty) throw new Error('Order mismatch');
+    if (order.ticketCodes) {
+      for (let i = 0; i < order.ticketCodes.length; i++) {
+        const ticketCode = order.ticketCodes[i];
+        await store('tickets').setJSON(ticketCode, { code: ticketCode, orderCode: code, index: i + 1 }, { onlyIfNew: true });
+        const ticket = await store('tickets').get(ticketCode, { type: 'json' });
+        if (!ticket || ticket.orderCode !== code) throw new Error('Ticket storage failed');
+      }
+    }
   } catch (e) {
     console.log('Order store failed:', e && e.message);
+    return { statusCode: 500, body: 'Ticket storage failed; retry required' };
   }
 
   if (!process.env.RESEND_API_KEY) return { statusCode: 500, body: 'RESEND_API_KEY not set' };
@@ -164,25 +181,39 @@ exports.handler = async (event) => {
 
   // 1) Buyer's QR ticket — critical. On failure, 500 so Stripe retries.
   try {
-    const payload = 'TYMF2026|' + code + '|x' + qty;
-    const qrPng = await QRCode.toBuffer(payload, {
-      margin: 1,
-      width: 480,
-      color: { dark: '#0a0d0a', light: '#ffffff' },
-    });
-    const qrUrl =
-      (process.env.SITE_URL || 'https://yogamusicfest.mx') +
-      '/.netlify/functions/qr?d=' + encodeURIComponent(payload);
-
-    await resend.emails.send({
+    const deliveryKey = 'buyer-' + session.id;
+    if (await store('ticket-delivery').get(deliveryKey, { type: 'json' })) {
+      return { statusCode: 200, body: 'tickets already sent' };
+    }
+    const ticketCodes = order.ticketCodes || [code]; // Preserve previously issued shared tickets.
+    const attachments = [];
+    const cards = [];
+    for (let i = 0; i < ticketCodes.length; i++) {
+      const admissionCount = order.ticketCodes ? 1 : qty;
+      const payload = 'TYMF2026|' + ticketCodes[i] + '|x' + admissionCount;
+      const qrPng = await QRCode.toBuffer(payload, { margin: 1, width: 480,
+        color: { dark: '#0a0d0a', light: '#ffffff' } });
+      const qrUrl = (process.env.SITE_URL || 'https://yogamusicfest.mx') +
+        '/.netlify/functions/qr?d=' + encodeURIComponent(payload);
+      const label = (locale === 'es' ? 'Boleto ' : 'Ticket ') + (i + 1) + ' / ' + ticketCodes.length;
+      cards.push(ticketHtml(t, ticketCodes[i], admissionCount, qrUrl, label)
+        .replace(/^.*?<body[^>]*>/s, '').replace(/<\/body><\/html>$/, ''));
+      attachments.push({ filename: 'tymf-2026-ticket-' + (i + 1) + '-of-' + ticketCodes.length + '.png', content: qrPng });
+    }
+    const explanation = locale === 'es'
+      ? 'Cada boleto admite a una persona. Comparte un archivo adjunto diferente con cada acompañante; pueden llegar por separado.'
+      : 'Each ticket admits one person. Share a different attachment with each guest; you can arrive separately.';
+    const result = await resend.emails.send({
       from,
       to: email,
       subject: t.subject,
-      html: ticketHtml(t, code, qty, qrUrl),
-      attachments: [
-        { filename: 'tymf-2026-ticket.png', content: qrPng },
-      ],
-    });
+      html: '<!doctype html><html><body style="margin:0;background:#0a0d0a;color:#efe8d6">' +
+        (order.ticketCodes ? '<p style="padding:24px;text-align:center;font:16px Arial">' + explanation + '</p>' : '') +
+        cards.join('') + '</body></html>',
+      attachments,
+    }, { idempotencyKey: deliveryKey });
+    if (result.error || !result.data || !result.data.id) throw new Error('Email provider did not accept tickets');
+    await store('ticket-delivery').setJSON(deliveryKey, { emailId: result.data.id }, { onlyIfNew: true });
   } catch (err) {
     return { statusCode: 500, body: 'Ticket email failed: ' + (err.message || 'unknown') };
   }

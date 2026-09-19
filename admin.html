@@ -225,7 +225,8 @@
       tr.innerHTML='<td>'+esc(new Date(o.createdAt).toLocaleString(FIXED_DATA_LOCALE,{timeZone:EVENT_TIME_ZONE}))+'</td>'+
         '<td>'+esc(o.name)+'</td><td>'+esc(o.email)+'</td><td>'+(o.qty||1)+'</td>'+
         '<td class="money">'+mxnCents(o.amount)+'</td><td>'+(o.ref?esc(o.ref):t('manualDash'))+(o.autoPaid?' <span class="pill ready">'+t('auto')+'</span>':'')+'</td>'+
-        '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+'</td>';
+        '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+
+        (typeof o.checkedIn==='number'?'<br><small>'+o.checkedIn+' / '+(o.qty||1)+(L==='es'?' ingresados':' checked in')+'</small>':'')+'</td>';
       ob.appendChild(tr);
     });
   }

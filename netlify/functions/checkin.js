@@ -7,7 +7,8 @@
 // Response { status, code?, order?, message? }
 //   status: ok | used | invalid | error
 
-const { getStore, connectLambda } = require('@netlify/blobs');
+const { connectLambda } = require('@netlify/blobs');
+const { store } = require('../lib/tickets');
 
 function json(status, obj) {
   return {
@@ -42,25 +43,28 @@ exports.handler = async (event) => {
   const code = (m ? m[0] : raw).toUpperCase();
   if (!code) return json(200, { status: 'invalid', message: 'No code' });
 
-  const store = getStore('orders');
-  let order;
   try {
-    order = await store.get(code, { type: 'json' });
+    const ticket = await store('tickets').get(code, { type: 'json' });
+    const parent = await store('orders').get(ticket ? ticket.orderCode : code, { type: 'json' });
+    if (!parent || (parent.ticketCodes && (!ticket || !parent.ticketCodes.includes(code)))) {
+      return json(200, { status: 'invalid', code, message: 'Use an individual ticket QR code' });
+    }
+    const order = ticket ? { ...parent, code, qty: 1, orderCode: parent.code, ticketNumber: ticket.index } : parent;
+    const admissions = store('ticket-admissions');
+    const prior = await admissions.get(code, { type: 'json' });
+    if (prior || parent.used) return json(200, { status: 'used', code,
+      order: { ...order, used: true, usedAt: prior ? prior.usedAt : parent.usedAt } });
+    if (body.mode === 'peek') return json(200, { status: 'ok', code, order: { ...order, used: false } });
+
+    // One immutable claim per ticket: simultaneous scans cannot both admit it.
+    const receipt = { usedAt: new Date().toISOString() };
+    const claim = await admissions.setJSON(code, receipt, { onlyIfNew: true });
+    if (!claim || typeof claim.modified !== 'boolean') throw new Error('Admission claim failed');
+    const saved = await admissions.get(code, { type: 'json' });
+    if (!saved) throw new Error('Admission was not saved');
+    return json(200, { status: claim.modified ? 'ok' : 'used', code,
+      order: { ...order, used: true, usedAt: saved.usedAt } });
   } catch (e) {
-    return json(500, { status: 'error', message: 'Lookup failed: ' + (e && e.message) });
+    return json(500, { status: 'error', message: 'Ticket lookup or check-in failed. Please retry.' });
   }
-
-  if (!order) return json(200, { status: 'invalid', code, message: 'Not found' });
-  if (order.used) return json(200, { status: 'used', code, order });
-  if (body.mode === 'peek') return json(200, { status: 'ok', code, order });
-
-  order.used = true;
-  order.usedAt = new Date().toISOString();
-  try {
-    await store.setJSON(code, order);
-  } catch (e) {
-    return json(500, { status: 'error', message: 'Save failed: ' + (e && e.message) });
-  }
-
-  return json(200, { status: 'ok', code, order });
 };
