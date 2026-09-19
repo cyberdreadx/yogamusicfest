@@ -389,8 +389,8 @@ section{position:relative;scroll-margin-top:88px}
 .ev-title-copy{min-width:0}
 .ev-venue-logo{display:grid;place-items:center;flex:0 0 64px;width:64px;height:60px;padding:6px;overflow:hidden}
 .ev-venue-logo img{width:100%;height:100%;min-height:0;object-fit:contain;mix-blend-mode:screen}
-.ev-venue-logo img[src="logos/calea.png"]{object-fit:cover;object-view-box:inset(30% 20% 30% 20%);filter:grayscale(1) contrast(5) brightness(1.5)}
-.venue-logos img[src="logos/calea.png"]{object-fit:contain;object-view-box:inset(30% 20% 30% 20%);filter:grayscale(1) contrast(5) brightness(1.5);mix-blend-mode:screen}
+.ev-venue-logo img[src="logos/calea.png"]{object-fit:cover;object-view-box:inset(30% 20% 30% 20%);filter:url(#calea-alpha)}
+.venue-logos img[src="logos/calea.png"]{object-fit:contain;object-view-box:inset(30% 20% 30% 20%);filter:url(#calea-alpha);mix-blend-mode:screen}
 .ev-venue-logo img[src="logos/oasis-tulum.png"]{object-fit:cover;object-position:center 46%;mix-blend-mode:screen}
 .ev-featured .ev-title,.ev-festival .ev-title{justify-content:center}
 .ev-festival .ev-title h4{margin:.8rem 0}
@@ -497,9 +497,9 @@ section{position:relative;scroll-margin-top:88px}
 .partner .logo img{width:100%;height:100%;min-height:0;object-fit:contain;mix-blend-mode:screen}
 .partner .logo img[src="logos/oasis-tulum.png"]{object-fit:cover;object-position:center 46%;mix-blend-mode:screen}
 :root[data-theme="light"] .ev-venue-logo img,:root[data-theme="light"] .partner .logo img{filter:invert(1);mix-blend-mode:multiply}
-:root[data-theme="light"] .ev-venue-logo img[src="logos/calea.png"]{filter:grayscale(1) contrast(5) brightness(1.5) invert(1)}
+:root[data-theme="light"] .ev-venue-logo img[src="logos/calea.png"]{filter:url(#calea-alpha) invert(1)}
 @media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .ev-venue-logo img,:root:not([data-theme="dark"]) .partner .logo img{filter:invert(1);mix-blend-mode:multiply}}
-@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .ev-venue-logo img[src="logos/calea.png"]{filter:grayscale(1) contrast(5) brightness(1.5) invert(1)}}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]) .ev-venue-logo img[src="logos/calea.png"]{filter:url(#calea-alpha) invert(1)}}
 .partner h4{font-family:var(--display);font-weight:600;font-size:1.05rem;color:var(--cream)}
 .partner .cat{font-size:.62rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin:.1rem 0 .5rem}
 .partner p{font-size:.78rem;color:var(--text-dim)}
@@ -774,6 +774,7 @@ img,svg,video{max-width:100%;height:auto}
 </style>
 </head>
 <body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute"><defs><filter id="calea-alpha" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.063 3.576 0.361 0 -3"/></filter></defs></svg>
 
 <!-- ============ NAV ============ -->
 <nav class="nav" id="nav">
@@ -785,7 +786,6 @@ img,svg,video{max-width:100%;height:auto}
     <div class="nav-links" id="navLinks">
       <a href="#tickets" data-i18n="nav.festival">Festival</a>
       <a href="#schedule" data-i18n="nav.schedule">Schedule</a>
-      <a href="#teachers" data-i18n="nav.teachers">Teachers + Healers</a>
       <a href="#partners" data-i18n="nav.partners">Partners</a>
       <a href="#affiliates" data-i18n="nav.affiliates">Affiliates</a>
       <a href="#vendors" data-i18n="nav.vendors">Vendors</a>
@@ -969,18 +969,6 @@ img,svg,video{max-width:100%;height:auto}
     </div>
     <div class="events" id="events"></div>
     <p class="sched-note" data-i18n="sched.note">Conference Week events are hosted independently by participating teachers and venues. Booking, payment and event details are managed directly by each host. The Main Festival on Sept 26 is ticketed above.</p>
-  </div>
-</section>
-
-<!-- ============ TEACHERS + HEALERS ============ -->
-<section class="section-pad" id="teachers">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="eyebrow" data-i18n="teach.eyebrow">Teachers + Healers</div>
-      <h2 class="sechead" style="margin-top:1rem" data-i18n="teach.heading">Meet the Facilitators</h2>
-      <p class="lede" style="margin-top:1rem" data-i18n="teach.lede">The teachers, guides and healers holding space across the week.</p>
-    </div>
-    <div class="people people-names reveal" id="people"></div>
   </div>
 </section>
 
@@ -1169,7 +1157,6 @@ img,svg,video{max-width:100%;height:auto}
         <h5 data-i18n="foot.explore">Explore</h5>
         <a href="#tickets" data-i18n="foot.mainFestival">Main Festival</a>
         <a href="#schedule" data-i18n="foot.fullSchedule">Full Schedule</a>
-        <a href="#teachers" data-i18n="nav.teachers">Teachers + Healers</a>
         <a href="#tickets" data-i18n="nav.buy">Buy Tickets</a>
       </div>
       <div class="foot-col">
@@ -1317,17 +1304,6 @@ DAYS.forEach(function(d){SCHED[d.num]=[];});
 EVENTS.forEach(function(e){e.days.forEach(function(d){if(SCHED[d])SCHED[d].push(e);});});
 Object.keys(SCHED).forEach(function(d){SCHED[d].sort(function(a,b){return (a.k||9999)-(b.k||9999);});});
 
-var TEACHERS=[
-  {n:'Iván Baray · Shivan Dharma',m:'Music, Sound Healing & Community',b:'Iván Baray, better known as Shivan Dharma, is a visionary entrepreneur, event producer, yogi, medicine musician, singer songwriter, and sound healer. His work weaves together music, consciousness, wellness, and community, creating experiences that inspire connection, transformation, and a deeper relationship with oneself and the world.',o:'Medicine Music & Sound Healing',w:'Schedule TBA'},
-  {n:'Narayani',m:'Bhakti & Community',b:'Founder of TYMF and a devoted teacher of bhakti yoga and kirtan, weaving practice, music and ceremony into community gatherings across Tulum.',o:'Opening Circle & Closing Ceremony',w:'Sept 21 & 27 · Holistika / Oasis'},
-  {n:'Maya Sol',m:'Vinyasa & Movement',b:'A dynamic vinyasa teacher known for breath-led, creative sequencing that meets the body where it is and opens space for stillness.',o:'Sunrise Vinyasa · Festival Opening Flow',w:'Daily · Ahau / Oasis'},
-  {n:'Rio Amara',m:'Sound & Womb Healing',b:'A sound healer and womb-wisdom facilitator guiding cacao ceremonies, sound baths and women\'s circles rooted in deep listening.',o:'Cacao & Sound Bath',w:'Sept 21 & 24 · Shakti Temple'},
-  {n:'Sofia Reyes',m:'Yin & Restorative',b:'A gentle guide in yin, restorative and yoga nidra, helping students soften the nervous system and rest into presence.',o:'Restorative & Yoga Nidra',w:'Sept 22, 24 & 27'},
-  {n:'David Portillo',m:'Ashtanga',b:'A traditional Ashtanga teacher offering Mysore-style practice with precise, compassionate adjustments for every level.',o:'Ashtanga Mysore',w:'Sept 22 · Vesica'},
-  {n:'Lena Ford',m:'Breathwork',b:'A breathwork facilitator leading conscious-connected journeys that release, energize and reconnect body and heart.',o:'Breathwork Journey',w:'Sept 22 · Kan Tulum'},
-  {n:'Abuela Itzel',m:'Temazcal & Ceremony',b:'A keeper of traditional Temazcal, holding ancestral sweat-lodge ceremony with song, prayer and medicine.',o:'Temazcal Ceremony',w:'Sept 23 · Tulum Despierta'},
-  {n:'Ana Lucía',m:'Sacred Art',b:'An artist and facilitator exploring sacred geometry, mandala and intuitive creation as moving meditation.',o:'Sacred Geometry & Art',w:'Sept 25 · Azulik'}
-];
 
 var FEAT_ARTISTS=[
   {n:'DJ Selva',r:'Headline · Electronic',b:'Organic house and downtempo woven with jungle field-recordings — the sound of a Tulum night.',w:'Sept 26 · 9:00 PM · Oasis Tulum'},
@@ -1518,32 +1494,6 @@ function renderDays(){
 }
 
 /* ---------- people / artists / partners / etc ---------- */
-function renderPeople(){
-  $('#people').innerHTML=TEACHERS.map(function(t){
-    return '<article class="person"><div class="person-body"><h4>'+t.n+'</h4><div class="mod">'+t.m+'</div>'+
-      '<p class="bio">'+t.b+'</p><div class="offer"><b>'+t.o+'</b>'+t.w+'</div></div></article>';
-  }).join('');
-}
-function initPeopleCarousel(){
-  var track=$('#people'),prev=$('#peoplePrev'),next=$('#peopleNext'),dotsC=$('#peopleDots');
-  if(!track||!prev||!next||!dotsC)return;
-  var cards=track.querySelectorAll('.person'); if(!cards.length)return;
-  function step(){var c=track.querySelector('.person');var g=parseFloat(getComputedStyle(track).gap)||22;return c.offsetWidth+g;}
-  dotsC.innerHTML=Array.prototype.map.call(cards,function(_,i){return '<button type="button" aria-label="Go to facilitator '+(i+1)+'"></button>';}).join('');
-  var dots=dotsC.querySelectorAll('button');
-  function update(){
-    var s=step(),idx=Math.round(track.scrollLeft/s);
-    Array.prototype.forEach.call(dots,function(d,i){d.setAttribute('aria-current',i===idx?'true':'false');});
-    prev.disabled=track.scrollLeft<4;
-    next.disabled=track.scrollLeft>=track.scrollWidth-track.clientWidth-4;
-  }
-  Array.prototype.forEach.call(dots,function(d,i){d.addEventListener('click',function(){track.scrollTo({left:i*step(),behavior:'smooth'});});});
-  prev.addEventListener('click',function(){track.scrollBy({left:-step(),behavior:'smooth'});});
-  next.addEventListener('click',function(){track.scrollBy({left:step(),behavior:'smooth'});});
-  track.addEventListener('scroll',function(){window.requestAnimationFrame(update);},{passive:true});
-  window.addEventListener('resize',update);
-  update();
-}
 function renderArtists(){
   $('#artistFeats').innerHTML=FEAT_ARTISTS.map(function(a){
     return '<article class="afeat"><div class="art"><span class="mono">'+initials(a.n)+'</span></div>'+
@@ -1679,7 +1629,7 @@ var io=new IntersectionObserver(function(entries){
 },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
 
 /* ---------- boot ---------- */
-renderTickets();renderSummary();renderDays();renderPeople();
+renderTickets();renderSummary();renderDays();
 renderPartners();renderAffiliates();renderSponsors();renderHeroSponsors();
 window.__rerender=function(){renderTickets();renderSummary();renderDays();renderAffiliates();};
 try{LANG=localStorage.getItem('tymf_lang')||'es';}catch(e){LANG='es';}
