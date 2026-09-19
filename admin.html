@@ -55,7 +55,7 @@
   <div class="head">
     <h1>T Y M F</h1>
     <div class="sub" data-t="subtitle">Panel · Ventas y Promotores</div>
-    <div class="lang" id="lang" role="tablist" aria-label="Idioma / Language"><button type="button" data-lang="es" role="tab">ES</button><button type="button" data-lang="en" role="tab">EN</button></div>
+    <div class="lang" id="lang" aria-label="Idioma / Language"><button type="button" data-lang="es" aria-pressed="false">ES</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
   </div>
 
   <section id="pinScreen" class="card" style="max-width:380px;margin:0 auto">
@@ -142,14 +142,14 @@
     document.querySelectorAll('[data-lang]').forEach(function(s){
       var active=s.getAttribute('data-lang')===L;
       s.setAttribute('aria-label',s.getAttribute('data-lang')==='es'?'Español':'English');
-      s.setAttribute('aria-selected',active?'true':'false');
+      s.setAttribute('aria-pressed',active?'true':'false');
       s.setAttribute('tabindex',active?'0':'-1');
       if(active) s.setAttribute('data-on','1');
       else s.removeAttribute('data-on');
     });
   }
   try{ PIN=sessionStorage.getItem('tymf_apin')||''; }catch(e){}
-  document.querySelectorAll('#lang [data-lang]').forEach(function(btn){ btn.onclick=function(){ var next=btn.getAttribute('data-lang'); if(next===L) return; L=next; try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); else if(genState) renderGenState(); }; });
+  document.querySelectorAll('#lang [data-lang]').forEach(function(btn){ btn.onclick=function(){ var next=btn.getAttribute('data-lang'); if(next===L) return; L=next; try{localStorage.setItem('tymf_lang',L);}catch(e){} applyStatic(); if(data) render(); if(genState) renderGenState(); }; });
   applyStatic();
   if(PIN){ load(); }
 
@@ -220,7 +220,6 @@
         '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+'</td>';
       ob.appendChild(tr);
     });
-    if(genState) renderGenState();
   }
 
   function wireRowButtons(pb){

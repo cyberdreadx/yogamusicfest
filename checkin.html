@@ -50,7 +50,7 @@
   <header>
     <div class="m">T Y M F</div>
     <div class="s" data-t="subtitle">Check-in · 2026</div>
-    <div class="lang" id="lang" role="tablist" aria-label="Idioma / Language"><button type="button" data-lang="es" role="tab">ES</button><button type="button" data-lang="en" role="tab">EN</button></div>
+    <div class="lang" id="lang" aria-label="Idioma / Language"><button type="button" data-lang="es" aria-pressed="false">ES</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
   </header>
 
   <!-- PIN gate -->
@@ -113,7 +113,7 @@
     document.querySelectorAll('[data-lang]').forEach(function(s){
       var active=s.getAttribute('data-lang')===L;
       s.setAttribute('aria-label',s.getAttribute('data-lang')==='es'?'Español':'English');
-      s.setAttribute('aria-selected',active?'true':'false');
+      s.setAttribute('aria-pressed',active?'true':'false');
       s.setAttribute('tabindex',active?'0':'-1');
       if(active) s.setAttribute('data-on','1');
       else s.removeAttribute('data-on');
