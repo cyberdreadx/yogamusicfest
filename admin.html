@@ -117,9 +117,7 @@
       activateAuto:'Activar pago automático', paid:'✓ Pagado', markPaid:'Marcar pagado', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promotor "'+code+'"';},
       sellLink:'Enlace para vender (compártelo con clientes):', generatingPanel:'Generando panel del promotor…', activateStripe:'Activar pago automático (Stripe)',
       promoterPanel:'Panel del promotor (para que vea sus ventas):', autoSignupFor:function(code){return 'Registro de pago automático para "'+code+'"';}, sendStripeLink:'Envía este enlace al promotor para que registre su banco en Stripe:',
-      copy:'Copiar', copied:'¡Copiado!', copyManual:'Copia manual', stripeConnectError:'Error de Stripe Connect', csvName:'tymf-ordenes.csv',
-      csvHeaders:['fecha','nombre','correo','telefono','boletos','monto_mxn','promotor','comision_mxn','pago_auto','codigo','checkin'],
-      yes:'si', no:'no'
+      copy:'Copiar', copied:'¡Copiado!', copyManual:'Copia manual', stripeConnectError:'Error de Stripe Connect'
     },
     en:{
       subtitle:'Dashboard · Sales and Promoters', adminPin:'Admin PIN', enter:'Enter', updated:'Updated', refresh:'Refresh', exportCsv:'Export CSV', logout:'Log out',
@@ -131,9 +129,7 @@
       activateAuto:'Enable auto-payout', paid:'✓ Paid', markPaid:'Mark paid', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promoter "'+code+'"';},
       sellLink:'Sales link (share it with customers):', generatingPanel:'Generating promoter panel…', activateStripe:'Enable auto-payout (Stripe)',
       promoterPanel:'Promoter panel (to track their sales):', autoSignupFor:function(code){return 'Auto-payout signup for "'+code+'"';}, sendStripeLink:'Send this link so the promoter can connect their bank in Stripe:',
-      copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error', csvName:'tymf-orders.csv',
-      csvHeaders:['date','name','email','phone','tickets','amount_mxn','promoter','commission_mxn','auto_payout','code','checkin'],
-      yes:'yes', no:'no'
+      copy:'Copy', copied:'Copied!', copyManual:'Copy manually', stripeConnectError:'Stripe Connect error'
     }
   };
   var L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
@@ -271,19 +267,28 @@
     }
     out.scrollIntoView({behavior:'smooth',block:'nearest'});
   }
-  function copy(text,btn){ (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
-    .then(function(){ btn.textContent=t('copied'); }).catch(function(){ btn.textContent=t('copyManual'); }); }
+  function copy(text,btn){
+    var label=btn.getAttribute('data-label')||btn.textContent;
+    btn.setAttribute('data-label',label);
+    (navigator.clipboard?navigator.clipboard.writeText(text):Promise.reject())
+      .then(function(){ btn.textContent=t('copied'); })
+      .catch(function(){ btn.textContent=t('copyManual'); })
+      .finally(function(){
+        clearTimeout(btn.__copyTimer);
+        btn.__copyTimer=setTimeout(function(){ btn.textContent=label; },1200);
+      });
+  }
 
   function exportCsv(){
     if(!data) return;
-    var head=t('csvHeaders');
+    var head=['fecha','nombre','correo','telefono','boletos','monto_mxn','promotor','comision_mxn','pago_auto','codigo','checkin'];
     var lines=[head.join(',')];
     (data.orders||[]).forEach(function(o){
-      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),(o.autoPaid?t('yes'):t('no')),o.code,(o.used?t('yes'):t('no'))];
+      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),(o.autoPaid?'si':'no'),o.code,(o.used?'si':'no')];
       lines.push(r.map(function(x){ x=String(x==null?'':x); return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x; }).join(','));
     });
     var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8'});
-    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=t('csvName'); a.click();
+    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='tymf-ordenes.csv'; a.click();
   }
 })();
 </script>
