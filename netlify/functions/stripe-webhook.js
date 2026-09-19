@@ -148,6 +148,7 @@ exports.handler = async (event) => {
       commission: ref ? qty * 100 : 0,
       autoPaid: (session.metadata && session.metadata.connect === '1') || false,
       session: session.id,
+      liveMode: !!session.livemode,
       createdAt: new Date().toISOString(),
       used: false,
       usedAt: null,
