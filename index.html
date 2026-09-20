@@ -791,7 +791,6 @@ img,svg,video{max-width:100%;height:auto}
     <div class="nav-links" id="navLinks">
       <a href="#tickets" data-i18n="nav.festival">Festival</a>
       <a href="#schedule" data-i18n="nav.schedule">Schedule</a>
-      <a href="#teachers" data-i18n="nav.teachers">Teachers + Healers</a>
       <a href="#partners" data-i18n="nav.partners">Partners</a>
       <a href="#affiliates" data-i18n="nav.affiliates">Affiliates</a>
       <a href="#vendors" data-i18n="nav.vendors">Vendors</a>
@@ -976,22 +975,6 @@ img,svg,video{max-width:100%;height:auto}
     </div>
     <div class="events" id="events"></div>
     <p class="sched-note" data-i18n="sched.note">Conference Week events are hosted independently by participating teachers and venues. Booking, payment and event details are managed directly by each host. The Main Festival on Sept 26 is ticketed above.</p>
-  </div>
-</section>
-
-<!-- ============ FACILITATORS ============ -->
-<section class="section-pad" id="teachers">
-  <div class="wrap">
-    <div class="reveal">
-      <div class="eyebrow" data-i18n="teach.eyebrow">Teachers + Healers</div>
-      <h2 class="sechead" style="margin-top:1rem" data-i18n="teach.heading">Meet the Facilitators</h2>
-      <p class="lede" style="margin-top:1rem" data-i18n="teach.lede">The teachers, guides and healers holding space across the week.</p>
-    </div>
-    <div class="people-slider">
-      <div class="people" id="people" tabindex="0" aria-label="Facilitators" role="region"></div>
-      <button class="car-btn prev" id="peoplePrev" type="button" aria-label="Previous facilitator">&#8249;</button>
-      <button class="car-btn next" id="peopleNext" type="button" aria-label="Next facilitator">&#8250;</button>
-    </div>
   </div>
 </section>
 
@@ -1529,36 +1512,6 @@ function renderDays(){
 }
 
 /* ---------- people / artists / partners / etc ---------- */
-function renderPeople(){
-  var lead=['Itzel','Jayson','Yosef','Narayani','Shivan'];
-  var names=lead.slice();
-  document.querySelectorAll('.lineup-flow .nm').forEach(function(el){
-    var name=el.textContent.trim();
-    if(names.indexOf(name)===-1)names.push(name);
-  });
-  var es=LANG==='es';
-  $('#people').innerHTML=names.map(function(name){
-    return '<article class="person"><div class="portrait" aria-label="'+(es?'Foto pendiente de ':'Photo coming soon for ')+escapeHtml(name)+'"><span class="mono" aria-hidden="true">'+escapeHtml(initials(name))+'</span></div><div class="person-body"><h4>'+escapeHtml(name)+'</h4><p class="bio" style="margin-top:1rem">'+(es?'Biografía próximamente.':'Bio coming soon.')+'</p><div class="offer">'+(es?'Instagram próximamente':'Instagram coming soon')+'</div></div></article>';
-  }).join('');
-  updatePeopleControls();
-}
-function updatePeopleControls(){
-  var track=$('#people');
-  $('#peoplePrev').disabled=track.scrollLeft<=2;
-  $('#peopleNext').disabled=track.scrollLeft>=track.scrollWidth-track.clientWidth-2;
-}
-function initPeopleCarousel(){
-  var track=$('#people');
-  function move(direction){
-    var card=track.querySelector('.person');
-    if(card)track.scrollBy({left:direction*(card.offsetWidth+(parseFloat(getComputedStyle(track).gap)||0)),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
-  }
-  $('#peoplePrev').addEventListener('click',function(){move(-1);});
-  $('#peopleNext').addEventListener('click',function(){move(1);});
-  track.addEventListener('keydown',function(e){if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();move(e.key==='ArrowLeft'?-1:1);}});
-  track.addEventListener('scroll',updatePeopleControls,{passive:true});
-  window.addEventListener('resize',updatePeopleControls);
-}
 function renderArtists(){
   $('#artistFeats').innerHTML=FEAT_ARTISTS.map(function(a){
     return '<article class="afeat"><div class="art"><span class="mono">'+initials(a.n)+'</span></div>'+
@@ -1694,9 +1647,9 @@ var io=new IntersectionObserver(function(entries){
 },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
 
 /* ---------- boot ---------- */
-renderTickets();renderSummary();renderDays();renderPeople();initPeopleCarousel();
+renderTickets();renderSummary();renderDays();
 renderPartners();renderAffiliates();renderSponsors();renderHeroSponsors();
-window.__rerender=function(){renderTickets();renderSummary();renderDays();renderAffiliates();renderPeople();};
+window.__rerender=function(){renderTickets();renderSummary();renderDays();renderAffiliates();};
 try{LANG=localStorage.getItem('tymf_lang')||'es';}catch(e){LANG='es';}
 var _lt=document.getElementById('langToggle');
 if(_lt)_lt.addEventListener('click',function(){setLang(LANG==='es'?'en':'es');});
