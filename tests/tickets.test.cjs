@@ -265,3 +265,30 @@ test('referred checkout keeps commission metadata without creating a Connect spl
   assert.equal(params.metadata.connect, '');
   assert.equal(params.payment_intent_data, undefined);
 });
+
+test('discount quote validates Stripe code and checkout applies it without stacking discounts', async () => {
+  let params, creates = 0, active = true;
+  const mod = { exports: {} };
+  vm.runInNewContext(fs.readFileSync(path.resolve(__dirname, '../netlify/functions/create-checkout.js'), 'utf8'), {
+    exports: mod.exports, module: mod, process: { env: { STRIPE_SECRET_KEY: 'fixture' } },
+    require: () => () => ({
+      promotionCodes: { list: async ({code}) => ({ data: active && code === 'TYMF50' ? [{id:'promo_fixture',coupon:{valid:true,percent_off:50},restrictions:{}}] : [] }) },
+      checkout: { sessions: { create: async p => { creates++; params=p; return {url:'https://checkout.example.invalid'}; } } }
+    })
+  });
+  const request = body => mod.exports.handler({httpMethod:'POST',headers:{origin:'https://example.invalid'},body:JSON.stringify(body)});
+  let result = await request({action:'quote',promoCode:' tymf50 ',quantity:2});
+  assert.equal(result.statusCode,200);
+  assert.equal(JSON.parse(result.body).percentOff,50);
+  assert.equal(creates,0);
+  result = await request({promoCode:'TYMF50',quantity:2,percentOff:100,unit_amount:1});
+  assert.equal(result.statusCode,200);
+  assert.equal(params.discounts[0].promotion_code,'promo_fixture');
+  assert.equal(params.allow_promotion_codes,undefined);
+  assert.equal(params.line_items[0].price_data.unit_amount,20000);
+  assert.equal(params.line_items[0].quantity,2);
+  active=false;
+  assert.equal((await request({promoCode:'TYMF50'})).statusCode,400);
+  assert.equal((await request({action:'quote',promoCode:'FAKE'})).statusCode,400);
+  assert.equal(creates,1);
+});

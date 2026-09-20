@@ -777,6 +777,13 @@ img,svg,video{max-width:100%;height:auto}
 
 .site-credit{margin:1.25rem 1rem 0;text-align:center;font-size:10px;line-height:1.6;color:var(--text-dim);font-weight:400;letter-spacing:.02em}
 .site-credit a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+#discountBox{margin-top:1.2rem}
+#discountBox label{display:block;margin-bottom:.5rem;font-size:.8rem;color:var(--text-dim)}
+.discount-row{display:flex;gap:.6rem;align-items:stretch}
+#discountCode{min-width:0;flex:1 1 0;width:100%;padding:.75rem;border:1px solid var(--line-strong);border-radius:5px;background:var(--bg);color:var(--text);font:inherit;font-size:16px}
+#discountBox .btn{flex:0 0 auto;width:auto;min-width:5.5rem;margin:0;padding:.75rem 1rem;border-radius:5px}
+#discountStatus{font-size:.8rem;margin:.5rem 0 0;color:var(--text-dim)}
+#discountStatus:empty{display:none}
 </style>
 </head>
 <body>
@@ -875,6 +882,14 @@ img,svg,video{max-width:100%;height:auto}
         <h3 data-i18n="tix.order">Your Order</h3>
         <div class="sum-lines" id="sumLines">
           <p class="sum-empty" data-i18n="tix.empty">No tickets selected yet — add a ticket to begin.</p>
+        </div>
+        <div id="discountBox">
+          <label for="discountCode">Discount code</label>
+          <div class="discount-row">
+            <input id="discountCode" type="text" maxlength="100" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="discountStatus">
+            <button type="button" class="btn btn-ghost">Apply</button>
+          </div>
+          <p id="discountStatus" role="status"></p>
         </div>
         <div class="sum-total"><span data-i18n="tix.total">Total</span><span class="g" id="grandTotal">$0 MXN</span></div>
         <button class="btn btn-gold" id="checkoutBtn" data-i18n="tix.checkout" disabled>Checkout</button>
@@ -1198,6 +1213,7 @@ img,svg,video{max-width:100%;height:auto}
 
 <div class="toast" id="toast"></div>
 
+<script src="discount.js"></script>
 <script>
 (function(){
 "use strict";
@@ -1347,6 +1363,8 @@ var PARTNERS=[
 ];
 
 var AFFILIATES=[
+  {n:'Narayani · Reiki',web:'WhatsApp',url:'https://wa.me/17867487247',
+   desc:{en:'Reiki healing sessions — 20% off.<br><br>Reiki certification training, Levels 1 &amp; 2.<br>Regular price: <s>$3,333 MXN</s><br><strong>Festival price: $2,222 MXN</strong>',es:'Sesiones de sanación Reiki — 20% de descuento.<br><br>Formación de certificación Reiki, niveles 1 y 2.<br>Precio regular: <s>$3,333 MXN</s><br><strong>Precio del festival: $2,222 MXN</strong>'}},
   {n:'Aiesha Cosmos · Jaguar Star Temple',disc:'20%',ig:'@jaguarstartemple',web:'aieshacosmos.com',url:'https://www.aieshacosmos.com',
    desc:{en:'Oracle guidance sessions — personal or relationship, in person or online.',es:'Sesiones de guía con oráculo — personales o de pareja, presenciales o en línea.'}},
   {n:'Somatic Shift Sessions',disc:'20%',ig:'@conscious_caro',web:'consciouscaro.com',url:'https://www.consciouscaro.com/',
@@ -1440,6 +1458,7 @@ function renderTickets(){
   });}
 }
 
+var discount=createDiscountField({language:function(){return LANG;},quantity:function(){return totals().count;},changed:renderSummary});
 function totals(){
   var sub=0,count=0;
   TICKETS.forEach(function(t){sub+=t.price*cart[t.id];count+=cart[t.id];});
@@ -1458,7 +1477,7 @@ function renderSummary(){
         '<span class="amt">'+fmt0(t.price*cart[t.id])+'</span></div>';
     }).join('');
   }
-  $('#grandTotal').textContent=fmt(tt.total);
+  $('#grandTotal').textContent=fmt(discount.total(tt.total));
   $('#checkoutBtn').disabled=tt.count===0;
 }
 
@@ -1581,9 +1600,9 @@ function renderHeroSponsors(){                                                  
 /* ---------- checkout modal ---------- */
 var modal=$('#modal'),lastFocus=null;
 function startCheckout(){
-  var tt=totals(); if(tt.count===0) return;
+  var tt=totals(); if(tt.count===0) return; var promoCode=discount.code(); if(promoCode===null)return;
   var btn=$('#checkoutBtn'); btn.disabled=true; btn.textContent=t('tix.redirecting');
-  fetch(CHECKOUT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({quantity:tt.count,locale:LANG,ref:getRef()})})
+  fetch(CHECKOUT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({quantity:tt.count,locale:LANG,ref:getRef(),promoCode:promoCode})})
     .then(function(r){return r.json().catch(function(){return {};});})
     .then(function(d){ if(d&&d.url){window.location.href=d.url;} else {throw 0;} })
     .catch(function(){ btn.disabled=false; btn.textContent=t('tix.checkout'); toast(t('tix.checkoutError')); });

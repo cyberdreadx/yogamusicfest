@@ -30,8 +30,12 @@ exports.handler = async (event) => {
   let locale = 'auto';
   let ref = '';
   let source = '';
+  let promoCode = '';
+  let quote = false;
   try {
     const body = JSON.parse(event.body || '{}');
+    if (typeof body.promoCode === 'string') promoCode = body.promoCode.trim().toUpperCase().slice(0, 100);
+    quote = body.action === 'quote';
     quantity = Math.max(1, Math.min(20, parseInt(body.quantity, 10) || 1));
     if (body.locale === 'es' || body.locale === 'en') locale = body.locale;
     if (typeof body.ref === 'string') ref = body.ref.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40);
@@ -45,9 +49,25 @@ exports.handler = async (event) => {
 
   // Referral commissions are tracked for separate Global Payouts payments.
   try {
+    let promotion;
+    if (promoCode) {
+      const matches = await stripe.promotionCodes.list({ code: promoCode, active: true, limit: 1 });
+      promotion = matches.data[0];
+      const coupon = promotion && promotion.coupon;
+      if (!promotion || promotion.customer || !coupon || !coupon.valid || coupon.percent_off !== 50 ||
+          coupon.applies_to || promotion.restrictions?.first_time_transaction ||
+          (promotion.expires_at && promotion.expires_at <= Date.now() / 1000) ||
+          (promotion.restrictions?.minimum_amount &&
+            (promotion.restrictions.minimum_amount_currency !== CURRENCY || quantity * UNIT_AMOUNT < promotion.restrictions.minimum_amount))) {
+        return { statusCode: 400, headers: cors, body: JSON.stringify({ error: 'Invalid or unavailable discount code.' }) };
+      }
+    }
+    if (quote) {
+      return { statusCode: 200, headers: cors, body: JSON.stringify({ percentOff: promotion ? 50 : 0 }) };
+    }
     const params = {
       mode: 'payment',
-      allow_promotion_codes: true,
+      ...(promotion ? { discounts: [{ promotion_code: promotion.id }] } : { allow_promotion_codes: true }),
       locale,
       metadata: {
         quantity: String(quantity),
