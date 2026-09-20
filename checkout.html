@@ -207,6 +207,7 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem;margin-top:auto}
   background:var(--bg-4);color:var(--cream);border:1px solid var(--line-strong);border-radius:4px;
   padding:.8em 1.3em;font-size:.85rem;z-index:60;transition:.35s;box-shadow:var(--shadow)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
+.pass-support{max-width:760px;margin:2rem auto 0;color:var(--text-dim);font-size:.88rem;line-height:1.7}.pass-support p{margin:0 0 1rem}.pass-contact{display:flex;flex-wrap:wrap;gap:.75rem}.pass-contact .btn{font-size:.75rem;white-space:normal;text-align:center}.desc ul,.tk-desc ul{padding-left:1.2rem;margin:.6rem 0 0}.desc li+li,.tk-desc li+li{margin-top:.5rem}
 </style>
 </head>
 <body>
@@ -235,18 +236,18 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem;margin-top:auto}
       <!-- left: pitch + ticket -->
       <div>
         <div class="co-head">
-          <div class="eyebrow" data-i18n="co.eyebrow">September 26, 2026 · Oasis Tulum</div>
-          <h1 class="co-title" data-i18n-html="co.title">Get Your <span class="goldtext">Festival Ticket</span></h1>
-          <p class="co-lede" data-i18n="co.lede">One ticket. One full day and night of yoga, conscious music and community at Oasis Tulum. Instant e-ticket by email.</p>
+          <div class="eyebrow" data-i18n="co.eyebrow">September 21–27, 2026 · Tulum</div>
+          <h1 class="co-title" data-i18n-html="co.title">Tulum Yoga Music Fest <span class="goldtext">+ Conference Week</span></h1>
+          <p class="co-lede" data-i18n="co.lede">ONE PASS. THE WHOLE EXPERIENCE.</p>
         </div>
 
         <div class="co-card">
           <div class="tk-head">
-            <h3 data-i18n="tix.name">Festival Ticket</h3>
+            <h3 data-i18n="tix.name">Week Pass</h3>
             <div class="tk-price" id="unitPrice">$200 MXN</div>
           </div>
-          <div class="tk-when" data-i18n="tix.dates">Saturday · Sept 26 · 11am–11pm · Oasis Tulum</div>
-          <p class="tk-desc" data-i18n="tix.desc">Full-day access to the Main Festival — yoga, live music, healing arts, conscious market, food &amp; community.</p>
+          <div class="tk-when" data-i18n="tix.dates">September 21–27, 2026</div>
+          <div class="tk-desc" data-i18n-html="tix.desc">Includes:<ul><li>Free entry to “World Peace Day | Kirtan” live music at AZULIK on Monday, September 21 at 5 PM.</li><li>Free entry to the “Holistic Business Expo” at OASIS on Thursday, September 24 from 10 AM–4 PM.</li><li>Free entry to the “Yoga Teacher Speakers Panel” at HOLISTIKA on Friday, September 25 at 11 AM.</li><li>Free entry to “Tulum: Yoga Music Fest | Full Moon: Day Festival” at OASIS on Saturday, September 26 from 11 AM–11 PM.</li><li>30+ free yoga, meditation &amp; wellness experiences from September 21–27, 2026.</li><li>Access to the full TYMF experience.</li></ul></div>
           <div class="tk-pills">
             <span class="pill" data-i18n="pill.yoga">Yoga + Movement</span>
             <span class="pill" data-i18n="pill.music">Live Music + DJs</span>
@@ -268,7 +269,7 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem;margin-top:auto}
       <aside class="summary" aria-label="Order summary">
         <h3 data-i18n="tix.order">Your Order</h3>
         <div id="sumLines">
-          <div class="sum-row"><span class="nm" data-i18n="tix.name">Festival Ticket</span><span class="amt" id="sumQtyLine">1 × $200</span></div>
+          <div class="sum-row"><span class="nm" data-i18n="tix.name">Week Pass</span><span class="amt" id="sumQtyLine">1 × $200</span></div>
         </div>
         <div class="sum-total"><span data-i18n="tix.total">Total</span><span class="g" id="grandTotal">$200 MXN</span></div>
         <button class="btn btn-gold btn-block btn-lg" id="checkoutBtn" data-i18n="co.pay">Continue to Payment</button>
@@ -279,6 +280,117 @@ footer{border-top:1px solid var(--line);padding-block:1.6rem;margin-top:auto}
         <p class="fine" data-i18n-html="tix.fine">Prices in Mexican pesos (MXN). Instant e-ticket by email.<br/>$300 at the door on the day of the festival.</p>
         <div class="ref-note" id="refNote"></div>
       </aside>
+    </div>
+<div class="pass-support"><p data-i18n="tix.support">Everyone deserves a place in our community. We understand that times can be challenging. If the $200 MXN contribution is out of reach right now, we would love to help you find a way to participate. Message Narayani on WhatsApp or send us a direct message on Instagram to explore the options together.</p><div class="pass-contact"><a class="btn btn-outline" href="https://wa.me/17867487247" target="_blank" rel="noopener" data-i18n="tix.whatsapp">Message Narayani on WhatsApp</a><a class="btn btn-outline" href="https://instagram.com/yogamusicfest.mx" target="_blank" rel="noopener" data-i18n="tix.instagram">Message us on Instagram</a></div></div>
+  </div>
+</section>
+
+<!-- ============ THE WEEK ============ -->
+<section class="section-pad" id="week">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow" data-i18n="week.eyebrow">September 21–27</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="week.heading">The Week, In Three Movements</h2>
+    </div>
+    <div class="week-grid">
+      <div class="week-card reveal">
+        <div class="num">01</div>
+        <div class="dates" data-i18n="week.c1dates">Sept 21–25</div>
+        <h3 data-i18n="week.c1title">Conference Week</h3>
+        <p data-i18n="week.c1p">Classes, workshops, kirtans, sound baths and gatherings hosted throughout Tulum by participating teachers, healers and venues.</p>
+      </div>
+      <div class="week-card hl reveal">
+        <div class="num">02</div>
+        <div class="dates" data-i18n="week.c2dates">Sept 26</div>
+        <h3 data-i18n="week.c2title">Main Festival</h3>
+        <p data-i18n="week.c2p">One full day and night at Oasis Tulum — yoga, live music, DJs, healing arts, workshops, a conscious market and community.</p>
+      </div>
+      <div class="week-card reveal">
+        <div class="num">03</div>
+        <div class="dates" data-i18n="week.c3dates">Sept 27</div>
+        <h3 data-i18n="week.c3title">Integration Day</h3>
+        <p data-i18n="week.c3p">A gentle closing at Oasis Tulum — restorative practice, ceremony and community reflection to carry the week forward.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRESENTERS ============ -->
+<section id="presenters" style="padding-block:clamp(40px,6vw,72px)">
+  <div class="wrap">
+    <div class="center reveal" style="max-width:640px;margin:0 auto">
+      <div class="eyebrow" style="justify-content:center" data-i18n="line.eyebrow">Presenters</div>
+    </div>
+    <div class="lineup-flow reveal">
+      <span class="nm w">Itzel</span> ·
+      <span class="nm g">Jayson</span> ·
+      <span class="nm w">Yosef</span> ·
+      <span class="nm g">Jose Troche</span> ·
+      <span class="nm w">Belu Kundalini</span> ·
+      <span class="nm g">R. Leon</span> ·
+      <span class="presenter-pair"><span class="nm w">Andros</span> · <span class="nm g">Narayani</span></span> ·
+      <span class="nm w">Kat</span> ·
+      <span class="nm g">Sylvia</span> ·
+      <span class="nm w">Laura</span> ·
+      <span class="nm g">Mafe &amp; Shakti Familia</span> ·
+      <span class="nm w">Skye Walker</span> ·
+      <span class="nm g">Red Monk</span> ·
+      <span class="presenter-line"><span class="nm w">Ganesha &amp; Friends</span> · <span class="nm g">Jay Hari</span> · <span class="nm w">Shivan</span> · <span class="nm g">Reuben</span></span> ·
+      <span class="nm w">Ona Munay</span> ·
+      <span class="nm g">Hang Element</span> ·
+      <span class="nm w">Cyberdreadx</span> ·
+      <span class="nm g">Goiztiri</span> ·
+      <span class="nm w">Ricardo</span> ·
+      <span class="nm g">Valentina</span> ·
+      <span class="nm w">Fabia Meraki</span> ·
+      <span class="nm g">Meta Rose</span> ·
+      <span class="nm w">Begona</span> ·
+      <span class="nm g">Omar</span> ·
+      <span class="nm w">Audrey</span> ·
+      <span class="nm g">Pepe</span> ·
+      <span class="nm w">Manu</span> ·
+      <span class="nm g">Mery</span> ·
+      <span class="nm w">Rocio</span> ·
+      <span class="nm g">Miracosu</span>
+    </div>
+    <p class="lineup-more reveal" data-i18n="line.more">&amp; More TBA</p>
+  </div>
+</section>
+
+<!-- ============ SCHEDULE ============ -->
+<section class="section-pad" id="schedule" style="background:var(--bg-2);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow" data-i18n="sched.eyebrow">Full Schedule</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n-html="sched.heading">One Week · <span class="goldtext">All of Tulum</span></h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="sched.lede">Seven days of practice across the community. Select a day to explore its offerings — each with teacher, time, venue and how to book.</p>
+    </div>
+
+    <div class="day-tabs" id="dayTabs" role="tablist"></div>
+    <div class="sched-legend">
+      <span><i class="dot" style="background:var(--cat-yoga)"></i> <span data-i18n="sched.legYoga">Yoga + Movement</span></span>
+      <span><i class="dot" style="background:var(--cat-music)"></i> <span data-i18n="sched.legMusic">Music + Kirtan</span></span>
+      <span><i class="dot" style="background:var(--cat-heal)"></i> <span data-i18n="sched.legHeal">Healing + Wellness</span></span>
+      <span><i class="dot" style="background:var(--cat-work)"></i> <span data-i18n="sched.legWork">Workshop + Talk</span></span>
+      <span><i class="dot" style="background:var(--cat-comm)"></i> <span data-i18n="sched.legComm">Community + Ceremony</span></span>
+    </div>
+    <div class="events" id="events"></div>
+    <p class="sched-note" data-i18n="sched.note">Conference Week events are hosted independently by participating teachers and venues. Booking, payment and event details are managed directly by each host. The Main Festival on Sept 26 is ticketed above.</p>
+  </div>
+</section>
+
+<!-- ============ FACILITATORS ============ -->
+<section class="section-pad" id="teachers">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow" data-i18n="teach.eyebrow">Teachers + Healers</div>
+      <h2 class="sechead" style="margin-top:1rem" data-i18n="teach.heading">Meet the Facilitators</h2>
+      <p class="lede" style="margin-top:1rem" data-i18n="teach.lede">The teachers, guides and healers holding space across the week.</p>
+    </div>
+    <div class="people-slider">
+      <div class="people" id="people" tabindex="0" aria-label="Facilitators" role="region"></div>
+      <button class="car-btn prev" id="peoplePrev" type="button" aria-label="Previous facilitator">&#8249;</button>
+      <button class="car-btn next" id="peopleNext" type="button" aria-label="Next facilitator">&#8250;</button>
     </div>
   </div>
 </main>
@@ -320,46 +432,7 @@ function getRef(){try{var v=JSON.parse(localStorage.getItem(REF_KEY)||'null');if
 (function(){try{var p=new URLSearchParams(location.search).get('ref');if(p){var s=p.toLowerCase().replace(/[^a-z0-9-]/g,'').slice(0,40);if(s)localStorage.setItem(REF_KEY,JSON.stringify({r:s,t:Date.now()}));}}catch(e){}})();
 
 /* ---------- i18n ---------- */
-var I18N={
-  en:{
-    "co.seeSiteShort":"See Full Website →","co.seeSite":"Explore the Full Website →",
-    "co.eyebrow":"September 26, 2026 · Oasis Tulum",
-    "co.title":"Get Your <span class=\"goldtext\">Festival Ticket</span>",
-    "co.lede":"One ticket. One full day and night of yoga, conscious music and community at Oasis Tulum. Instant e-ticket by email.",
-    "co.qty":"Tickets","co.pay":"Continue to Payment","co.secure":"Secure checkout via Stripe",
-    "tix.name":"Festival Ticket","tix.dates":"Saturday · Sept 26 · 11am–11pm · Oasis Tulum",
-    "tix.desc":"Full-day access to the Main Festival — yoga, live music, healing arts, conscious market, food & community.",
-    "tix.door":"$300 at the door (day of)","tix.order":"Your Order","tix.total":"Total",
-    "tix.fine":"Prices in Mexican pesos (MXN). Instant e-ticket by email.<br/>$300 at the door on the day of the festival.",
-    "pill.yoga":"Yoga + Movement","pill.music":"Live Music + DJs","pill.heal":"Healing + Wellness","pill.food":"Vendors + Food",
-    "tix.redirecting":"Redirecting to secure checkout…","tix.checkoutError":"Couldn't start checkout — please try again.",
-    "tix.added":"Ticket added",
-    "paid.title":"Payment received!",
-    "succ.body2":"Your spot at Tulum Yoga Music Fest is reserved. A confirmation and your e-tickets are on the way to your email.",
-    "succ.see":"See you Saturday, September 26 in Tulum. 🪷",
-    "foot.copyright":"© 2026 Tulum Yoga Music Fest + Conference Week. Made in community.",
-    "ref.note":"Referred by <b>{ref}</b> — your promoter gets credit for this order."
-  },
-  es:{
-    "co.seeSiteShort":"Ver Sitio Completo →","co.seeSite":"Explorar el Sitio Completo →",
-    "co.eyebrow":"26 de Septiembre, 2026 · Oasis Tulum",
-    "co.title":"Compra Tu <span class=\"goldtext\">Boleto del Festival</span>",
-    "co.lede":"Un boleto. Un día y una noche completos de yoga, música consciente y comunidad en Oasis Tulum. Boleto electrónico al instante por correo.",
-    "co.qty":"Boletos","co.pay":"Continuar al Pago","co.secure":"Pago seguro con Stripe",
-    "tix.name":"Boleto del Festival","tix.dates":"Sábado · 26 Sep · 11am–11pm · Oasis Tulum",
-    "tix.desc":"Acceso de día completo al Festival Principal — yoga, música en vivo, artes de sanación, mercado consciente, comida y comunidad.",
-    "tix.door":"$300 en la entrada (día del evento)","tix.order":"Tu Orden","tix.total":"Total",
-    "tix.fine":"Precios en pesos mexicanos (MXN). Boleto electrónico al instante por correo.<br/>$300 en la entrada el día del festival.",
-    "pill.yoga":"Yoga + Movimiento","pill.music":"Música en Vivo + DJs","pill.heal":"Sanación + Bienestar","pill.food":"Vendedores + Comida",
-    "tix.redirecting":"Redirigiendo al pago seguro…","tix.checkoutError":"No se pudo iniciar el pago — inténtalo de nuevo.",
-    "tix.added":"Boleto agregado",
-    "paid.title":"¡Pago recibido!",
-    "succ.body2":"Tu lugar en Tulum Yoga Music Fest está reservado. Una confirmación y tus boletos van en camino a tu correo.",
-    "succ.see":"Nos vemos el sábado 26 de septiembre en Tulum. 🪷",
-    "foot.copyright":"© 2026 Tulum Yoga Music Fest + Semana de Conferencias. Hecho en comunidad.",
-    "ref.note":"Referido por <b>{ref}</b> — tu promotor recibe crédito por esta compra."
-  }
-};
+var I18N={"en":{"co.seeSiteShort":"See Full Website →","co.seeSite":"Explore the Full Website →","co.eyebrow":"September 21–27, 2026 · Tulum","co.title":"Tulum Yoga Music Fest <span class=\"goldtext\">+ Conference Week</span>","co.lede":"ONE PASS. THE WHOLE EXPERIENCE.","co.qty":"Tickets","co.pay":"Continue to Payment","co.secure":"Secure checkout via Stripe","tix.name":"Week Pass","tix.dates":"September 21–27, 2026","tix.desc":"Includes:<ul><li>Free entry to “World Peace Day | Kirtan” live music at AZULIK on Monday, September 21 at 5 PM.</li><li>Free entry to the “Holistic Business Expo” at OASIS on Thursday, September 24 from 10 AM–4 PM.</li><li>Free entry to the “Yoga Teacher Speakers Panel” at HOLISTIKA on Friday, September 25 at 11 AM.</li><li>Free entry to “Tulum: Yoga Music Fest | Full Moon: Day Festival” at OASIS on Saturday, September 26 from 11 AM–11 PM.</li><li>30+ free yoga, meditation &amp; wellness experiences from September 21–27, 2026.</li><li>Access to the full TYMF experience.</li></ul>","tix.door":"$300 at the door (day of)","tix.order":"Your Order","tix.total":"Total","tix.fine":"Prices in Mexican pesos (MXN). Instant e-ticket by email.<br/>$300 at the door on the day of the festival.","pill.yoga":"Yoga + Movement","pill.music":"Live Music + DJs","pill.heal":"Healing + Wellness","pill.food":"Vendors + Food","tix.redirecting":"Redirecting to secure checkout…","tix.checkoutError":"Couldn't start checkout — please try again.","tix.added":"Week Pass added","paid.title":"Payment received!","succ.body2":"Your spot at Tulum Yoga Music Fest is reserved. A confirmation and your e-tickets are on the way to your email.","succ.see":"See you Saturday, September 26 in Tulum. 🪷","foot.copyright":"© 2026 Tulum Yoga Music Fest + Conference Week. Made in community.","ref.note":"Referred by <b>{ref}</b> — your promoter gets credit for this order.","tix.support":"Everyone deserves a place in our community. We understand that times can be challenging. If the $200 MXN contribution is out of reach right now, we would love to help you find a way to participate. Message Narayani on WhatsApp or send us a direct message on Instagram to explore the options together.","tix.whatsapp":"Message Narayani on WhatsApp","tix.instagram":"Message us on Instagram"},"es":{"co.seeSiteShort":"Ver Sitio Completo →","co.seeSite":"Explorar el Sitio Completo →","co.eyebrow":"21–27 de septiembre de 2026 · Tulum","co.title":"Tulum Yoga Music Fest <span class=\"goldtext\">+ Semana de Conferencias</span>","co.lede":"UN PASE. TODA LA EXPERIENCIA.","co.qty":"Boletos","co.pay":"Continuar al Pago","co.secure":"Pago seguro con Stripe","tix.name":"Pase Semanal","tix.dates":"21–27 de septiembre de 2026","tix.desc":"Incluye:<ul><li>Entrada gratuita al evento de música en vivo “Día Mundial de la Paz | Kirtan” en AZULIK el lunes 21 de septiembre a las 5 PM.</li><li>Entrada gratuita a la “Expo de Negocios Holísticos” en OASIS el jueves 24 de septiembre de 10 AM a 4 PM.</li><li>Entrada gratuita al “Panel de Maestros de Yoga” en HOLISTIKA el viernes 25 de septiembre a las 11 AM.</li><li>Entrada gratuita a “Tulum: Yoga Music Fest | Luna Llena: Festival de Día” en OASIS el sábado 26 de septiembre de 11 AM a 11 PM.</li><li>Más de 30 experiencias gratuitas de yoga, meditación y bienestar del 21 al 27 de septiembre de 2026.</li><li>Acceso a la experiencia completa de TYMF.</li></ul>","tix.door":"$300 en la entrada (día del evento)","tix.order":"Tu Orden","tix.total":"Total","tix.fine":"Precios en pesos mexicanos (MXN). Boleto electrónico al instante por correo.<br/>$300 en la entrada el día del festival.","pill.yoga":"Yoga + Movimiento","pill.music":"Música en Vivo + DJs","pill.heal":"Sanación + Bienestar","pill.food":"Vendedores + Comida","tix.redirecting":"Redirigiendo al pago seguro…","tix.checkoutError":"No se pudo iniciar el pago — inténtalo de nuevo.","tix.added":"Pase Semanal agregado","paid.title":"¡Pago recibido!","succ.body2":"Tu lugar en Tulum Yoga Music Fest está reservado. Una confirmación y tus boletos van en camino a tu correo.","succ.see":"Nos vemos el sábado 26 de septiembre en Tulum. 🪷","foot.copyright":"© 2026 Tulum Yoga Music Fest + Semana de Conferencias. Hecho en comunidad.","ref.note":"Referido por <b>{ref}</b> — tu promotor recibe crédito por esta compra.","tix.support":"Todas las personas tienen un lugar en nuestra comunidad. Sabemos que los tiempos pueden ser difíciles. Si en este momento no puedes realizar la aportación de $200 MXN, nos encantará ayudarte a encontrar una manera de participar. Escribe a Narayani por WhatsApp o envíanos un mensaje directo por Instagram para explorar las opciones juntos.","tix.whatsapp":"Escribe a Narayani por WhatsApp","tix.instagram":"Escríbenos por Instagram"}};
 var LANG='es';
 function t(k){var d=I18N[LANG]||{};return (k in d)?d[k]:((k in I18N.en)?I18N.en[k]:k);}
 function applyI18n(){
