@@ -628,6 +628,7 @@ section{position:relative;scroll-margin-top:88px}
 .sg-sm img[src="logos/santuario-jade.png"],.sg-sm img[src="logos/agua-viva.png"]{mix-blend-mode:screen}
 .sg-sm img[src="logos/tcf.png"]{filter:brightness(0) invert(1)}
 .sg-sm img[src="logos/microphone-collaborator.jpg"]{mix-blend-mode:screen}
+.sg-sm img[src="logos/innovation-city.png"]{width:180px;max-width:100%;object-fit:contain;object-view-box:inset(34% 3% 30% 3%);mix-blend-mode:screen}
 .sg-sm .wm{font-size:1.05rem}
 .sg-host{align-items:center;text-align:center}
 .oasis-mark{display:flex;flex-direction:column;align-items:center;line-height:1}
@@ -1408,6 +1409,7 @@ var COLLABS=[
   {name:'Ezens',file:'ezens'},
   {name:'Agua Viva',file:'agua-viva'},
   {name:'Santuario Jade',file:'santuario-jade'},
+  {name:'Innovation City · LGM Group',file:'innovation-city'},
   {name:'Paz & Florita',file:'paz-florita'}
 ];
 /* Institutions (own row). */
@@ -1604,7 +1606,7 @@ function renderLogoStrip(el,list){
   });
 }
 function renderSponsors(){                                                        // bottom: labeled tiers (flyer style) + host
-  renderLogoStrip($('#sgVenues'),VENUES.concat([{name:'Calea Tulum',file:'calea'}]));
+  renderLogoStrip($('#sgVenues'),VENUES);
   renderLogoStrip($('#sgRest'),COLLABS);
   renderLogoStrip($('#sgInst'),INSTITUTIONS);
 }
