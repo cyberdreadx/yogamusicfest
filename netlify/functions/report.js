@@ -75,8 +75,12 @@ exports.handler = async (event) => {
     if (b.key === '__diag__') continue;
     try {
       const o = await orders.get(b.key, { type: 'json' });
-      if (isLiveOrder(o)) rows.push(await attendance(o));
-    } catch (_) { return json(500, { error: 'Order attendance could not be loaded. Please retry.' }); }
+      if (isLiveOrder(o)) {
+        const order = { ...o, code: o.code || b.key };
+        try { rows.push(await attendance(order)); }
+        catch (_) { rows.push({ ...order, checkedIn: null, used: null, attendanceUnavailable: true }); }
+      }
+    } catch (_) { return json(500, { error: 'Orders could not be loaded. Please retry.' }); }
   }
   rows.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 

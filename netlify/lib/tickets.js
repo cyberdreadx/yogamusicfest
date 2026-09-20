@@ -2,7 +2,10 @@ const { createHash } = require('node:crypto');
 const { getStore } = require('@netlify/blobs');
 
 function store(name) {
-  return getStore({ name, consistency: 'strong', fetch: async (...args) => {
+  // connectLambda does not provide the uncached endpoint required by strong reads.
+  // These records are immutable: newly created blobs are immediately available,
+  // and onlyIfNew atomically decides admission even when two scans race.
+  return getStore({ name, fetch: async (...args) => {
     const response = await fetch(...args);
     // Conditional writes must never treat an HTTP failure as a successful claim.
     if (!response.ok && response.status !== 404 && response.status !== 412) {

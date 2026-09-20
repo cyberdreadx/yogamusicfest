@@ -15,7 +15,10 @@ function fixture(qty = 2, locale = 'en') {
     if (!db.has(name)) db.set(name, new Map());
     const data = db.get(name);
     return {
-      get: async key => data.has(key) ? structuredClone(data.get(key)) : null,
+      get: async key => {
+        if (state.failAttendance && name === 'ticket-admissions') throw Error('Attendance unavailable');
+        return data.has(key) ? structuredClone(data.get(key)) : null;
+      },
       setJSON: async (key, value, opts = {}) => {
         if (state.failStorage) throw Error('Storage unavailable');
         if (opts.onlyIfNew && data.has(key)) return { modified: false };
@@ -90,6 +93,59 @@ test('concurrent scans admit a ticket exactly once', async () => {
   const f = fixture(1); await f.issue();
   const results = await Promise.all([f.scan(f.payloads[0]), f.scan(f.payloads[0])]);
   assert.deepEqual(results.map(r => r.status).sort(), ['ok', 'used']);
+});
+
+test('attendance failure preserves sales totals and explicitly marks counts unknown', async () => {
+  const f = fixture(); await f.issue(); f.state.failAttendance = true;
+  const report = await f.report();
+  assert.equal(report.totals.tickets, 2);
+  assert.equal(report.totals.revenue, 40000);
+  assert.equal(report.totals.commission, 200);
+  assert.equal(report.orders[0].checkedIn, null);
+  assert.equal(report.orders[0].used, null);
+  assert.equal(report.orders[0].attendanceUnavailable, true);
+  assert.equal((await f.scan(f.payloads[0])).http, 500);
+});
+
+test('legacy orders without an embedded code use their storage key for attendance', async () => {
+  const f = fixture();
+  await f.getStore('orders').setJSON('TYMF-LEGACY', { qty: 2, amount: 40000, liveMode: true });
+  await f.getStore('ticket-admissions').setJSON('TYMF-LEGACY', { usedAt: '2026-09-19T00:00:00Z' });
+  const report = await f.report();
+  assert.equal(report.orders[0].code, 'TYMF-LEGACY');
+  assert.equal(report.orders[0].checkedIn, 2);
+});
+
+test('real Blobs SDK supports legacy Lambda context and preserves atomic admission writes', async () => {
+  const blobs = require('@netlify/blobs');
+  const originalContext = process.env.NETLIFY_BLOBS_CONTEXT;
+  const originalFetch = global.fetch;
+  const requests = [];
+  try {
+    blobs.connectLambda({ headers: { 'x-nf-site-id': 'fixture-site', 'x-nf-deploy-id': 'fixture-deploy' },
+      blobs: Buffer.from(JSON.stringify({ url: 'https://blobs.example.invalid', token: 'fixture-token' })).toString('base64') });
+    let claimed = false;
+    global.fetch = async (url, options) => {
+      requests.push({ url, options });
+      if (options.method === 'put') {
+        if (claimed) return new Response(null, { status: 412 });
+        claimed = true;
+        return new Response(null, { status: 200 });
+      }
+      return new Response(JSON.stringify({ usedAt: '2026-09-19T00:00:00Z' }), { status: 200 });
+    };
+    const { store } = require('../netlify/lib/tickets');
+    const admissions = store('ticket-admissions');
+    assert.ok((await admissions.get('TYMF-TEST', { type: 'json' })).usedAt);
+    assert.equal((await admissions.setJSON('TYMF-TEST', {}, { onlyIfNew: true })).modified, true);
+    assert.equal((await admissions.setJSON('TYMF-TEST', {}, { onlyIfNew: true })).modified, false);
+    assert.equal(requests[1].options.headers['if-none-match'], '*');
+    assert.ok(requests.every(r => r.url.startsWith('https://blobs.example.invalid/')));
+  } finally {
+    global.fetch = originalFetch;
+    if (originalContext === undefined) delete process.env.NETLIFY_BLOBS_CONTEXT;
+    else process.env.NETLIFY_BLOBS_CONTEXT = originalContext;
+  }
 });
 
 test('webhook retries preserve codes and consumed admissions without another email', async () => {

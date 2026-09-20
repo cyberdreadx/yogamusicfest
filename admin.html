@@ -226,7 +226,7 @@
         '<td>'+esc(o.name)+'</td><td>'+esc(o.email)+'</td><td>'+(o.qty||1)+'</td>'+
         '<td class="money">'+mxnCents(o.amount)+'</td><td>'+(o.ref?esc(o.ref):t('manualDash'))+(o.autoPaid?' <span class="pill ready">'+t('auto')+'</span>':'')+'</td>'+
         '<td>'+(o.used?'<span class="pill in">✓ '+esc(o.code)+'</span>':'<span class="pill">'+esc(o.code)+'</span>')+
-        (typeof o.checkedIn==='number'?'<br><small>'+o.checkedIn+' / '+(o.qty||1)+(L==='es'?' ingresados':' checked in')+'</small>':'')+'</td>';
+        (typeof o.checkedIn==='number'?'<br><small>'+o.checkedIn+' / '+(o.qty||1)+(L==='es'?' ingresados':' checked in')+'</small>':o.attendanceUnavailable?'<br><small>'+(L==='es'?'Asistencia no disponible':'Check-in count unavailable')+'</small>':'')+'</td>';
       ob.appendChild(tr);
     });
   }
@@ -306,7 +306,7 @@
     var head=['fecha','nombre','correo','telefono','boletos','monto_mxn','promotor','comision_mxn','pago_auto','codigo','checkin'];
     var lines=[head.join(',')];
     (data.orders||[]).forEach(function(o){
-      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),(o.autoPaid?'si':'no'),o.code,(o.used?'si':'no')];
+      var r=[o.createdAt,o.name,o.email,o.phone,(o.qty||1),((o.amount||0)/100).toFixed(2),o.ref||'',(o.commission||0),(o.autoPaid?'si':'no'),o.code,(o.attendanceUnavailable?'unknown':o.used?'si':'no')];
       lines.push(r.map(function(x){ x=String(x==null?'':x); return /[",\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x; }).join(','));
     });
     var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8'});
