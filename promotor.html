@@ -58,7 +58,7 @@
       <div class="big"><div class="n" id="tickets">0</div><div class="l" data-t="ticketsSold">Boletos vendidos</div></div>
       <div class="grid">
         <div class="box"><div class="n" id="earned">$0</div><div class="l" data-t="earnedTotal">Ganado (total)</div></div>
-        <div class="box"><div class="n" id="rate">$100</div><div class="l" data-t="perTicket">Por boleto</div></div>
+        <div class="box"><div class="n" id="rate">50%</div><div class="l" data-t="perTicket">Por boleto</div></div>
       </div>
       <div id="payNote" class="note"></div>
     </div>
@@ -67,7 +67,7 @@
       <label data-t="yourLink">Tu enlace para compartir</label>
       <div class="lk" id="shareLink">—</div>
       <button class="ghost" id="copyBtn" data-t="copy">Copiar enlace</button>
-      <p class="muted center" style="margin:12px 0 0" data-t="linkNote">Cada boleto que se compre con tu enlace suma $100 MXN a tu cuenta.</p>
+      <p class="muted center" style="margin:12px 0 0" data-t="linkNote">Ganas el 50% del importe pagado con tu enlace: $100 MXN por boleto a precio completo o $50 MXN con 50% de descuento.</p>
     </div>
 
     <div class="center"><button class="ghost" id="refresh" style="width:auto;padding:9px 18px" data-t="refresh">Actualizar</button></div>
@@ -80,12 +80,12 @@
   var TXT={
     es:{subtitle:'Panel de Promotor',loading:'Cargando…',invalid:'Enlace inválido. Pide a la organización tu enlace de promotor.',loadFail:'No se pudo cargar tu panel.',connErr:'Error de conexión. Intenta de nuevo.',
         hi:'Hola',thanks:'Gracias por difundir Tulum Yoga Music Fest 🪷',ticketsSold:'Boletos vendidos',earnedTotal:'Ganado (total)',perTicket:'Por boleto',
-        yourLink:'Tu enlace para compartir',copy:'Copiar enlace',copied:'¡Copiado!',copyManual:'Copia manual',linkNote:'Cada boleto que se compre con tu enlace suma $100 MXN a tu cuenta.',refresh:'Actualizar',
+        yourLink:'Tu enlace para compartir',copy:'Copiar enlace',copied:'¡Copiado!',copyManual:'Copia manual',linkNote:'Ganas el 50% del importe pagado con tu enlace: $100 MXN por boleto a precio completo o $50 MXN con 50% de descuento.',refresh:'Actualizar',
         autoActive:'Pago automático activo',autoNote:function(a){return 'Tus comisiones ('+a+') se depositan automáticamente a tu banco vía Stripe. Consulta tus pagos en ';},
         owedNote:function(a){return 'Comisión por pagar: <b>'+a+'</b> — ';},paidBy:'te la paga la organización directamente',paid:'Pagado',wantAuto:'La organización gestiona los pagos por separado mediante Stripe Global Payouts. Contacta al equipo para coordinar tu pago.'},
     en:{subtitle:'Promoter Panel',loading:'Loading…',invalid:'Invalid link. Ask the organizers for your promoter link.',loadFail:'Could not load your panel.',connErr:'Connection error. Try again.',
         hi:'Hi',thanks:'Thanks for spreading the word about Tulum Yoga Music Fest 🪷',ticketsSold:'Tickets sold',earnedTotal:'Earned (total)',perTicket:'Per ticket',
-        yourLink:'Your link to share',copy:'Copy link',copied:'Copied!',copyManual:'Copy manually',linkNote:'Every ticket bought with your link adds $100 MXN to your account.',refresh:'Refresh',
+        yourLink:'Your link to share',copy:'Copy link',copied:'Copied!',copyManual:'Copy manually',linkNote:'Earn 50% of the amount paid through your link: $100 MXN per full-price ticket or $50 MXN with 50% off.',refresh:'Refresh',
         autoActive:'Auto-payout active',autoNote:function(a){return 'Your commissions ('+a+') are deposited automatically to your bank via Stripe. See your payouts at ';},
         owedNote:function(a){return 'Commission pending: <b>'+a+'</b> — ';},paidBy:'the organizers pay you directly',paid:'Paid',wantAuto:'The organizers handle payments separately through Stripe Global Payouts. Contact the team to arrange your payout.'}
   };

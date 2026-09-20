@@ -90,6 +90,21 @@ test('two purchased tickets produce distinct codes, QR images and numbered singl
   assert.equal(report.orders[0].used, true);
 });
 
+test('half-price orders issue every ticket and halve the promoter commission', async () => {
+  const f = fixture(2);
+  f.session.amount_total = 20000;
+  assert.equal((await f.issue()).statusCode, 200);
+  const order = [...f.db.get('orders').values()][0];
+  assert.equal(order.commission, 100);
+  assert.equal(order.ticketCodes.length, 2);
+  assert.equal(f.sent[0].mail.attachments.length, 2);
+  const report = await f.report();
+  assert.equal(report.totals.revenue, 20000);
+  assert.equal(report.totals.commission, 100);
+  assert.equal((await f.issue()).statusCode, 200);
+  assert.equal([...f.db.get('orders').values()][0].commission, 100);
+});
+
 test('concurrent scans admit a ticket exactly once', async () => {
   const f = fixture(1); await f.issue();
   const results = await Promise.all([f.scan(f.payloads[0]), f.scan(f.payloads[0])]);
@@ -244,6 +259,8 @@ test('referred checkout keeps commission metadata without creating a Connect spl
   const result=await mod.exports.handler({ httpMethod: 'POST', headers: { origin: 'https://example.invalid' }, body: JSON.stringify({ quantity: 2, ref: 'host' }) });
   assert.equal(result.statusCode, 200);
   assert.equal(params.metadata.ref, 'host');
+  assert.equal(params.allow_promotion_codes, true);
+  assert.equal(params.line_items[0].price_data.unit_amount, 20000);
   assert.equal(params.metadata.quantity, '2');
   assert.equal(params.metadata.connect, '');
   assert.equal(params.payment_intent_data, undefined);

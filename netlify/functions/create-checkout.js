@@ -47,6 +47,7 @@ exports.handler = async (event) => {
   try {
     const params = {
       mode: 'payment',
+      allow_promotion_codes: true,
       locale,
       metadata: {
         quantity: String(quantity),

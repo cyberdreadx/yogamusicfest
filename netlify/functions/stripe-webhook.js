@@ -151,7 +151,8 @@ exports.handler = async (event) => {
       amount: session.amount_total,
       currency: session.currency,
       ref,
-      commission: ref ? qty * 100 : 0,
+      // Half of the actual payment, in pesos; discounts reduce commissions too.
+      commission: ref ? Math.round((session.amount_total || 0) / 2) / 100 : 0,
       autoPaid: (session.metadata && session.metadata.connect === '1') || false,
       session: session.id,
       liveMode: !!session.livemode,
