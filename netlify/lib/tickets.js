@@ -3,8 +3,8 @@ const { getStore } = require('@netlify/blobs');
 
 function store(name) {
   // connectLambda does not provide the uncached endpoint required by strong reads.
-  // These records are immutable: newly created blobs are immediately available,
-  // and onlyIfNew atomically decides admission even when two scans race.
+  // Records use atomic onlyIfNew writes. Cached reads can lag writes; callers
+  // must use the successful write result instead of relying on read-after-write.
   return getStore({ name, fetch: async (...args) => {
     const response = await fetch(...args);
     // Conditional writes must never treat an HTTP failure as a successful claim.

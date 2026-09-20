@@ -16,6 +16,7 @@ function fixture(qty = 2, locale = 'en') {
     const data = db.get(name);
     return {
       get: async key => {
+        if (state.staleReads && (name === 'orders' || name === 'tickets')) return null;
         if (state.failAttendance && name === 'ticket-admissions') throw Error('Attendance unavailable');
         return data.has(key) ? structuredClone(data.get(key)) : null;
       },
@@ -198,4 +199,36 @@ test('Spanish maximum-size order, invalid quantity, invalid code and PIN', async
   assert.equal((await f.scan('TYMF-NOPE')).status, 'invalid');
   assert.equal((await f.scan(f.payloads[0], undefined, 'wrong')).http, 401);
   assert.equal((await fixture(21).issue()).statusCode, 400);
+});
+
+
+test('first purchase sends tickets even when storage reads lag successful writes', async () => {
+  const f = fixture(); f.state.staleReads = true;
+  assert.equal((await f.issue()).statusCode, 200);
+  assert.equal(f.sent[0].mail.attachments.length, 2);
+  assert.equal(f.db.get('orders').size, 1);
+  assert.equal(f.db.get('tickets').size, 2);
+  f.state.staleReads = false;
+  assert.equal((await f.scan(f.payloads[0])).status, 'ok');
+  assert.equal((await f.issue()).statusCode, 200);
+  assert.equal(f.sent.length, 2);
+});
+
+test('a conflicting existing order is never overwritten or emailed', async () => {
+  const f = fixture();
+  await f.getStore('orders').setJSON('TYMF-ABCDEFGH', { session: 'another-session', qty: 2 });
+  assert.equal((await f.issue()).statusCode, 500);
+  assert.equal(f.sent.length, 0);
+  f.state.staleReads = true;
+  assert.equal((await f.issue()).statusCode, 500);
+  assert.equal(f.sent.length, 0);
+  assert.equal(f.db.get('orders').get('TYMF-ABCDEFGH').session, 'another-session');
+});
+
+test('existing ticket conflicts prevent sending invalid admissions', async () => {
+  const f = fixture();
+  const { codesFor } = require('../netlify/lib/tickets');
+  await f.getStore('tickets').setJSON(codesFor(f.session.id, 2)[0], { orderCode: 'another-order', index: 1 });
+  assert.equal((await f.issue()).statusCode, 500);
+  assert.equal(f.sent.length, 0);
 });

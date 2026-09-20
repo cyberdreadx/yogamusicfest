@@ -141,7 +141,8 @@ exports.handler = async (event) => {
     const ref = (session.metadata && session.metadata.ref) || '';
     const orders = store('orders');
     order = await orders.get(code, { type: 'json' });
-    if (!order) await orders.setJSON(code, {
+    if (!order) {
+      const newOrder = {
       code,
       qty,
       name: (session.customer_details && session.customer_details.name) || '',
@@ -158,15 +159,23 @@ exports.handler = async (event) => {
       used: false,
       usedAt: null,
       ticketCodes: codesFor(session.id, qty),
-    }, { onlyIfNew: true });
-    order = await orders.get(code, { type: 'json' });
-    if (!order || order.session !== session.id || order.qty !== qty) throw new Error('Order mismatch');
+      };
+      const created = await orders.setJSON(code, newOrder, { onlyIfNew: true });
+      // A successful atomic write is authoritative. Reading the same key again
+      // can return a cached miss from the lookup before the write.
+      order = created.modified ? newOrder : await orders.get(code, { type: 'json' });
+    }
+    if (!order) throw new Error('Existing order not yet readable');
+    if (order.session !== session.id || order.qty !== qty) throw new Error('Order mismatch');
     if (order.ticketCodes) {
       for (let i = 0; i < order.ticketCodes.length; i++) {
         const ticketCode = order.ticketCodes[i];
-        await store('tickets').setJSON(ticketCode, { code: ticketCode, orderCode: code, index: i + 1 }, { onlyIfNew: true });
-        const ticket = await store('tickets').get(ticketCode, { type: 'json' });
-        if (!ticket || ticket.orderCode !== code) throw new Error('Ticket storage failed');
+        const tickets = store('tickets');
+        const newTicket = { code: ticketCode, orderCode: code, index: i + 1 };
+        const created = await tickets.setJSON(ticketCode, newTicket, { onlyIfNew: true });
+        const ticket = created.modified ? newTicket : await tickets.get(ticketCode, { type: 'json' });
+        if (!ticket) throw new Error('Existing ticket not yet readable');
+        if (ticket.orderCode !== code || ticket.index !== i + 1) throw new Error('Ticket mismatch');
       }
     }
   } catch (e) {
