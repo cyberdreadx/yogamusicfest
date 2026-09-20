@@ -82,12 +82,12 @@
         hi:'Hola',thanks:'Gracias por difundir Tulum Yoga Music Fest 🪷',ticketsSold:'Boletos vendidos',earnedTotal:'Ganado (total)',perTicket:'Por boleto',
         yourLink:'Tu enlace para compartir',copy:'Copiar enlace',copied:'¡Copiado!',copyManual:'Copia manual',linkNote:'Cada boleto que se compre con tu enlace suma $100 MXN a tu cuenta.',refresh:'Actualizar',
         autoActive:'Pago automático activo',autoNote:function(a){return 'Tus comisiones ('+a+') se depositan automáticamente a tu banco vía Stripe. Consulta tus pagos en ';},
-        owedNote:function(a){return 'Comisión por pagar: <b>'+a+'</b> — ';},paidBy:'te la paga la organización directamente',paid:'Pagado',wantAuto:'¿Quieres cobro automático a tu banco? Pide a la organización activar tu pago con Stripe.'},
+        owedNote:function(a){return 'Comisión por pagar: <b>'+a+'</b> — ';},paidBy:'te la paga la organización directamente',paid:'Pagado',wantAuto:'La organización gestiona los pagos por separado mediante Stripe Global Payouts. Contacta al equipo para coordinar tu pago.'},
     en:{subtitle:'Promoter Panel',loading:'Loading…',invalid:'Invalid link. Ask the organizers for your promoter link.',loadFail:'Could not load your panel.',connErr:'Connection error. Try again.',
         hi:'Hi',thanks:'Thanks for spreading the word about Tulum Yoga Music Fest 🪷',ticketsSold:'Tickets sold',earnedTotal:'Earned (total)',perTicket:'Per ticket',
         yourLink:'Your link to share',copy:'Copy link',copied:'Copied!',copyManual:'Copy manually',linkNote:'Every ticket bought with your link adds $100 MXN to your account.',refresh:'Refresh',
         autoActive:'Auto-payout active',autoNote:function(a){return 'Your commissions ('+a+') are deposited automatically to your bank via Stripe. See your payouts at ';},
-        owedNote:function(a){return 'Commission pending: <b>'+a+'</b> — ';},paidBy:'the organizers pay you directly',paid:'Paid',wantAuto:'Want automatic payouts to your bank? Ask the organizers to enable your Stripe payout.'}
+        owedNote:function(a){return 'Commission pending: <b>'+a+'</b> — ';},paidBy:'the organizers pay you directly',paid:'Paid',wantAuto:'The organizers handle payments separately through Stripe Global Payouts. Contact the team to arrange your payout.'}
   };
   var L; try{L=localStorage.getItem('tymf_lang')||'es';}catch(e){L='es';}
   function t(k){var d=TXT[L]||TXT.en; return (k in d)?d[k]:(TXT.en[k]!=null?TXT.en[k]:k);}
@@ -124,13 +124,9 @@
     $('earned').textContent=mxn(d.commission);
     $('shareLink').textContent=link;
     var note='';
-    if(d.autoEnabled){
-      note='<span class="pill good">'+t('autoActive')+'</span><br>'+t('autoNote')(mxn(d.commissionAuto))+
-           '<a href="https://connect.stripe.com/express_login" target="_blank" rel="noopener">connect.stripe.com/express_login</a>.';
-    } else {
-      note=t('owedNote')(mxn(d.commissionOwed))+(d.paidManual?'<span class="pill good">'+t('paid')+'</span>':t('paidBy'))+'.'+
-           '<br><span class="muted">'+t('wantAuto')+'</span>';
-    }
+    note=t('owedNote')(mxn(d.commissionOwed))+(d.paidManual?'<span class="pill good">'+t('paid')+'</span>':t('paidBy'))+'.'+
+         '<br><span class="muted">'+t('wantAuto')+'</span>';
+    if(d.commissionAuto) note+='<br>'+(L==='es'?'Transferido anteriormente: ':'Previously transferred: ')+mxn(d.commissionAuto);
     $('payNote').innerHTML=note;
   }
 })();

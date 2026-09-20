@@ -85,7 +85,7 @@
         <div style="flex:0 0 auto"><button id="genBtn" data-t="createLink">Crear enlace</button></div>
       </div>
       <div id="genOut" class="out hidden"></div>
-      <p class="sub" style="text-align:left;margin:10px 0 0" data-t="shareHint">Comparte el enlace. Cada boleto vendido con él acredita $100 MXN. Activa el pago automático para que Stripe le deposite su 50% directo a su banco.</p>
+      <p class="sub" style="text-align:left;margin:10px 0 0" data-t="shareHint">Comparte el enlace. Cada boleto vendido acredita $100 MXN. Envía las comisiones por separado desde Stripe Global Payouts. Activa y fondea tu cuenta financiera, agrega al destinatario y revisa el monto y las comisiones en Stripe. Marca pagado solo después de confirmar el pago.</p>
     </div>
 
     <div class="section">
@@ -110,8 +110,8 @@
     es:{
       subtitle:'Panel · Ventas y Promotores', adminPin:'PIN de administrador', enter:'Entrar', updated:'Actualizado', refresh:'Actualizar', exportCsv:'Exportar CSV', logout:'Salir',
       orders:'Órdenes', tickets:'Boletos', revenue:'Ingresos', commissions:'Comisiones', newPromoter:'Nuevo promotor', nameOrAlias:'Nombre o alias', promoterPlaceholder:'ej. maria, carlos, dj-selva',
-      createLink:'Crear enlace', shareHint:'Comparte el enlace. Cada boleto vendido con él acredita $100 MXN. Activa el pago automático para que Stripe le deposite su 50% directo a su banco.',
-      promoters:'Promotores', promoter:'Promotor', commission:'Comisión', autoPayout:'Pago automático (Stripe)', manualOwed:'Por pagar (manual)', noPromoters:'Aún no hay promotores.',
+      createLink:'Crear enlace', shareHint:'Comparte el enlace. Cada boleto vendido acredita $100 MXN. Envía las comisiones por separado desde Stripe Global Payouts. Activa y fondea tu cuenta financiera, agrega al destinatario y revisa el monto y las comisiones en Stripe. Marca pagado solo después de confirmar el pago.',
+      promoters:'Promotores', promoter:'Promotor', commission:'Comisión', autoPayout:'Global Payouts', manualOwed:'Por pagar (manual)', noPromoters:'Aún no hay promotores.',
       ordersGuestList:'Órdenes · Lista de invitados', date:'Fecha', name:'Nombre', email:'Correo', qtyShort:'Bol.', amount:'Monto', checkin:'Check-in',
       badPin:'PIN incorrecto', connectionError:'Error de conexión', active:'✓ Activo', autoLabel:'Auto', pending:'Registro pendiente', signupLink:'Enlace de registro', updateStatus:'Actualizar estado', updateStatusAria:'Actualizar estado del pago automático del promotor',
       activateAuto:'Activar pago automático', paid:'✓ Pagado', markPaid:'Marcar pagado', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promotor "'+code+'"';},
@@ -122,8 +122,8 @@
     en:{
       subtitle:'Dashboard · Sales and Promoters', adminPin:'Admin PIN', enter:'Enter', updated:'Updated', refresh:'Refresh', exportCsv:'Export CSV', logout:'Log out',
       orders:'Orders', tickets:'Tickets', revenue:'Revenue', commissions:'Commissions', newPromoter:'New promoter', nameOrAlias:'Name or alias', promoterPlaceholder:'e.g. Maria, carlos, jungle-dj',
-      createLink:'Create link', shareHint:'Share the link. Every ticket sold through it credits $100 MXN. Enable auto-payout so Stripe sends their 50% directly to their bank.',
-      promoters:'Promoters', promoter:'Promoter', commission:'Commission', autoPayout:'Auto-payout (Stripe)', manualOwed:'Manual payout due', noPromoters:'No promoters yet.',
+      createLink:'Create link', shareHint:'Share the link. Every ticket sold credits $100 MXN. Send commissions separately through Stripe Global Payouts. Activate and fund your financial account, add the recipient, and review the amount and fees in Stripe. Mark paid only after confirming payment.',
+      promoters:'Promoters', promoter:'Promoter', commission:'Commission', autoPayout:'Global Payouts', manualOwed:'Manual payout due', noPromoters:'No promoters yet.',
       ordersGuestList:'Orders · Guest list', date:'Date', name:'Name', email:'Email', qtyShort:'Qty.', amount:'Amount', checkin:'Check-in',
       badPin:'Incorrect PIN', connectionError:'Connection error', active:'✓ Active', autoLabel:'Auto', pending:'Signup pending', signupLink:'Signup link', updateStatus:'Refresh status', updateStatusAria:'Refresh promoter auto-payout status',
       activateAuto:'Enable auto-payout', paid:'✓ Paid', markPaid:'Mark paid', manualDash:'—', auto:'auto', promoterLabel:function(code){return 'Promoter "'+code+'"';},
@@ -181,9 +181,6 @@
       $('pinScreen').classList.add('hidden'); $('dash').classList.remove('hidden');
       render();
       // Just returned from Stripe onboarding? Refresh that promoter's status once.
-      try{ var cc=new URLSearchParams(location.search).get('connect');
-        if(cc && !window.__ccDone){ window.__ccDone=1; history.replaceState(null,'',location.pathname);
-          post('connect',{action:'status',promoter:cc}).then(load); } }catch(e){}
     }).catch(function(){ $('pinErr').textContent=t('connectionError'); });
   }
   function mxnCents(c){ return '$'+((c||0)/100).toLocaleString(FIXED_DATA_LOCALE,{minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -202,11 +199,8 @@
     var pb=$('promoTable').querySelector('tbody'); pb.innerHTML='';
     (data.promoters||[]).forEach(function(p){
       var tr=document.createElement('tr');
-      // auto column
-      var autoCell, c=p.connect;
-      if(c&&c.ready){ autoCell='<span class="pill ready">'+t('active')+'</span><div class="sub" style="text-align:left;margin:4px 0 0">'+t('autoLabel')+': '+mxn(p.commissionAuto||0)+'</div>'; }
-      else if(c){ autoCell='<span class="pill pend">'+t('pending')+'</span><div class="stack" style="margin-top:6px"><button class="ghost mini" data-link="'+esc(p.code)+'">'+t('signupLink')+'</button><button class="ghost mini" data-cstat="'+esc(p.code)+'" aria-label="'+esc(t('updateStatusAria'))+'">'+t('updateStatus')+'</button></div>'; }
-      else { autoCell='<button class="mini" data-activate="'+esc(p.code)+'">'+t('activateAuto')+'</button>'; }
+      var autoCell='<a class="mini" href="https://dashboard.stripe.com/global-payouts/payouts" target="_blank" rel="noopener">'+(L==='es'?'Abrir Global Payouts':'Open Global Payouts')+'</a>';
+      if(p.commissionAuto) autoCell+='<div class="sub">'+(L==='es'?'Transferido antes: ':'Previously transferred: ')+mxn(p.commissionAuto)+'</div>';
       // owed column
       var owed=p.commissionOwed||0, owedCell;
       if(owed<=0){ owedCell='<span class="sub" style="text-align:left">'+t('manualDash')+'</span>'; }
@@ -234,23 +228,6 @@
   function wireRowButtons(pb){
     pb.querySelectorAll('[data-p]').forEach(function(b){ b.onclick=function(){ b.disabled=true;
       post('report',{action:'setPaid',promoter:b.getAttribute('data-p'),paid:true}).then(load); }; });
-    pb.querySelectorAll('[data-activate]').forEach(function(b){ b.onclick=function(){ activate(b.getAttribute('data-activate'),b); }; });
-    pb.querySelectorAll('[data-link]').forEach(function(b){ b.onclick=function(){ activate(b.getAttribute('data-link'),b); }; });
-    pb.querySelectorAll('[data-cstat]').forEach(function(b){ b.onclick=function(){ b.disabled=true;
-      post('connect',{action:'status',promoter:b.getAttribute('data-cstat')}).then(load); }; });
-  }
-
-  function activate(code,btn){
-    btn.disabled=true; var old=btn.textContent; btn.textContent='…';
-    post('connect',{action:'create',promoter:code,origin:location.origin}).then(function(res){
-      btn.disabled=false; btn.textContent=old;
-      if(res.d&&res.d.url){ showOnboard(code,res.d.url); }
-      else { alert((res.d&&res.d.error)||t('stripeConnectError')); }
-    }).catch(function(){ btn.disabled=false; btn.textContent=old; alert(t('connectionError')); });
-  }
-  function showOnboard(code,url){
-    genState={type:'onboard',code:code,url:url};
-    renderGenState();
   }
 
   function genLink(){
@@ -277,9 +254,8 @@
       out.innerHTML='<b>'+esc(t('promoterLabel')(genState.slug))+'</b>'+
         '<div style="margin-top:8px">'+esc(t('sellLink'))+'<br><span class="lk">'+esc(genState.link)+'</span> <button class="ghost mini" id="cpRef" data-label-key="copy">'+esc(t('copy'))+'</button></div>'+
         '<div style="margin-top:12px" id="panelRow" class="sub"></div>'+
-        '<div style="margin-top:12px"><button class="mini" id="actNow">'+esc(t('activateStripe'))+'</button></div>';
+        '<div style="margin-top:12px"><a class="mini" href="https://dashboard.stripe.com/global-payouts/recipients" target="_blank" rel="noopener">'+(L==='es'?'Gestionar destinatarios en Stripe':'Manage recipients in Stripe')+'</a></div>';
       $('cpRef').onclick=function(){ copy(genState.link,$('cpRef')); };
-      $('actNow').onclick=function(){ activate(genState.slug,$('actNow')); };
       if(genState.panelLink){
         $('panelRow').innerHTML=esc(t('promoterPanel'))+'<br><span class="lk">'+esc(genState.panelLink)+'</span> <button class="ghost mini" id="cpPanel" data-label-key="copy">'+esc(t('copy'))+'</button>';
         $('cpPanel').onclick=function(){ copy(genState.panelLink,$('cpPanel')); };

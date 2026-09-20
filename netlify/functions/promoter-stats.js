@@ -52,7 +52,7 @@ exports.handler = async (event) => {
   let paidManual = false;
   try { const pd = await getStore('payouts').get(code, { type: 'json' }); paidManual = !!(pd && pd.paid); } catch (_) {}
   let autoEnabled = false;
-  try { const cs = await getStore('connect').get(code, { type: 'json' }); autoEnabled = !!(cs && cs.chargesEnabled && cs.payoutsEnabled); } catch (_) {}
+  // New commissions are paid separately through Global Payouts.
 
   return json(200, { code, tickets, commission, commissionAuto, commissionOwed, paidManual, autoEnabled, lastSale });
 };

@@ -232,3 +232,19 @@ test('existing ticket conflicts prevent sending invalid admissions', async () =>
   assert.equal((await f.issue()).statusCode, 500);
   assert.equal(f.sent.length, 0);
 });
+
+
+test('referred checkout keeps commission metadata without creating a Connect split', async () => {
+  let params;
+  const mod = { exports: {} };
+  vm.runInNewContext(fs.readFileSync(path.resolve(__dirname, '../netlify/functions/create-checkout.js'), 'utf8'), {
+    exports: mod.exports, module: mod, process: { env: { STRIPE_SECRET_KEY: 'fixture' } },
+    require: id => { assert.equal(id, 'stripe'); return () => ({ checkout: { sessions: { create: async p => { params=p; return { url: 'https://checkout.example.invalid' }; } } } }); }
+  });
+  const result=await mod.exports.handler({ httpMethod: 'POST', headers: { origin: 'https://example.invalid' }, body: JSON.stringify({ quantity: 2, ref: 'host' }) });
+  assert.equal(result.statusCode, 200);
+  assert.equal(params.metadata.ref, 'host');
+  assert.equal(params.metadata.quantity, '2');
+  assert.equal(params.metadata.connect, '');
+  assert.equal(params.payment_intent_data, undefined);
+});

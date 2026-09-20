@@ -79,32 +79,8 @@ exports.handler = async (event) => {
     const code = slug(body.promoter);
     if (!code) return json(200, { error: 'Missing promoter code' });
 
-    if (action === 'create') {
-      let rec = await store.get(code, { type: 'json' });
-      let acctId = rec && rec.acctId;
-      if (!acctId) {
-        const acct = await stripe.accounts.create({
-          type: 'express',
-          country: 'MX',
-          business_type: 'individual',
-          capabilities: { transfers: { requested: true } },
-          // Promoters only receive transfers (they're recipients, not merchants).
-          // MX requires the recipient service agreement for a transfers-only account.
-          tos_acceptance: { service_agreement: 'recipient' },
-          metadata: { promoter: code },
-        });
-        acctId = acct.id;
-        await saveStatus(code, acctId, acct);
-      }
-      const url = await onboardingUrl(acctId, code);
-      return json(200, { code, acctId, url });
-    }
-
-    if (action === 'link') {
-      const rec = await store.get(code, { type: 'json' });
-      if (!rec || !rec.acctId) return json(200, { error: 'No account yet' });
-      const url = await onboardingUrl(rec.acctId, code);
-      return json(200, { code, acctId: rec.acctId, url });
+    if (action === 'create' || action === 'link') {
+      return json(409, { error: 'Connect onboarding has been retired. Manage recipients and send commissions separately in Stripe Global Payouts.', url: 'https://dashboard.stripe.com/global-payouts/recipients' });
     }
 
     if (action === 'status') {
