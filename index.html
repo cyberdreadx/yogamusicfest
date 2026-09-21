@@ -1328,6 +1328,7 @@ var EVENTS=[
   {days:[27],c:'comm',t:'1:00 PM',end:'2:00 PM',n:'Jungle Karma (Trash Cleanup)',who:'Claire O',v:'Oasis',p:'don',k:780},
 
   /* ---- Multi-day offerings ---- */
+  {days:[22,24],c:'yoga',t:'9:00 AM',end:'10:00 AM',n:'Intuitive Flow',who:'Maia',v:'Private location',p:'paid',pr:'$200 MXN',k:540,book:'https://wa.me/529841200940'},
   {days:[21,24],c:'heal',t:'9:00 AM',end:'10:30 AM',n:'Meditation + Breathwork',who:'Ganesha',v:'Holistika',p:'tba',k:540},
   {days:[25],c:'music',t:'7:30 PM',n:'Harmonizing Sound Journey',who:'Katarina',v:'Shakti Temple (LILA)',p:'paid',pr:'$333',k:1170},
 ];
@@ -1513,7 +1514,7 @@ function renderEvents(day){
       '<div class="ev-time">'+e.t+(e.end?'<span class="ev-end">'+e.end+'</span>':'')+'</div>'+
       '<div class="ev-mid">'+(e.special?'<span class="ev-special">SPECIAL CLASS</span>':'')+eventTitle(e,true,e.featured)+'</div>'+
       '<div class="ev-right">'+priceTag(e)+
-      '<a class="ev-book" href="https://wa.me/17867487247">'+t('book.direct')+' →</a>'+
+      '<a class="ev-book" href="'+(e.book||'https://wa.me/17867487247')+'">'+t('book.direct')+' →</a>'+
       '</div></div>';
   }).join('');
 }
