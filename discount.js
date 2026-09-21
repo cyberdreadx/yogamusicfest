@@ -7,7 +7,7 @@
     function render() {
       box.querySelector('label').textContent = es() ? 'Código de descuento' : 'Discount code';
       button.textContent = busy ? (es() ? 'Verificando…' : 'Checking…') : (es() ? 'Aplicar' : 'Apply');
-      message.textContent = status === 'applied' ? (es() ? '50% de descuento aplicado' : '50% discount applied') :
+      message.textContent = status === 'applied' ? (es() ? percent + '% de descuento aplicado' : percent + '% discount applied') :
         status === 'error' ? (es() ? 'No se pudo validar el código. Revisa el código e inténtalo de nuevo.' : 'Could not validate this code. Check it and try again.') :
         status === 'pending' ? (es() ? 'Aplica el código antes de continuar.' : 'Apply the code before continuing.') : '';
     }
@@ -26,7 +26,7 @@
           body: JSON.stringify({ action: 'quote', quantity: options.quantity(), promoCode: code })
         });
         var data = await response.json();
-        if (!response.ok || data.percentOff !== 50) throw Error('Invalid code');
+        if (!response.ok || [50, 100].indexOf(data.percentOff) === -1) throw Error('Invalid code');
         if (current !== revision) return;
         applied = code; percent = data.percentOff; status = 'applied';
       } catch (_) { if (current === revision) status = 'error'; }

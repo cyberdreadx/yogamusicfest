@@ -54,7 +54,7 @@ exports.handler = async (event) => {
       const matches = await stripe.promotionCodes.list({ code: promoCode, active: true, limit: 1 });
       promotion = matches.data[0];
       const coupon = promotion && promotion.coupon;
-      if (!promotion || promotion.customer || !coupon || !coupon.valid || coupon.percent_off !== 50 ||
+      if (!promotion || promotion.customer || !coupon || !coupon.valid || ![50, 100].includes(coupon.percent_off) ||
           coupon.applies_to || promotion.restrictions?.first_time_transaction ||
           (promotion.expires_at && promotion.expires_at <= Date.now() / 1000) ||
           (promotion.restrictions?.minimum_amount &&
@@ -63,7 +63,7 @@ exports.handler = async (event) => {
       }
     }
     if (quote) {
-      return { statusCode: 200, headers: cors, body: JSON.stringify({ percentOff: promotion ? 50 : 0 }) };
+      return { statusCode: 200, headers: cors, body: JSON.stringify({ percentOff: promotion ? promotion.coupon.percent_off : 0 }) };
     }
     const params = {
       mode: 'payment',

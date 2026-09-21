@@ -292,3 +292,47 @@ test('discount quote validates Stripe code and checkout applies it without stack
   assert.equal((await request({action:'quote',promoCode:'FAKE'})).statusCode,400);
   assert.equal(creates,1);
 });
+
+test('free registrations issue individual tickets, record zero revenue and commission, and retry safely', async () => {
+  const f=fixture(2);
+  f.session.payment_status='no_payment_required';
+  f.session.amount_total=0;
+  assert.equal((await f.issue()).statusCode,200);
+  const order=[...f.db.get('orders').values()][0];
+  assert.equal(order.amount,0);
+  assert.equal(order.commission,0);
+  assert.equal(order.ticketCodes.length,2);
+  assert.equal(f.sent[0].mail.attachments.length,2);
+  assert.equal((await f.scan(order.ticketCodes[0])).status,'ok');
+  assert.equal((await f.scan(order.ticketCodes[0])).status,'used');
+  const sent=f.sent.length;
+  await f.issue();
+  assert.equal(f.sent.length,sent);
+  assert.equal((await f.report()).totals.revenue,0);
+});
+
+test('unpaid orders and nonzero no-payment-required sessions never issue tickets', async () => {
+  for (const status of ['unpaid','no_payment_required']) {
+    const f=fixture(); f.session.payment_status=status;
+    await f.issue(); assert.equal(f.sent.length,0);
+  }
+});
+
+test('all five complimentary codes validate and attach their Stripe promotion to checkout', async () => {
+  const codes=['GUEST0','PARTNER0','SPONSOR0','ARTIST0','FACILITATOR0'];
+  let params;
+  const mod={exports:{}};
+  vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../netlify/functions/create-checkout.js'),'utf8'),{
+    exports:mod.exports,module:mod,process:{env:{STRIPE_SECRET_KEY:'fixture'}},
+    require:()=>()=>({promotionCodes:{list:async({code})=>({data:codes.includes(code)?[{id:'promo_'+code,coupon:{valid:true,percent_off:100},restrictions:{}}]:[]})},checkout:{sessions:{create:async p=>{params=p;return {url:'https://checkout.example.invalid'};}}}})
+  });
+  const request=body=>mod.exports.handler({httpMethod:'POST',headers:{origin:'https://example.invalid'},body:JSON.stringify(body)});
+  for(const code of codes){
+    const quote=await request({action:'quote',promoCode:code.toLowerCase(),quantity:2});
+    assert.equal(quote.statusCode,200);assert.equal(JSON.parse(quote.body).percentOff,100);
+    assert.equal((await request({promoCode:code,quantity:2})).statusCode,200);
+    assert.equal(params.discounts[0].promotion_code,'promo_'+code);
+    assert.equal(params.allow_promotion_codes,undefined);
+    assert.equal(params.metadata.quantity,'2');
+  }
+});

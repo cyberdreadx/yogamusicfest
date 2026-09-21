@@ -121,7 +121,8 @@ exports.handler = async (event) => {
   }
 
   const session = stripeEvent.data.object;
-  if (session.payment_status !== 'paid') return { statusCode: 200, body: 'not paid' };
+  const freeRegistration = session.payment_status === 'no_payment_required' && session.amount_total === 0;
+  if (session.payment_status !== 'paid' && !freeRegistration) return { statusCode: 200, body: 'not paid' };
 
   const email =
     (session.customer_details && session.customer_details.email) || session.customer_email;
