@@ -1320,7 +1320,7 @@ var EVENTS=[
   {days:[26],c:'comm',t:'11:00 AM',end:'11:00 PM',n:'TULUM: YOGA MUSIC FESTIVAL',v:'Oasis Tulum',festival:true,k:660},
 
   /* ---- Sept 27 ---- */
-  {days:[27],c:'yoga',t:'7:00 AM',n:'Sunrise Yoga & Sound Healing',who:'TBA',v:'Neek Tulum',p:'tba',k:420},
+  {days:[27],c:'yoga',t:'7:00 AM',n:'Sunrise Yoga & Sound Journey',who:'Narayani & Shivan Dharma',v:'Neek Tulum',p:'free',k:420},
   {days:[27],c:'yoga',t:'8:30 AM',end:'10:00 AM',n:'Master Yoga Class · International Day of Tourism',who:'Ayuntamiento de Tulum',v:'Palacio Plaza Square of Tulum',p:'free',featured:true,featuredLogos:[{file:'municipio-tulum',name:'Ayuntamiento de Tulum'}],k:510},
   {days:[27],c:'comm',t:'Evening · Time TBA',n:'Soul Sunday',who:'Mafe',v:'Shakti Temple',p:'tba',k:1440},
   {days:[27],c:'yoga',t:'9:00 AM',end:'10:30 AM',n:'Kundalini Class',who:'Belu Kundalini',v:'Ikal',p:'paid',pr:'$100 local',k:540},
@@ -1359,7 +1359,7 @@ var PARTNERS=[
   {n:'Shakti Temple',logo:'shakti-temple',c:'Healing Sanctuary',d:'Sound baths, women\'s circles and healing ceremonies in a sacred setting.'},
   {n:'Quantika Spa',logo:'quantika-spa',c:'Spa & Wellness',d:'Holistic spa treatments and wellness therapies to restore and recharge during the week.'},
   {n:'Vortex Vitality Spa',logo:'vortex',c:'Spa & Wellness',d:'Rejuvenating spa rituals, bodywork and energy healing in a restorative setting.'},
-  {n:'Neek Tulum',logo:'neek',c:'Yoga & Sound Healing',d:'Hosting Sunrise Yoga & Sound Healing during Conference Week.'},
+  {n:'Neek Tulum',logo:'neek',c:'Yoga & Sound Healing',d:'Hosting Sunrise Yoga & Sound Journey during Conference Week.'},
   {n:'Mute Holistic Wellness Club',logo:'mute',c:'Holistic Wellness',d:'Hosting breathwork, sound healing, acupuncture, yoga and a temazcal ceremony during Conference Week.'}
 ];
 
@@ -1486,7 +1486,8 @@ function renderSummary(){
 function priceTag(e){var p=e.p||'tba';return '<span class="price-tag '+p+'">'+(e.pr||t('price.'+p))+'</span>';}
 function eventTitle(e,withMeta,hideLogo){
   var venue=e.v||'',file='';
-  if(e.n==='Ecstatic Dance')file='ecstatic-dance';
+  if(e.n==='Ecstatic Dance'||e.n==='Intuitive Flow')file='ecstatic-dance';
+  else if(venue==='Quantika Spa')file='quantika-spa';
   else if(/^Holistika\b/.test(venue))file='holistika';
   else if(/^Oasis\b/.test(venue))file='oasis-tulum';
   else if(/^Shakti\b/.test(venue))file='shakti-temple';
