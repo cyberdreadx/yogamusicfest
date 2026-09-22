@@ -671,6 +671,9 @@ section{position:relative;scroll-margin-top:88px}
 .app-sponsor-card p{color:var(--text-dim);margin-bottom:1.5rem;max-width:30ch}
 .app-sponsor-card .btn{margin-top:auto;max-width:100%}
 .app-sponsor-video{display:block;width:100%;height:auto;aspect-ratio:1920/1072;object-fit:contain;border:0;border-radius:8px;background:#0b0f0b;margin:0 0 1rem}
+.app-sponsor-preview{display:block;width:100%;margin:0 0 1.5rem;border-radius:8px;overflow:hidden}
+.app-sponsor-preview img{display:block;width:100%;height:auto}
+.app-sponsor-preview:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
 .app-video-link{color:var(--gold);font-size:.85rem;text-decoration:underline;margin-bottom:1.5rem}
 @media(max-width:600px){.app-sponsor-grid{grid-template-columns:1fr}.app-sponsor-card{padding:2rem 1.25rem}}
 
@@ -1170,6 +1173,7 @@ img,svg,video{max-width:100%;height:auto}
         <div class="app-sponsor-logo"><img src="logos/unite.png" alt="Unite" width="94" height="94" loading="lazy"></div>
         <h3>Unite</h3>
         <p data-i18n="apps.unite">Explore Unite and find out how to get the app on its official website.</p>
+        <a class="app-sponsor-preview" href="https://unite.earth" target="_blank" rel="noopener noreferrer"><img src="media/unite-preview.png" alt="Unite — Put down the phone. Show up." width="2822" height="1516" loading="lazy"></a>
         <a class="btn btn-gold" href="https://unite.earth" target="_blank" rel="noopener noreferrer" data-i18n="apps.getUnite">Get Unite ↗</a>
       </article>
       <article class="app-sponsor-card reveal">
