@@ -670,7 +670,7 @@ section{position:relative;scroll-margin-top:88px}
 .app-sponsor-card h3{font-family:var(--display);font-size:2rem;margin-bottom:.7rem}
 .app-sponsor-card p{color:var(--text-dim);margin-bottom:1.5rem;max-width:30ch}
 .app-sponsor-card .btn{margin-top:auto;max-width:100%}
-.app-sponsor-video{width:100%;aspect-ratio:16/9;border:0;border-radius:8px;background:#0b0f0b;margin:0 0 1rem}
+.app-sponsor-video{display:block;width:100%;height:auto;aspect-ratio:1920/1072;object-fit:contain;border:0;border-radius:8px;background:#0b0f0b;margin:0 0 1rem}
 .app-video-link{color:var(--gold);font-size:.85rem;text-decoration:underline;margin-bottom:1.5rem}
 @media(max-width:600px){.app-sponsor-grid{grid-template-columns:1fr}.app-sponsor-card{padding:2rem 1.25rem}}
 
@@ -1176,7 +1176,7 @@ img,svg,video{max-width:100%;height:auto}
         <div class="app-sponsor-logo"><img src="logos/qwalla.png" alt="Qwalla" width="94" height="94" loading="lazy"></div>
         <h3>Qwalla</h3>
         <p data-i18n="apps.qwalla">Explore Qwalla and find out how to get the app on its official website.</p>
-        <iframe class="app-sponsor-video" src="https://drive.google.com/file/d/1_4dzrM2VNapb5aUeVWPXCahFTK5nxvit/preview" title="Qwalla commercial" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+        <video class="app-sponsor-video" controls playsinline preload="metadata" aria-label="Qwalla commercial"><source src="media/qwalla-commercial.mp4" type="video/mp4"></video>
         <a class="app-video-link" href="https://drive.google.com/file/d/1_4dzrM2VNapb5aUeVWPXCahFTK5nxvit/view" target="_blank" rel="noopener noreferrer" data-i18n="apps.watch">Watch the Qwalla video ↗</a>
         <a class="btn btn-gold" href="https://qwalla.io" target="_blank" rel="noopener noreferrer" data-i18n="apps.getQwalla">Get Qwalla ↗</a>
       </article>
