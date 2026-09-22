@@ -1328,6 +1328,7 @@ var EVENTS=[
   {days:[22],c:'comm',t:'7:00 PM',end:'11:00 PM',n:'Fall Equinox Fire Ceremony',who:'Meta Rose',v:'Oasis',p:'don',k:1140},
 
   /* ---- Sept 23 ---- */
+  {days:[23],c:'yoga',t:'9:00 AM',n:'Tantric Yoga',who:'Veronika',v:'Tulumania',p:'don',k:540},
   {days:[23],c:'yoga',t:'10:00 AM',end:'11:00 AM',n:'Yoga & Sound Healing',who:'Elizabeth',v:'Deck · Vesica Sanctuary',p:'tba',k:600},
   {days:[23],c:'yoga',t:'11:00 AM',end:'12:00 PM',n:'Calisthenics Class',who:'Angelo · In collaboration with Start Fit',v:'Vesica Origin-Gym',p:'tba',k:660},
   {days:[23],c:'yoga',t:'12:30 PM',end:'1:30 PM',n:'Yoga, Meditation and Breathing',who:'Frank Rocha',v:'Vesica',p:'tba',k:750},
@@ -1356,6 +1357,7 @@ var EVENTS=[
   {days:[24],c:'music',t:'6:00 PM',end:'8:00 PM',n:'Kirtan',who:'Ganesha and Friends',v:'Oasis',p:'don',k:1080},
 
   /* ---- Sept 25 ---- */
+  {days:[25],c:'yoga',t:'8:00 AM',n:'Vinyasa Yoga',who:'Kat Manilova',v:'Cenote Encantado',p:'don',k:480},
   {days:[25],c:'work',t:'4:30 PM',end:'6:00 PM',n:'Dream Code · Live Dream Transmission',who:'Skye Walker',v:'Holistika (Magic Studio)',p:'paid',pr:'$600 MXN',k:990},
   {days:[25],c:'work',t:'11:00 AM',end:'1:00 PM',n:'Yoga Teacher Speaker Panel',who:'Itzel, Jayson, Jose Troche, Narayani & Maverick Monk',v:'Holistika',p:'tba',featured:true,featuredLogos:[{file:'holistika',name:'Holistika'}],k:660},
   {days:[25],c:'work',t:'10:00 AM',end:'11:30 AM',n:'Tempering — Learning to Release Fascia',who:'Dr. Rick Potts & Garrett Wood',v:'Lifeforce Tulum',p:'free',k:600},
@@ -1539,13 +1541,15 @@ function renderSummary(){
 function priceTag(e){var p=e.p||'tba';return '<span class="price-tag '+p+'">'+(e.pr||t('price.'+p))+'</span>';}
 function eventTitle(e,withMeta,hideLogo){
   var venue=e.v||'',file='';
-  if(e.n==='Ecstatic Dance'||e.n==='Intuitive Flow')file='ecstatic-dance';
+  if(e.n==='Vinyasa Yoga'&&venue==='Cenote Encantado')file='private-home';
+  else if(e.n==='Ecstatic Dance'||e.n==='Intuitive Flow')file='ecstatic-dance';
   else if(venue==='Quantika Spa')file='quantika-spa';
   else if(/^Holistika\b/.test(venue))file='holistika';
   else if(/^Oasis\b/.test(venue))file='oasis-tulum';
   else if(/^Shakti\b/.test(venue))file='shakti-temple';
   else if(venue.indexOf('Vesica')!==-1)file='vesica';
   else if(venue==='Kan Tulum')file='kan-tulum';
+  else if(venue==='Tulumania')file='tulumania';
   else if(venue==='Lokah Yoga Studio')file='lokah';
   else if(venue==='The Space')file='the-space';
   else if(venue==='Centro Calea')file='calea';
@@ -1557,7 +1561,7 @@ function eventTitle(e,withMeta,hideLogo){
   else if(venue==='Palacio Plaza Square of Tulum')file='municipio-tulum';
   else if(venue==='Private (Home)')file='private-home';
   if(hideLogo)file='';
-  return '<div class="ev-title">'+(file?'<span class="ev-venue-logo"><img src="logos/'+file+(['private-home','ecstatic-dance'].indexOf(file)!==-1?'.svg':'.png')+'" alt="'+(file==='ecstatic-dance'?'Ecstatic Dance icon':venue+' logo')+'" loading="lazy"></span>':'')+'<div class="ev-title-copy"><h4>'+e.n+'</h4>'+(withMeta?'<div class="meta"><b>'+e.who+'</b> · '+e.v+'</div>':'')+'</div></div>';
+  return '<div class="ev-title">'+(file?'<span class="ev-venue-logo"><img src="logos/'+file+(['private-home','ecstatic-dance'].indexOf(file)!==-1?'.svg':file==='tulumania'?'.jpg':'.png')+'" alt="'+(file==='ecstatic-dance'?'Ecstatic Dance icon':venue+' logo')+'" loading="lazy"></span>':'')+'<div class="ev-title-copy"><h4>'+e.n+'</h4>'+(withMeta?'<div class="meta"><b>'+e.who+'</b> · '+e.v+'</div>':'')+'</div></div>';
 }
 function renderEvents(day){
   var ev=$('#events');
