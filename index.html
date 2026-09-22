@@ -1541,7 +1541,7 @@ function renderSummary(){
 function priceTag(e){var p=e.p||'tba';return '<span class="price-tag '+p+'">'+(e.pr||t('price.'+p))+'</span>';}
 function eventTitle(e,withMeta,hideLogo){
   var venue=e.v||'',file='';
-  if(e.n==='Vinyasa Yoga'&&venue==='Cenote Encantado')file='private-home';
+  if((e.n==='Vinyasa Yoga'&&venue==='Cenote Encantado')||(e.n==='Tantric Yoga'&&venue==='Tulumania'))file='vikingos-fit-club';
   else if(e.n==='Ecstatic Dance'||e.n==='Intuitive Flow')file='ecstatic-dance';
   else if(venue==='Quantika Spa')file='quantika-spa';
   else if(/^Holistika\b/.test(venue))file='holistika';
@@ -1561,7 +1561,7 @@ function eventTitle(e,withMeta,hideLogo){
   else if(venue==='Palacio Plaza Square of Tulum')file='municipio-tulum';
   else if(venue==='Private (Home)')file='private-home';
   if(hideLogo)file='';
-  return '<div class="ev-title">'+(file?'<span class="ev-venue-logo"><img src="logos/'+file+(['private-home','ecstatic-dance'].indexOf(file)!==-1?'.svg':file==='tulumania'?'.jpg':'.png')+'" alt="'+(file==='ecstatic-dance'?'Ecstatic Dance icon':venue+' logo')+'" loading="lazy"></span>':'')+'<div class="ev-title-copy"><h4>'+e.n+'</h4>'+(withMeta?'<div class="meta"><b>'+e.who+'</b> · '+e.v+'</div>':'')+'</div></div>';
+  return '<div class="ev-title">'+(file?'<span class="ev-venue-logo"><img src="logos/'+file+(['private-home','ecstatic-dance'].indexOf(file)!==-1?'.svg':file==='tulumania'?'.jpg':'.png')+'" alt="'+(file==='ecstatic-dance'?'Ecstatic Dance icon':file==='vikingos-fit-club'?'Vikingos Fit Club logo':venue+' logo')+'" loading="lazy"></span>':'')+'<div class="ev-title-copy"><h4>'+e.n+'</h4>'+(withMeta?'<div class="meta"><b>'+e.who+'</b> · '+e.v+'</div>':'')+'</div></div>';
 }
 function renderEvents(day){
   var ev=$('#events');
