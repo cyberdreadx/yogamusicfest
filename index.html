@@ -1375,7 +1375,10 @@ var EVENTS=[
 
   /* ---- Sept 27 ---- */
   {days:[27],c:'yoga',t:'7:00 AM',n:'Sunrise Yoga & Sound Journey',who:'Narayani & Shivan Dharma',v:'Neek Tulum',p:'free',k:420},
-  {days:[27],c:'yoga',t:'8:30 AM',end:'10:00 AM',n:'Master Yoga Class · International Day of Tourism',who:'Ayuntamiento de Tulum',v:'Palacio Plaza Square of Tulum',p:'free',featured:true,featuredLogos:[{file:'municipio-tulum',name:'Ayuntamiento de Tulum'}],k:510},
+  {days:[27],c:'comm',t:'5:00 PM',n:'Gastro Market · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1020},
+  {days:[27],c:'heal',t:'7:00 PM',n:'Guided Meditation · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1140},
+  {days:[27],c:'comm',t:'7:30 PM',n:'Cacao Ceremony · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1170},
+  {days:[27],c:'heal',t:'9:00 PM',n:'Sound Healing · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1260},
   {days:[27],c:'music',t:'6:00 PM',end:'9:00 PM',n:'Ecstatic & Contact Dance Jam',who:'Mafe & Yulio · Live Music by Andros',v:'Shakti Temple',p:'free',k:1080},
   {days:[27],c:'music',t:'9:00 PM',end:'Late',n:'Sound Journey · Tea & Integration',who:'Selva & Friends',v:'Shakti Temple',p:'don',k:1260},
   {days:[27],c:'yoga',t:'9:00 AM',end:'10:30 AM',n:'Kundalini Class',who:'Belu Kundalini',v:'Ikal',p:'paid',pr:'$100 local',k:540},
@@ -1560,7 +1563,7 @@ function eventTitle(e,withMeta,hideLogo){
   else if(venue==='Mute')file='mute';
   else if(venue==='Neek Tulum')file='neek';
   else if(venue.indexOf('Selvadentro')===0)file='selvadentro';
-  else if(venue==='Palacio Plaza Square of Tulum')file='municipio-tulum';
+  else if(venue==='Palacio Plaza Square of Tulum'||venue==='Ayuntamiento Plaza')file='municipio-tulum';
   else if(venue==='Private (Home)')file='private-home';
   if(hideLogo)file='';
   return '<div class="ev-title">'+(file?'<span class="ev-venue-logo"><img src="logos/'+file+(['private-home','ecstatic-dance'].indexOf(file)!==-1?'.svg':file==='tulumania'?'.jpg':'.png')+'" alt="'+(file==='ecstatic-dance'?'Ecstatic Dance icon':file==='vikingos-fit-club'?'Vikingos Fit Club logo':venue+' logo')+'" loading="lazy"></span>':'')+'<div class="ev-title-copy"><h4>'+e.n+'</h4>'+(withMeta?'<div class="meta"><b>'+e.who+'</b> · '+e.v+'</div>':'')+'</div></div>';
