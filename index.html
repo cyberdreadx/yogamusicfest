@@ -412,6 +412,11 @@ section{position:relative;scroll-margin-top:88px}
 .ev-featured .ev-mid h4{font-family:var(--display);font-size:clamp(2rem,5vw,3.5rem);line-height:1.15}
 .ev-featured .ev-mid .meta{font-size:1rem;margin-top:1rem}
 .ev-featured .ev-right{justify-content:center}
+.ev-closing-subtitle{font-size:.95rem;color:var(--text-dim);margin:.8rem 0}
+.ev-closing-location{font-size:1.15rem;color:var(--gold);margin-bottom:1.5rem}
+.ev-closing-program{list-style:none;padding:0;margin:0 auto;max-width:480px;text-align:left}
+.ev-closing-program li{display:grid;grid-template-columns:6.5rem 1fr;gap:1rem;padding:.85rem 0;border-top:1px solid var(--line);align-items:baseline}
+.ev-closing-program time{color:var(--gold);font-weight:600}
 .ev-mid .meta{font-size:.78rem;color:var(--text-dim);margin-top:.25rem}
 .ev-mid .meta b{color:var(--sage);font-weight:500}
 .ev-right{display:flex;align-items:center;gap:1rem;justify-content:flex-end}
@@ -1375,10 +1380,7 @@ var EVENTS=[
 
   /* ---- Sept 27 ---- */
   {days:[27],c:'yoga',t:'7:00 AM',n:'Sunrise Yoga & Sound Journey',who:'Narayani & Shivan Dharma',v:'Neek Tulum',p:'free',k:420},
-  {days:[27],c:'comm',t:'5:00 PM',n:'Gastro Market · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1020},
-  {days:[27],c:'heal',t:'7:00 PM',n:'Guided Meditation · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1140},
-  {days:[27],c:'comm',t:'7:30 PM',n:'Cacao Ceremony · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1170},
-  {days:[27],c:'heal',t:'9:00 PM',n:'Sound Healing · Closing Celebration',who:'Ayuntamiento de Tulum',v:'Ayuntamiento Plaza',p:'free',k:1260},
+  {days:[27],c:'comm',t:'5:00 PM',n:'World Tourism Day',who:'Ayuntamiento de Tulum',v:'Palacio Municipal',p:'free',featured:true,featuredLogos:[{file:'municipio-tulum',name:'Ayuntamiento de Tulum'}],closing:true,program:[{time:'5:00 PM',name:{en:'Gastro Market',es:'Mercado Gastronómico'}},{time:'7:00 PM',name:{en:'Guided Meditation',es:'Meditación Guiada'}},{time:'7:30 PM',name:{en:'Cacao Ceremony',es:'Ceremonia de Cacao'}},{time:'9:00 PM',name:{en:'Sound Healing',es:'Sanación con Sonido'}}],k:1020},
   {days:[27],c:'music',t:'6:00 PM',end:'9:00 PM',n:'Ecstatic & Contact Dance Jam',who:'Mafe & Yulio · Live Music by Andros',v:'Shakti Temple',p:'free',k:1080},
   {days:[27],c:'music',t:'9:00 PM',end:'Late',n:'Sound Journey · Tea & Integration',who:'Selva & Friends',v:'Shakti Temple',p:'don',k:1260},
   {days:[27],c:'yoga',t:'9:00 AM',end:'10:30 AM',n:'Kundalini Class',who:'Belu Kundalini',v:'Ikal',p:'paid',pr:'$100 local',k:540},
@@ -1574,8 +1576,8 @@ function renderEvents(day){
     if(e.festival)return '<div class="ev-festival"><div class="ev-venue-logo ev-festival-logo"><img src="logos/oasis-tulum.png" alt="Oasis Tulum logo" loading="lazy"></div><div class="ev-festival-time">'+e.t+' – '+e.end+'</div><h4>'+e.n+'</h4><div class="ev-festival-venue">'+e.v+'</div><p class="ev-festival-note">LINEUP AND SCHEDULE TBD</p></div>';
     return '<div class="ev'+(e.featured?' ev-featured':'')+'" style="--cat:'+CAT[e.c]+'">'+
       (e.featured?'<div class="ev-expo-logos">'+(e.featuredLogos||[{file:'oasis-tulum',name:'Oasis Tulum'},{file:'tulum-despierta',name:'Tulum Despierta'}]).map(function(logo){return '<div class="ev-venue-logo ev-expo-logo"><img src="logos/'+logo.file+'.png" alt="'+logo.name+' logo" loading="lazy"></div>';}).join('')+'</div>':'')+
-      '<div class="ev-time">'+e.t+(e.end?'<span class="ev-end">'+e.end+'</span>':'')+'</div>'+
-      '<div class="ev-mid">'+(e.special?'<span class="ev-special">SPECIAL CLASS</span>':'')+eventTitle(e,true,e.featured)+'</div>'+
+      (e.closing?'':'<div class="ev-time">'+e.t+(e.end?'<span class="ev-end">'+e.end+'</span>':'')+'</div>')+
+      '<div class="ev-mid">'+(e.closing?'<h4>'+(LANG==='es'?'Día Mundial del Turismo':'World Tourism Day')+'</h4><p class="ev-closing-subtitle">'+(LANG==='es'?'Clausura del Tulum Yoga Music Festival':'Closing of the Tulum Yoga Music Festival')+'</p><div class="ev-closing-location">'+e.v+'</div><ul class="ev-closing-program">'+e.program.map(function(item){return '<li><time>'+item.time+'</time><span>'+tl(item.name)+'</span></li>';}).join('')+'</ul>':(e.special?'<span class="ev-special">SPECIAL CLASS</span>':'')+eventTitle(e,true,e.featured))+'</div>'+
       '<div class="ev-right">'+priceTag(e)+
       '<a class="ev-book" href="'+(e.book||'https://wa.me/17867487247')+'">'+t('book.direct')+' →</a>'+
       '</div></div>';
