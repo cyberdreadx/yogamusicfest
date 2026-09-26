@@ -248,6 +248,13 @@ section{position:relative;scroll-margin-top:88px}
 /* sponsor strip below hero (dark band so white logos always read) */
 .hero-sponsors{background:#0b0f0b;border-bottom:1px solid rgba(201,164,78,.16)}
 .hero-sponsors .wrap{padding-block:2.6rem}
+.presenting-sponsors{padding-bottom:2.2rem;margin-bottom:2.2rem;border-bottom:1px solid rgba(201,164,78,.16)}
+.presenting-logos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:clamp(.8rem,3vw,2rem);max-width:760px;margin:0 auto;text-align:center}
+.presenting-logos img{display:block;width:100%;height:100px;object-fit:contain;mix-blend-mode:screen}
+.presenting-logos .presenting-ic{object-view-box:inset(34% 3% 30% 3%)}
+.presenting-logos .presenting-tif{object-view-box:inset(39% 19% 40% 19%)}
+.presenting-wordmark{font-family:var(--sans);font-size:clamp(1.1rem,3vw,2rem);font-weight:700;color:#fff}
+@media(max-width:600px){.presenting-logos img{height:64px}}
 .hs-eyebrow{text-align:center;font-family:var(--sans);font-weight:500;letter-spacing:.26em;text-transform:uppercase;font-size:.6rem;color:#c9a44e;margin-bottom:1.1rem}
 .hs-logos{display:flex;flex-direction:column;align-items:center;gap:2rem;max-width:1340px;margin:0 auto}
 .hs-row{display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:1.8rem 2.4rem}
@@ -863,6 +870,14 @@ img,svg,video{max-width:100%;height:auto}
 <!-- ===== Sponsor / partner strip (below hero) ===== -->
 <section class="hero-sponsors" aria-label="Sponsors and community partners">
   <div class="wrap">
+    <div class="presenting-sponsors">
+      <p class="hs-eyebrow" data-i18n="sponsors.presented">TYMF 2026 Presented By</p>
+      <div class="presenting-logos">
+        <img class="presenting-ic" src="logos/innovation-city.png" alt="Innovation City">
+        <img class="presenting-tif" src="logos/tulum-innovation-fest.png" alt="Tulum Innovation Fest">
+        <span class="presenting-wordmark">Blokko</span>
+      </div>
+    </div>
     <p class="hs-eyebrow" data-i18n="sponsors.eyebrow">Presented in community with</p>
     <div class="hs-logos reveal" id="heroSponsors"></div>
   </div>
@@ -1287,6 +1302,8 @@ Object.assign(I18N.en,{'apps.eyebrow':'Our App Sponsors','apps.heading':'Stay Co
 Object.assign(I18N.es,{'apps.eyebrow':'Apps Patrocinadoras','apps.heading':'Sigamos Conectados','apps.lede':'Descubre las apps que apoyan a nuestra comunidad del festival.','apps.unite':'Conoce Unite y descubre cómo obtener la app en su sitio oficial.','apps.qwalla':'Conoce Qwalla y descubre cómo obtener la app en su sitio oficial.','apps.getUnite':'Obtener Unite ↗','apps.getQwalla':'Obtener Qwalla ↗'});
 I18N.en['apps.watch']='Watch the Qwalla video ↗';
 I18N.es['apps.watch']='Ver el video de Qwalla ↗';
+I18N.en['sponsors.presented']='TYMF 2026 Presented By';
+I18N.es['sponsors.presented']='TYMF 2026 Presentado Por';
 var LANG='es';
 function t(k){var d=I18N[LANG]||{};return (k in d)?d[k]:((k in I18N.en)?I18N.en[k]:k);}
 function tl(o){return (o&&typeof o==='object')?(o[LANG]||o.en):o;}
@@ -1586,11 +1603,13 @@ var FESTIVAL_PROGRAM=[
   {time:'2:30–3:00 PM',name:'Handpan & Vocal Activation',detail:'Handpan with Nicolas · Vocal activation with Skye Walker'},
   {time:'3:00 PM',name:'Shakti Temple Lounge Opens',detail:'In the Shala · Opening ceremony with Mafe and Familia, Andros & more'},
   {time:'3:30 PM',name:'Handpan Workshop',detail:'Hang Element'},
+  {time:'4:00 PM',name:'Loving is Receiving',detail:'Meditation by Mafe · Shakti Temple Lounge'},
   {time:'4:00–5:00 PM',name:'Arm Balance Workshop',detail:'Daniela (Lokah Yoga Center)'},
   {time:'4:00–6:00 PM',name:'Healing Activities (Optional)',detail:'Ice Bath · Temazcal'},
   {time:'5:00–6:00 PM',name:'Maverick Monk Speaks',detail:'In Shakti Temple Shala'},
   {time:'6:00–7:30 PM',name:'Kirtan',detail:'Ganesha, Jay Hari, Narayani & Friends'},
   {time:'7:30 PM',name:'Drums, Fire Circle & Medicine Music',detail:'Shivan Dharma & Friends'},
+  {time:'8:30 PM',name:'Fire Dance',detail:'Miracosu'},
   {time:'9:00–11:00 PM',name:'Ecstatic Dance',detail:'Red Monk / Skye Walker · Guest: BJ Griffin — Live Music'},
   {time:'11:11 PM',name:'Closing Ceremony',detail:'Prayer of Love',ceremony:true}
 ];
