@@ -16,6 +16,7 @@ function fixture(qty = 2, locale = 'en') {
     const data = db.get(name);
     return {
       get: async key => {
+        if (state.staleAdmissions && name === 'ticket-admissions') return null;
         if (state.staleReads && (name === 'orders' || name === 'tickets')) return null;
         if (state.failAttendance && name === 'ticket-admissions') throw Error('Attendance unavailable');
         return data.has(key) ? structuredClone(data.get(key)) : null;
@@ -309,6 +310,19 @@ test('free registrations issue individual tickets, record zero revenue and commi
   await f.issue();
   assert.equal(f.sent.length,sent);
   assert.equal((await f.report()).totals.revenue,0);
+});
+
+test('successful check-in survives cached admission misses and repeated scans stay blocked', async () => {
+  const f = fixture(1); await f.issue(); f.state.staleAdmissions = true;
+  const first = await f.scan(f.payloads[0]);
+  assert.equal(first.http, 200);
+  assert.equal(first.status, 'ok');
+  assert.ok(first.order.usedAt);
+  const second = await f.scan(f.payloads[0]);
+  assert.equal(second.http, 200);
+  assert.equal(second.status, 'used');
+  assert.equal(second.order.used, true);
+  assert.equal(f.db.get('ticket-admissions').size, 1);
 });
 
 test('unpaid orders and nonzero no-payment-required sessions never issue tickets', async () => {

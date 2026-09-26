@@ -60,10 +60,12 @@ exports.handler = async (event) => {
     const receipt = { usedAt: new Date().toISOString() };
     const claim = await admissions.setJSON(code, receipt, { onlyIfNew: true });
     if (!claim || typeof claim.modified !== 'boolean') throw new Error('Admission claim failed');
-    const saved = await admissions.get(code, { type: 'json' });
-    if (!saved) throw new Error('Admission was not saved');
+    // The atomic write is authoritative; cached reads can still return a miss.
+    // A rejected onlyIfNew claim means the ticket was already admitted, even
+    // when its original timestamp is not yet visible through the read cache.
+    const saved = claim.modified ? receipt : null;
     return json(200, { status: claim.modified ? 'ok' : 'used', code,
-      order: { ...order, used: true, usedAt: saved.usedAt } });
+      order: { ...order, used: true, usedAt: saved ? saved.usedAt : null } });
   } catch (e) {
     return json(500, { status: 'error', message: 'Ticket lookup or check-in failed. Please retry.' });
   }
