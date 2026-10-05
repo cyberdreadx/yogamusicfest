@@ -260,6 +260,9 @@ section{position:relative;scroll-margin-top:88px}
 .hs-row{display:flex;flex-wrap:wrap;align-items:center;align-content:center;justify-content:center;gap:1.8rem 2.4rem}
 .hs-row img{height:70px;width:auto;max-width:220px;object-fit:contain;opacity:.9;transition:.3s}
 .hs-row img:hover{opacity:1;transform:translateY(-2px)}
+.logo-link{display:inline-flex;align-items:center;justify-content:center;max-width:100%;border-radius:4px}
+.logo-link:focus-visible{outline:2px solid var(--gold);outline-offset:5px}
+.ev-venue-logo>.logo-link,.partner .logo>.logo-link,.app-sponsor-logo>.logo-link{width:100%;height:100%}
 .hs-row img.big{height:auto;max-width:none;width:min(300px,70vw)}
 .hs-row img.tall{height:100px}
 .hs-row .wm{font-family:var(--display);font-weight:600;letter-spacing:.08em;font-size:1rem;color:#efe8d6;opacity:.72;transition:.3s;white-space:nowrap}
@@ -875,7 +878,7 @@ img,svg,video{max-width:100%;height:auto}
       <div class="presenting-logos">
         <img class="presenting-ic" src="logos/innovation-city.png" alt="Innovation City">
         <img class="presenting-tif" src="logos/tulum-innovation-fest.png" alt="Tulum Innovation Fest">
-        <span class="presenting-wordmark">Blokko</span>
+        <a class="presenting-wordmark logo-link" href="https://blokko.us/" target="_blank" rel="noopener noreferrer" aria-label="Blokko — website">Blokko</a>
       </div>
     </div>
     <p class="hs-eyebrow" data-i18n="sponsors.eyebrow">Presented in community with</p>
@@ -1432,6 +1435,47 @@ var ARTISTS=[
   {n:'Tambor Maya',r:'Percussion'},{n:'Nadi',r:'Medicine Music'}
 ];
 
+// Confirmed official destinations, shared by every occurrence of each logo.
+var LOGO_URLS={
+  'holistika':'https://www.holistikatulum.com/',
+  'azulik':'https://azulik.com/',
+  'kan-tulum':'https://www.kantulum.com/',
+  'ashtanga-yoga-tulum':'https://ashtangayogatulum.com/',
+  'vesica':'https://www.vesicatulum.com/',
+  'ahau-tulum':'https://ahaucollection.com/',
+  'neek':'https://neektulum.com.mx/',
+  'mute':'https://www.mutewellness.com/',
+  'the-space':'https://www.thespacetulum.mx/',
+  'lokah':'https://lokahyogacenter.com/',
+  'bikram-yoga-tulum':'https://www.lacolmenatulum.com/bikram-yoga',
+  'shakti-temple':'https://shaktitulum.mx/',
+  'tcf':'https://tulumcryptofest.io/home',
+  'vikingos-fit-club':'https://vikingosfitclub.wixsite.com/website',
+  'kuul-beach-club':'https://www.kuulbeachtulum.com/',
+  'ganeshas-lounge':'http://www.ganesharose.com',
+  'vortex':'https://www.vortex-vitality.com/',
+  'youniq':'https://youniq.app',
+  'unite':'https://unite.earth',
+  'qwalla':'https://qwalla.io',
+  'quantika-spa':'https://www.quantikaspa.com/',
+  'lifeforce-tulum':'https://lifeforcetulum.com/',
+  'innovation-city':'https://www.tuluminnovationfest.com/',
+  'tulum-innovation-fest':'https://www.tuluminnovationfest.com/',
+  'municipio-tulum':'https://tulum.gob.mx/Turismo',
+  'tulum':'https://tulum.gob.mx/Turismo',
+  'tulum-despierta':'https://www.instagram.com/tulumdespierta/',
+  'calea':'https://www.centrocalea.com/en/'
+};
+function linkLogos(root){
+  (root||document).querySelectorAll('img[src^="logos/"]').forEach(function(img){
+    var key=img.getAttribute('src').replace(/^logos\//,'').replace(/\.[^.]+$/,'');
+    var url=LOGO_URLS[key];
+    if(!url||img.closest('a'))return;
+    var a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.className='logo-link';
+    a.setAttribute('aria-label',img.alt+' — '+(LANG==='es'?'sitio oficial':'official website'));
+    img.replaceWith(a);a.appendChild(img);
+  });
+}
 var PARTNERS=[
   {n:'Holistika',logo:'holistika',c:'Wellness Center',d:'A holistic hub of studios, art and gathering spaces hosting classes and circles all week.'},
   {n:'Azulik',logo:'azulik',c:'Art & Design',d:'An iconic space where architecture, art and nature meet — home to featured evening gatherings.'},
@@ -1625,6 +1669,7 @@ function renderEvents(day){
       '<a class="ev-book" href="'+(e.book||'https://wa.me/17867487247')+'">'+t('book.direct')+' →</a>'+
       '</div></div>';
   }).join('');
+  linkLogos(ev);
 }
 function renderDays(){
   var tabs=$('#dayTabs');
@@ -1656,7 +1701,7 @@ function renderPartners(){
   $('#partnersGrid').innerHTML=PARTNERS.map(function(p){
     return '<article class="partner"><div class="logo"><img src="logos/'+p.logo+'.png" alt="'+p.n+' logo" loading="lazy"></div>'+
       '<div><h4>'+p.n+'</h4><div class="cat">'+p.c+'</div><p>'+p.d+'</p>'+
-      '<div class="links"><a href="#">Website</a><a href="#">Instagram</a></div></div></article>';
+      (LOGO_URLS[p.logo]?'<div class="links"><a href="'+LOGO_URLS[p.logo]+'" target="_blank" rel="noopener noreferrer">Website</a></div>':'')+'</div></article>';
   }).join('');
 }
 function renderAffiliates(){
@@ -1687,7 +1732,7 @@ function renderLogoStrip(el,list){
     img.alt=s.name; img.loading='lazy'; img.className=s.big?'big':(s.tall?'tall':'');
     img.onerror=function(){
       var sp=document.createElement('span'); sp.className='wm'+(s.big?' big':''); sp.textContent=s.name;
-      if(img.parentNode) el.replaceChild(sp,img);
+      if(img.parentNode) img.replaceWith(sp);
     };
     img.src='logos/'+s.file+'.'+(s.ext||'png');
     el.appendChild(img);
@@ -1778,7 +1823,7 @@ var io=new IntersectionObserver(function(entries){
 
 /* ---------- boot ---------- */
 renderTickets();renderSummary();renderDays();
-renderPartners();renderAffiliates();renderSponsors();renderHeroSponsors();
+renderPartners();renderAffiliates();renderSponsors();renderHeroSponsors();linkLogos();
 window.__rerender=function(){renderTickets();renderSummary();renderDays();renderAffiliates();};
 try{LANG=localStorage.getItem('tymf_lang')||'es';}catch(e){LANG='es';}
 var _lt=document.getElementById('langToggle');
