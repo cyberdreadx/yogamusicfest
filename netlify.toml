@@ -10,6 +10,11 @@
 
 # Pretty URL for the direct-link ticket checkout page
 [[redirects]]
+  from = "/thank-you"
+  to = "/thank-you.html"
+  status = 200
+
+[[redirects]]
   from = "/checkout"
   to = "/checkout.html"
   status = 200
